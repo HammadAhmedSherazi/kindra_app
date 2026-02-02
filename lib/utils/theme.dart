@@ -20,6 +20,7 @@ class AppTheme {
   static final ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
+    fontFamily: 'Roboto Flex',
     primaryColor: AppColors.primaryColor,
     colorScheme: lightColorScheme,
     scaffoldBackgroundColor: Colors.white,

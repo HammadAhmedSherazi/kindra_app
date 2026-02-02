@@ -3,6 +3,7 @@ export 'package:flutter/material.dart';
 export 'package:flutter_riverpod/flutter_riverpod.dart';
 export 'package:flutter_localizations/flutter_localizations.dart';
 export 'package:shared_preferences/shared_preferences.dart';
+export 'package:flutter_svg/flutter_svg.dart';
 
 // Data
 export 'data/enums/api_status.dart';

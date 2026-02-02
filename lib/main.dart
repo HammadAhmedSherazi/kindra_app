@@ -1,3 +1,5 @@
+import 'package:kindra_app/views/onboarding/splash_view.dart';
+
 import 'export_all.dart';
 
 void main() async {
@@ -43,7 +45,7 @@ class MyApp extends ConsumerWidget {
           child: child!,
         );
       },
-      home: prefs.getStartedCheck() ? const LoginView() : const OnboardingView(),
+      home: SplashView(),
     );
   }
 }
