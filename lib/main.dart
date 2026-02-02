@@ -45,7 +45,7 @@ class MyApp extends ConsumerWidget {
           child: child!,
         );
       },
-      home: SplashView(),
+      home: LoginView(),
     );
   }
 }

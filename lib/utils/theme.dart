@@ -24,6 +24,12 @@ class AppTheme {
     primaryColor: AppColors.primaryColor,
     colorScheme: lightColorScheme,
     scaffoldBackgroundColor: Colors.white,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.white,
+      surfaceTintColor: Colors.transparent,
+      elevation: 0,
+      scrolledUnderElevation: 0,
+    ),
     textTheme: TextTheme(
       bodyLarge: TextStyle(
         color: AppColors.primaryTextColor,
