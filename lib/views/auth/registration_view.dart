@@ -51,7 +51,7 @@ class _RegistrationViewState extends ConsumerState<RegistrationView> {
     if (!_formKey.currentState!.validate()) return;
     // TODO: call registration API
     if (!mounted) return;
-    AppRouter.pushAndRemoveUntil(const HomeView());
+    AppRouter.pushAndRemoveUntil(const NavigationView());
   }
 
   @override

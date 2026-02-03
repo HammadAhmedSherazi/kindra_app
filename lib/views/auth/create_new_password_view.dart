@@ -29,7 +29,7 @@ class _CreateNewPasswordViewState extends ConsumerState<CreateNewPasswordView> {
     if (!_formKey.currentState!.validate()) return;
     // TODO: call API to set new password (email + new password)
     if (!mounted) return;
-    AppRouter.pushAndRemoveUntil(const LoginView());
+    showPasswordSuccessDialog(context);
   }
 
   void _onSkip() {
@@ -181,26 +181,7 @@ class _CreateNewPasswordViewState extends ConsumerState<CreateNewPasswordView> {
                   label: 'Confirm',
                   onPressed: _onConfirm,
                 ),
-                24.ph,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: _onSkip,
-                      child: Text(
-                        'Skip',
-                        style: TextStyle(
-                          color: Colors.black.withValues(alpha: 0.5),
-                          fontSize: 20,
-                          fontFamily: 'Roboto Flex',
-                          fontWeight: FontWeight.w400,
-                          height: 1.08,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                32.ph,
+               
               ],
             ),
           ),

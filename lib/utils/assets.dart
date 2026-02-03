@@ -11,4 +11,13 @@ abstract class Assets {
   static const String passwordIcon = '${iconPath}pasword_icon.png';
   static const String eyeIcon = '${iconPath}eye_icon.png';
   static const String userIcon = '${iconPath}user_icon.png';
+  static const String checkedIcon = '${iconPath}checked_icon.png';
+  static const String navHomeIcon = '${iconPath}nav_home.png';
+  static const String navRewardIcon = '${iconPath}nav_reward.png';
+  static const String navTrainerIcon = '${iconPath}nav_trainer.png';
+  static const String navUserIcon = '${iconPath}nav_user.png';
+  static const String scanDocIcon = '${iconPath}scan_doc_icon.png';
+  static const String notificationIcon = '${iconPath}notification_icon.png';
+  static const String addLocationIcon = '${iconPath}add_location_icon.png';
+
 }

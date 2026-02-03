@@ -43,7 +43,12 @@ export 'views/auth/otp_verification_view.dart';
 export 'views/auth/registration_view.dart';
 export 'views/auth/reset_password_view.dart';
 export 'views/home/home_view.dart';
+export 'views/navigation/navigation_view.dart';
 export 'views/onboarding/onboarding_view.dart';
+export 'views/profile/profile_view.dart';
+export 'views/reward/reward_view.dart';
+export 'views/trainer/trainer_view.dart';
+
 
 // Widgets
 export 'widget/back_button_widget.dart';
@@ -51,3 +56,4 @@ export 'widget/custom_back_arrow_widget.dart';
 export 'widget/custom_button_widget.dart';
 export 'widget/custom_loading_widget.dart';
 export 'widget/custom_text_field_widget.dart';
+export 'widget/password_success_dialog.dart';

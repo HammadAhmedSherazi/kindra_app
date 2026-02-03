@@ -21,31 +21,14 @@ class _LoginViewState extends ConsumerState<LoginView> {
 
   Future<void> _onSubmit() async {
     if (!_formKey.currentState!.validate()) return;
-    await ref
-        .read(authProvider.notifier)
-        .login(
-          email: _emailController.text.trim(),
-          password: _passwordController.text,
-        );
-    if (!mounted) return;
-    final state = ref.read(authProvider);
-    if (state.loginApiResponse.status == Status.completed) {
-      AppRouter.pushAndRemoveUntil(const HomeView());
-    } else if (state.loginApiResponse.status == Status.error) {
-      Helper.showMessage(
-        context,
-        message: state.loginApiResponse.message.isNotEmpty
-            ? state.loginApiResponse.message
-            : 'Login failed',
-      );
-    }
+   AppRouter.pushAndRemoveUntil(const NavigationView());
   }
 
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
     final isLoading = authState.loginApiResponse.status == Status.loading;
-    final theme = Theme.of(context);
+  
 
     return Scaffold(
       backgroundColor: Colors.white,
