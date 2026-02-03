@@ -27,14 +27,34 @@ class HomeView extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'Hello \nFajar Firmansyah',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontFamily: 'Roboto Flex',
-                                fontWeight: FontWeight.w500,
-                                height: 1.65,
+                            Text.rich(
+                              TextSpan(
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontFamily: 'Roboto Flex',
+                                  fontWeight: FontWeight.w500,
+                                  height: 1.65,
+                                ),
+                                children: [
+                                  TextSpan(text: 'Hello '),
+                                  WidgetSpan(
+                                    alignment: PlaceholderAlignment.middle,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(left: 4),
+                                      child: Transform.flip(
+                                        flipX: true,
+                                        child: Image.asset(
+                                          Assets.helloHandIcon,
+                                          width: 24,
+                                          height: 24,
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  TextSpan(text: '\nFajar Firmansyah'),
+                                ],
                               ),
                             ),
                           ],
@@ -127,7 +147,9 @@ class HomeView extends StatelessWidget {
                             ),
                           ),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              AppRouter.push(AllNewsView());
+                            },
                             child: Text(
                               'See All',
                               style: TextStyle(
@@ -144,88 +166,15 @@ class HomeView extends StatelessWidget {
                         shrinkWrap: true,
                         padding: EdgeInsets.zero,
                         physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) => Container(
-                          height: 114,
-                          child: Row(
-                            spacing: 10,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(13),
-                                child: Image.network(
-                                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8kvhwsPdeSIGSEvbktsxc_4pQpEqu4ykg4A&s",
-                                  height: double.infinity,
-                                  width: 114,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Kindra Green Campaign: P...',
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 17,
-                                        fontFamily: 'Roboto Flex',
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                    Text(
-                                      'In commemoration of Earth Day, Kindra launched  campaign by planting....',
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        color: Colors.black.withValues(
-                                          alpha: 0.66,
-                                        ),
-                                        fontSize: 14,
-                                        fontFamily: 'Roboto Flex',
-                                        fontWeight: FontWeight.w300,
-                                        height: 1.37,
-                                      ),
-                                    ),
-                                    Row(
-                                      spacing: 4,
-                                      children: [
-                                        Icon(
-                                          Icons.schedule,
-                                          color: Colors.black.withValues(
-                                            alpha: 0.40,
-                                          ),
-                                          size: 18,
-                                        ),
-                                        Text(
-                                          '20 Jun 2025',
-                                          style: TextStyle(
-                                            color: Colors.black.withValues(
-                                            alpha: 0.40,
-                                          ),
-                                            fontSize: 14,
-                                            fontFamily: 'Roboto Flex',
-                                            fontWeight: FontWeight.w300,
-                                            height: 1.14,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                        itemCount: demoNewsList.length,
+                        itemBuilder: (context, index) =>
+                            NewsItemWidget(news: demoNewsList[index]),
                         separatorBuilder: (context, index) => Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           child: Divider(),
                         ),
-                        itemCount: 2,
                       ),
-                      200.ph
+                      200.ph,
                     ],
                   ),
                 ),

@@ -19,5 +19,6 @@ abstract class Assets {
   static const String scanDocIcon = '${iconPath}scan_doc_icon.png';
   static const String notificationIcon = '${iconPath}notification_icon.png';
   static const String addLocationIcon = '${iconPath}add_location_icon.png';
+  static const String helloHandIcon = '${iconPath}hello_hand_icon.png';
 
 }

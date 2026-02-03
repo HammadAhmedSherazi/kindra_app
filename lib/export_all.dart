@@ -6,6 +6,7 @@ export 'package:shared_preferences/shared_preferences.dart';
 export 'package:flutter_svg/flutter_svg.dart';
 
 // Data
+export 'data/demo_news_list.dart';
 export 'data/enums/api_status.dart';
 export 'data/network/api_endpoints.dart';
 export 'data/network/api_exceptions.dart';
@@ -13,6 +14,7 @@ export 'data/network/api_response.dart';
 export 'data/network/http_client.dart';
 
 // Models
+export 'models/news_model.dart';
 export 'models/user_data_model.dart';
 
 // Providers
@@ -48,12 +50,15 @@ export 'views/onboarding/onboarding_view.dart';
 export 'views/profile/profile_view.dart';
 export 'views/reward/reward_view.dart';
 export 'views/trainer/trainer_view.dart';
+export 'views/home/all_news_view.dart';
 
 
 // Widgets
 export 'widget/back_button_widget.dart';
 export 'widget/custom_back_arrow_widget.dart';
+export 'widget/news_item_widget.dart';
 export 'widget/custom_button_widget.dart';
 export 'widget/custom_loading_widget.dart';
 export 'widget/custom_text_field_widget.dart';
 export 'widget/password_success_dialog.dart';
+export 'widget/custom_inner_screen_template.dart';
