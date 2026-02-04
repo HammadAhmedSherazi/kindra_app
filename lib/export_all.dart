@@ -52,6 +52,7 @@ export 'views/reward/reward_view.dart';
 export 'views/trainer/trainer_view.dart';
 export 'views/home/all_news_view.dart';
 
+export 'views/onboarding/splash_view.dart';
 
 // Widgets
 export 'widget/back_button_widget.dart';

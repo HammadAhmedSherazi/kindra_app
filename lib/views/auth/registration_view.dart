@@ -87,7 +87,7 @@ class _RegistrationViewState extends ConsumerState<RegistrationView> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
-                      Assets.logo,
+                      Assets.kindraTextLogo,
                       width: 160,
                       height: 67,
                       fit: BoxFit.contain,
@@ -225,37 +225,41 @@ class _RegistrationViewState extends ConsumerState<RegistrationView> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text.rich(
-                      TextSpan(
-                        children: [
-                          TextSpan(
-                            text: 'Already have an account? ',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                              fontFamily: 'Roboto Flex',
-                              fontWeight: FontWeight.w300,
-                              height: 1.08,
+                    Expanded(
+                      
+                      child: Text.rich(
+                        textAlign: TextAlign.center,
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'Already have an account? ',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontFamily: 'Roboto Flex',
+                                fontWeight: FontWeight.w300,
+                                height: 1.08,
+                              ),
                             ),
-                          ),
-                          WidgetSpan(
-                            alignment: PlaceholderAlignment.baseline,
-                            baseline: TextBaseline.alphabetic,
-                            child: GestureDetector(
-                              onTap: () => AppRouter.back(),
-                              child: Text(
-                                'Login here',
-                                style: TextStyle(
-                                  color: const Color(0xFFDB932C),
-                                  fontSize: 20,
-                                  fontFamily: 'Roboto Flex',
-                                  fontWeight: FontWeight.w600,
-                                  height: 1.08,
+                            WidgetSpan(
+                              alignment: PlaceholderAlignment.baseline,
+                              baseline: TextBaseline.alphabetic,
+                              child: GestureDetector(
+                                onTap: () => AppRouter.back(),
+                                child: Text(
+                                  'Login here',
+                                  style: TextStyle(
+                                    color: const Color(0xFFDB932C),
+                                    fontSize: 20,
+                                    fontFamily: 'Roboto Flex',
+                                    fontWeight: FontWeight.w600,
+                                    height: 1.08,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ],

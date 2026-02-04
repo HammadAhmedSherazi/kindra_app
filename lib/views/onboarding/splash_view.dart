@@ -9,6 +9,16 @@ class SplashView extends StatefulWidget {
 
 class _SplashViewState extends State<SplashView> {
   @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 3), () {
+      if (mounted) {
+        AppRouter.pushReplacement(const OnboardingView());
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
@@ -21,7 +31,9 @@ class _SplashViewState extends State<SplashView> {
           colors: [const Color(0xFF005469), const Color(0xFF001419)],
         ),
       ),
-      child: SvgPicture.asset(Assets.logo, width: 30, height: 30,),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(44),
+        child: Image.asset(Assets.logo, width: 152, height: 152,)),
     );
   }
 }

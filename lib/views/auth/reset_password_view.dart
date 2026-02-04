@@ -56,7 +56,7 @@ class _ResetPasswordViewState extends ConsumerState<ResetPasswordView> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
-                      Assets.logo,
+                      Assets.kindraTextLogo,
                       width: 160,
                       height: 67,
                       fit: BoxFit.contain,

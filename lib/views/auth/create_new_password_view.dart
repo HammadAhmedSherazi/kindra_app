@@ -62,7 +62,7 @@ class _CreateNewPasswordViewState extends ConsumerState<CreateNewPasswordView> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
-                      Assets.logo,
+                      Assets.kindraTextLogo,
                       width: 160,
                       height: 67,
                       fit: BoxFit.contain,

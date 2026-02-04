@@ -4,7 +4,7 @@ abstract class Assets {
   static const String imagePath = 'assets/images/';
   static const String iconPath = 'assets/icons/';
 
-  static const String logo = '${iconPath}kindra_text_logo.png';
+  // static const String logo = '${iconPath}kindra_text_logo.png';
   static const String placeholder = '${imagePath}placeholder.png';
 
   static const String emailIcon = '${iconPath}email_icon.png';
@@ -20,5 +20,14 @@ abstract class Assets {
   static const String notificationIcon = '${iconPath}notification_icon.png';
   static const String addLocationIcon = '${iconPath}add_location_icon.png';
   static const String helloHandIcon = '${iconPath}hello_hand_icon.png';
+  static const String logo = '${imagePath}logo.png';
+  static const String kindraTextLogo = '${imagePath}kindra_text_logo.png';
+
+
+  static const String onBoarding1 = "${imagePath}onboarding1.png";
+  static const String onBoarding2 = "${imagePath}onboarding2.png";
+  static const String onBoarding3 = "${imagePath}onboarding3.png";
 
 }
+  
+

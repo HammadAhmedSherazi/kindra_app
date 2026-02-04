@@ -21,14 +21,13 @@ class _LoginViewState extends ConsumerState<LoginView> {
 
   Future<void> _onSubmit() async {
     if (!_formKey.currentState!.validate()) return;
-   AppRouter.pushAndRemoveUntil(const NavigationView());
+    AppRouter.pushAndRemoveUntil(const NavigationView());
   }
 
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
     final isLoading = authState.loginApiResponse.status == Status.loading;
-  
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -40,7 +39,8 @@ class _LoginViewState extends ConsumerState<LoginView> {
         leading: Padding(
           padding: const EdgeInsets.only(left: 12),
           child: BackButtonWidget(
-            onPressed: () => AppRouter.pushAndRemoveUntil(const OnboardingView()),
+            onPressed: () =>
+                AppRouter.pushAndRemoveUntil(const OnboardingView()),
           ),
         ),
       ),
@@ -56,11 +56,12 @@ class _LoginViewState extends ConsumerState<LoginView> {
                   mainAxisAlignment: .center,
                   children: [
                     Image.asset(
-          Assets.logo,
-          width: 160,
-height: 67,
-          fit: BoxFit.contain,
-        ) ],
+                      Assets.kindraTextLogo,
+                      width: 160,
+                      height: 67,
+                      fit: BoxFit.contain,
+                    ),
+                  ],
                 ),
                 57.ph,
                 Row(
@@ -154,8 +155,7 @@ height: 67,
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
-                    onPressed: () =>
-                        AppRouter.push(const ResetPasswordView()),
+                    onPressed: () => AppRouter.push(const ResetPasswordView()),
                     style: TextButton.styleFrom(
                       foregroundColor: AppColors.primaryColor,
                       padding: EdgeInsets.zero,
@@ -184,38 +184,41 @@ height: 67,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text.rich(
-                      TextSpan(
-                        children: [
-                          TextSpan(
-                            text: 'Don`t have an account? ',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                              fontFamily: 'Roboto Flex',
-                              fontWeight: FontWeight.w300,
-                              height: 1.08,
+                    Expanded(
+                      child: Text.rich(
+                        textAlign: TextAlign.center,
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'Don`t have an account? ',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontFamily: 'Roboto Flex',
+                                fontWeight: FontWeight.w300,
+                                height: 1.08,
+                              ),
                             ),
-                          ),
-                          WidgetSpan(
-                            alignment: PlaceholderAlignment.baseline,
-                            baseline: TextBaseline.alphabetic,
-                            child: GestureDetector(
-                              onTap: () =>
-                                  AppRouter.push(const RegistrationView()),
-                              child: Text(
-                                'Register here',
-                                style: TextStyle(
-                                  color: const Color(0xFFDB932C),
-                                  fontSize: 20,
-                                  fontFamily: 'Roboto Flex',
-                                  fontWeight: FontWeight.w600,
-                                  height: 1.08,
+                            WidgetSpan(
+                              alignment: PlaceholderAlignment.baseline,
+                              baseline: TextBaseline.alphabetic,
+                              child: GestureDetector(
+                                onTap: () =>
+                                    AppRouter.push(const RegistrationView()),
+                                child: Text(
+                                  'Register here',
+                                  style: TextStyle(
+                                    color: const Color(0xFFDB932C),
+                                    fontSize: 20,
+                                    fontFamily: 'Roboto Flex',
+                                    fontWeight: FontWeight.w600,
+                                    height: 1.08,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ],
