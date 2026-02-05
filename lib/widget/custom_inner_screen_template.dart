@@ -39,6 +39,7 @@ class CustomInnerScreenTemplate extends StatelessWidget {
             child: Icon(Icons.arrow_back_ios, size: 18,),
           ),
         ),
+        centerTitle: true,
         title: Text(
           title,
           style: TextStyle(
@@ -48,7 +49,7 @@ class CustomInnerScreenTemplate extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
-        actions: [actionButton != null ? actionButton! : SizedBox.shrink()],
+        actions:actionButton != null? [ actionButton!, 15.pw] : null,
       ),
       body: child,
     );

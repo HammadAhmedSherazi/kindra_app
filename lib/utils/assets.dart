@@ -20,6 +20,9 @@ abstract class Assets {
   static const String notificationIcon = '${iconPath}notification_icon.png';
   static const String addLocationIcon = '${iconPath}add_location_icon.png';
   static const String helloHandIcon = '${iconPath}hello_hand_icon.png';
+  static const String amountDisplayIcon = '${iconPath}amount_display_icon.png';
+  static const String bookMarkIcon = '${iconPath}book_mark_icon.png';
+  static const String checkBlackIcon = '${iconPath}check_black_icon.png';
   static const String logo = '${imagePath}logo.png';
   static const String kindraTextLogo = '${imagePath}kindra_text_logo.png';
 
@@ -29,5 +32,4 @@ abstract class Assets {
   static const String onBoarding3 = "${imagePath}onboarding3.png";
 
 }
-  
 

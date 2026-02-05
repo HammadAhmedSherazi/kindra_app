@@ -60,15 +60,18 @@ class HomeView extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Container(
-                        width: 45,
-                        height: 45,
-                        padding: EdgeInsets.all(10),
-                        decoration: ShapeDecoration(
-                          color: Colors.white,
-                          shape: OvalBorder(),
+                      GestureDetector(
+                        onTap: () => AppRouter.push(const NotificationView()),
+                        child: Container(
+                          width: 45,
+                          height: 45,
+                          padding: EdgeInsets.all(10),
+                          decoration: ShapeDecoration(
+                            color: Colors.white,
+                            shape: OvalBorder(),
+                          ),
+                          child: Image.asset(Assets.notificationIcon),
                         ),
-                        child: Image.asset(Assets.notificationIcon),
                       ),
                     ],
                   ),
@@ -101,6 +104,7 @@ class HomeView extends StatelessWidget {
                           ),
                         ),
                         child: ListTile(
+                          onTap: () => AppRouter.push(const PointsView()),
                           leading: Container(
                             width: 55,
                             height: 55,
@@ -167,8 +171,12 @@ class HomeView extends StatelessWidget {
                         padding: EdgeInsets.zero,
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: demoNewsList.length,
-                        itemBuilder: (context, index) =>
-                            NewsItemWidget(news: demoNewsList[index]),
+                        itemBuilder: (context, index) => NewsItemWidget(
+                          news: demoNewsList[index],
+                          onTap: () => AppRouter.push(
+                            NewsDetailView(news: demoNewsList[index]),
+                          ),
+                        ),
                         separatorBuilder: (context, index) => Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           child: Divider(),
@@ -191,6 +199,112 @@ class HomeView extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.black,
                 borderRadius: BorderRadius.circular(23),
+              ),
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 13,
+                      vertical: 20,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          spacing: 10,
+                          children: [
+                            Container(
+                              width: 55,
+                              height: 55,
+                              padding: EdgeInsets.all(14),
+                              decoration: ShapeDecoration(
+                                color: const Color(0xFF4C4C4C),
+                                shape: OvalBorder(
+                                  side: BorderSide(
+                                    width: 1,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                              child: Image.asset(Assets.amountDisplayIcon),
+                            ),
+                            Expanded(
+                              child: Column(
+                                spacing: 10,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Your Points',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14.04,
+                                      fontFamily: 'Roboto Flex',
+                                      fontWeight: FontWeight.w500,
+                                      height: 0.73,
+                                    ),
+                                  ),
+                                  Text(
+                                    '85000',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 25.38,
+                                      fontFamily: 'Roboto Flex',
+                                      fontWeight: FontWeight.w500,
+                                      height: 0.73,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Faj*******',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18.83,
+                                  fontFamily: 'Roboto Flex',
+                                  fontWeight: FontWeight.w600,
+                                  height: 0.73,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          spacing: 24,
+                          children: [
+                            Expanded(
+                              child: CustomButtonWidget(
+                                label: "Redeem Point",
+                                onPressed: () {},
+                                textSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Expanded(
+                              child: CustomButtonWidget(
+                                label: 'History',
+                                onPressed: () {},
+                                backgroundColor: Colors.white.withValues(alpha: 0.35),
+                                borderColor: Colors.white,
+                                textColor: Colors.white,
+                                variant: CustomButtonVariant.outlined,
+                                textSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

@@ -36,9 +36,14 @@ class _OnboardingViewState extends State<OnboardingView> {
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
-        leading: IconButton(
+        leading: _currentPage > 0 ? IconButton(
           onPressed: () {
-            AppRouter.back();
+            if (_currentPage > 0) {
+              _pageController.previousPage(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
+            }
           },
           icon: Container(
             width: 32,
@@ -54,123 +59,113 @@ class _OnboardingViewState extends State<OnboardingView> {
             ),
             child: const Icon(Icons.arrow_back_ios, size: 15),
           ),
-        ),
+        ) : null,
         title: Image.asset(Assets.kindraTextLogo, width: 150, height: 70),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: PageView.builder(
-              controller: _pageController,
-              onPageChanged: (index) {
-                setState(() {
-                  _currentPage = index;
-                });
-              },
-              itemCount: _onboardingImages.length,
-              itemBuilder: (context, index) {
-                return Image.asset(
-                  _onboardingImages[index],
-                  // fit: BoxFit.cover,
-                  width: context.screenWidth * 0.80,
-                );
-              },
+      body: Padding(
+        padding:EdgeInsets.symmetric(horizontal: 24),
+        child: Column(
+          children: [
+            Expanded(
+              child: PageView.builder(
+                controller: _pageController,
+                onPageChanged: (index) {
+                  setState(() {
+                    _currentPage = index;
+                  });
+                },
+                itemCount: _onboardingImages.length,
+                itemBuilder: (context, index) {
+                  return Image.asset(
+                    _onboardingImages[index],
+                    // fit: BoxFit.cover,
+                    width: context.screenWidth * 0.80,
+                  );
+                },
+              ),
             ),
-          ),
-          // Stepper indicator
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(
-              _onboardingImages.length,
-              (index) => Expanded(
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 6),
-                  width: _currentPage == index ? 24 : 8,
-                  height: 8,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    color: _currentPage == index
-                        ? AppColors.primaryColor
-                        : const Color(0xFFD0D0D0),
+            // Stepper indicator
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(
+                _onboardingImages.length,
+                (index) => Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 6),
+                    width: _currentPage == index ? 24 : 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                      color: _currentPage == index
+                          ? AppColors.primaryColor
+                          : const Color(0xFFD0D0D0),
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          50.ph,
-          Text(
-            'Welcome to Kindra',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 38.37,
-              fontFamily: 'Roboto Flex',
-              fontWeight: FontWeight.w600,
+            50.ph,
+            Text(
+              'Welcome to Kindra',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 38.37,
+                fontFamily: 'Roboto Flex',
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          ),
-          Text(
-            'Lorem Ipsum is simply dummy is the printing and typesetting industry.',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20,
-              fontFamily: 'Roboto Flex',
-              fontWeight: FontWeight.w300,
-              height: 1.65,
+            Text(
+              'Lorem Ipsum is simply dummy is the printing and typesetting industry.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 20,
+                fontFamily: 'Roboto Flex',
+                fontWeight: FontWeight.w300,
+                height: 1.65,
+              ),
             ),
-          ),
-          // Bottom buttons
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
+            70.ph,  
+            // Bottom buttons
+            if(_currentPage < _onboardingImages.length - 1)
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TextButton(
-                  onPressed: () {
-                    AppRouter.pushReplacement(const LoginView());
-                  },
-                  child: const Text(
-                    'Skip',
-                    style: TextStyle(
-                      color: Color(0xFF005469),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
+                CustomButtonWidget(
+                  expandWidth: false,
+                  backgroundColor: const Color(0xFF818180),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 32,
                   ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
+                  label: "Skip", onPressed: () {
+                     AppRouter.pushReplacement(const LoginView());
+                  },),
+                
+                CustomButtonWidget(
+                  expandWidth: false,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 32,
+                  ),
+                  label: "Next", onPressed: () {
                     if (_currentPage < _onboardingImages.length - 1) {
                       _pageController.nextPage(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeInOut,
                       );
-                    } else {
-                      AppRouter.pushReplacement(const LoginView());
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF005469),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 32,
-                      vertical: 12,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: const Text(
-                    'Next',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
+                    } 
+                  },)
               ],
             ),
-          ),
-        ],
+            if(_currentPage == 2)
+            CustomButtonWidget(
+              label: 'Get Started',
+              onPressed: () {
+                 AppRouter.push(const LoginView());
+              },
+            ),
+            60.ph
+          ],
+        ),
       ),
     );
   }

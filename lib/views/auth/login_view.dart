@@ -53,7 +53,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Row(
-                  mainAxisAlignment: .center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
                       Assets.kindraTextLogo,
@@ -65,7 +65,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                 ),
                 57.ph,
                 Row(
-                  mainAxisAlignment: .center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       'Explore Kindra',
@@ -79,7 +79,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                   ],
                 ),
                 Row(
-                  mainAxisAlignment: .center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       'Enter your email & password',

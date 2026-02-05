@@ -69,10 +69,10 @@ flutter:
     - family: Roboto Flex
       fonts:
         - asset: assets/fonts/RobotoFlex.ttf
-          weight: 300  # Regular
+          weight: 400  # Regular
         - asset: assets/fonts/RobotoFlex.ttf
-          weight: 400  # Medium
+          weight: 500  # Medium
         - asset: assets/fonts/RobotoFlex.ttf
-          weight: 500  # SemiBold
+          weight: 600  # SemiBold
         - asset: assets/fonts/RobotoFlex.ttf
-          weight: 600  # Bold
+          weight: 700  # Bold

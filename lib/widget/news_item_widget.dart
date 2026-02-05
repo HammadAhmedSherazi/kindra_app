@@ -4,9 +4,11 @@ class NewsItemWidget extends StatelessWidget {
   const NewsItemWidget({
     super.key,
     required this.news,
+    this.onTap,
   });
 
   final NewsModel news;
+  final VoidCallback? onTap;
 
   static const List<String> _monthNames = [
     'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
@@ -26,9 +28,12 @@ class NewsItemWidget extends StatelessWidget {
     final description = news.description ?? '';
     final dateStr = _formatDate(news.date);
 
-    return SizedBox(
-      height: 114,
-      child: Row(
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(13),
+      child: SizedBox(
+        height: 114,
+        child: Row(
         spacing: 10,
         children: [
           ClipRRect(
@@ -98,6 +103,7 @@ class NewsItemWidget extends StatelessWidget {
             ),
           ),
         ],
+        ),
       ),
     );
   }

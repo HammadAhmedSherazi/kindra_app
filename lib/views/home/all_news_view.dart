@@ -10,8 +10,10 @@ class AllNewsView extends StatelessWidget {
       child: ListView.separated(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         itemCount: demoNewsList.length,
-        itemBuilder: (context, index) =>
-            NewsItemWidget(news: demoNewsList[index]),
+        itemBuilder: (context, index) => NewsItemWidget(
+          news: demoNewsList[index],
+          onTap: () => AppRouter.push(NewsDetailView(news: demoNewsList[index])),
+        ),
         separatorBuilder: (context, index) => Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
           child: Divider(),
