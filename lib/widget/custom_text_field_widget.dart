@@ -67,13 +67,7 @@ class CustomTextFieldWidget extends StatelessWidget {
         if (label != null) ...[
           Text(
             label!,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20,
-              fontFamily: 'Roboto Flex',
-              fontWeight: FontWeight.w300,
-              height: 1.08,
-            ),
+            style: context.robotoFlexRegular(fontSize: 18, color: Colors.black),
           ),
           8.ph,
         ],

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../views/navigation/navigation_view.dart';
+
 class AppRouter {
   AppRouter._();
 
@@ -29,6 +31,20 @@ class AppRouter {
     await Navigator.pushAndRemoveUntil(
       navKey.currentContext!,
       MaterialPageRoute(builder: (_) => page),
+      (route) => false,
+    );
+  }
+
+  /// Pops all screens and routes to Navigation with Home tab selected.
+  static Future<void> backToHome() async {
+    final context = navKey.currentContext;
+    if (context == null) return;
+    FocusScope.of(context).unfocus();
+    await Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const NavigationView(initialIndex: 0),
+      ),
       (route) => false,
     );
   }

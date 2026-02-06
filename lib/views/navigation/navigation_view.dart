@@ -1,17 +1,23 @@
-import 'package:flutter/material.dart';
-
 import '../../export_all.dart';
-import '../../utils/colors.dart';
 
 class NavigationView extends ConsumerStatefulWidget {
-  const NavigationView({super.key});
+  const NavigationView({super.key, this.initialIndex = 0});
+
+  /// Tab to show when opened (0=Home, 1=Training, 2=Reward, 3=Profile).
+  final int initialIndex;
 
   @override
   ConsumerState<NavigationView> createState() => _NavigationViewState();
 }
 
 class _NavigationViewState extends ConsumerState<NavigationView> {
-  int _currentIndex = 0;
+  late int _currentIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.initialIndex.clamp(0, 3);
+  }
 
   final List<Widget> _tabs = const [
     HomeView(),
@@ -22,16 +28,18 @@ class _NavigationViewState extends ConsumerState<NavigationView> {
 
   void _onFabPressed() {
     // Center FAB action - e.g. create post, add item, etc.
-    // TODO: navigate to create screen or show bottom sheet
+    AppRouter.push(const UsedOilHandoverView());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(index: _currentIndex, children: _tabs),
-      extendBody: true,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      body: IndexedStack(
+        index: _currentIndex,
+        children: _tabs,
+      ),
       floatingActionButton: _buildCenterFab(context),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: _buildBottomBar(context),
     );
   }

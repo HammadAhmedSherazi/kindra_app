@@ -290,7 +290,9 @@ class HomeView extends StatelessWidget {
                             Expanded(
                               child: CustomButtonWidget(
                                 label: 'History',
-                                onPressed: () {},
+                                onPressed: () {
+                                  AppRouter.push(const HistoryView());
+                                },
                                 backgroundColor: Colors.white.withValues(alpha: 0.35),
                                 borderColor: Colors.white,
                                 textColor: Colors.white,

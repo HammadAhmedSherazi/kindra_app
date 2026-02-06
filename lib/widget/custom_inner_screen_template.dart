@@ -4,11 +4,13 @@ class CustomInnerScreenTemplate extends StatelessWidget {
   final String title;
   final Widget child;
   final Widget? actionButton;
+  final bool showBackButton;
   const CustomInnerScreenTemplate({
     super.key,
     required this.title,
     required this.child,
     this.actionButton,
+    this.showBackButton = true,
   });
 
   @override
@@ -17,9 +19,10 @@ class CustomInnerScreenTemplate extends StatelessWidget {
       backgroundColor: Color(0xffF9FAFC),
       appBar: AppBar(
         toolbarHeight: 100,
+        automaticallyImplyLeading: showBackButton,
         backgroundColor: Colors.transparent,
         leadingWidth: 80,
-        leading: IconButton(
+        leading: showBackButton ? IconButton(
           onPressed: () {
             AppRouter.back();
           },
@@ -38,15 +41,20 @@ class CustomInnerScreenTemplate extends StatelessWidget {
             ),
             child: Icon(Icons.arrow_back_ios, size: 18,),
           ),
-        ),
+        ) : null,
         centerTitle: true,
-        title: Text(
-          title,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 22,
-            fontFamily: 'Roboto Flex',
-            fontWeight: FontWeight.w600,
+        title: SizedBox(
+          width: context.screenWidth * 0.55,
+          child: Text(
+            title,
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 22,
+              fontFamily: 'Roboto Flex',
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
         actions:actionButton != null? [ actionButton!, 15.pw] : null,

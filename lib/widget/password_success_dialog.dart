@@ -98,7 +98,7 @@ height: 1.18,
               label: 'Continue to Home',
               onPressed: () {
                 Navigator.of(context).pop();
-                AppRouter.pushAndRemoveUntil(const NavigationView());
+                AppRouter.backToHome();
               },
             ),
           ],

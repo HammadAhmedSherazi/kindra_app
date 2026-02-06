@@ -64,12 +64,11 @@ class PointsView extends StatelessWidget {
                   ],
                 ),
               ),
-              Expanded(
-                child: ListView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+              130.ph,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
                   children: [
-                    130.ph,
                     Text(
                       'Ponts Redemption History',
                       style: TextStyle(
@@ -79,15 +78,20 @@ class PointsView extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    16.ph,
-                    ...demoPointsRedemptionList.map(
-                      (item) => Padding(
-                        padding: EdgeInsets.only(bottom: 16),
-                        child: _RedemptionHistoryTile(item: item),
-                      ),
-                    ),
-                    200.ph,
                   ],
+                ),
+              ),
+              16.ph,
+              Expanded(
+                child: ListView.separated(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  itemBuilder: (context, index) {
+                    final item = demoPointsRedemptionList[index];
+                    return _RedemptionHistoryTile(item: item);
+                  },
+                  separatorBuilder: (context, index) => 16.ph,
+                  itemCount: demoPointsRedemptionList.length,
                 ),
               ),
             ],
@@ -133,17 +137,17 @@ class _PointsSummaryCard extends StatelessWidget {
         clipBehavior: Clip.none,
         children: [
           // Subtle pattern (right & bottom)
-          Positioned(
-            right: -20,
-            bottom: -20,
-            child: Opacity(
-              opacity: 0.06,
-              child: CustomPaint(
-                size: Size(120, 120),
-                painter: _SwirlPatternPainter(),
-              ),
-            ),
-          ),
+          // Positioned(
+          //   right: -20,
+          //   bottom: -20,
+          //   child: Opacity(
+          //     opacity: 0.06,
+          //     child: CustomPaint(
+          //       size: Size(120, 120),
+          //       painter: _SwirlPatternPainter(),
+          //     ),
+          //   ),
+          // ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -229,7 +233,7 @@ class _PointsSummaryCard extends StatelessWidget {
                 child: CustomButtonWidget(
                   label: 'Redeem Points',
                   onPressed: () {
-                    // TODO: Redeem points
+                    AppRouter.push(const RedeemMethodSelectionView());
                   },
                   textSize: 20,
                   fontWeight: FontWeight.w600,
@@ -295,63 +299,46 @@ class _RedemptionHistoryTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFE8E8E8)),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 44,
-            height: 44,
-            decoration: BoxDecoration(
-              color: const Color(0xFFF0F0F0),
-              shape: BoxShape.circle,
-              border: Border.all(color: const Color(0xFFE0E0E0)),
-            ),
-            child: Icon(Icons.sync_alt, color: Colors.grey.shade600, size: 22),
-          ),
-          14.pw,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  item.description,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 15,
-                    fontFamily: 'Roboto Flex',
-                    fontWeight: FontWeight.w400,
-                  ),
+    return Row(
+      children: [
+        SvgPicture.asset(Assets.transitionIcon, width: 55, height: 55),
+        14.pw,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                item.description,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 15,
+                  fontFamily: 'Roboto Flex',
+                  fontWeight: FontWeight.w400,
                 ),
-                4.ph,
-                Text(
-                  item.date,
-                  style: TextStyle(
-                    color: Colors.grey.shade600,
-                    fontSize: 13,
-                    fontFamily: 'Roboto Flex',
-                    fontWeight: FontWeight.w400,
-                  ),
+              ),
+              10.ph,
+              Text(
+                item.date,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 13,
+                  fontFamily: 'Roboto Flex',
+                  fontWeight: FontWeight.w400,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          Text(
-            item.pointsDisplay,
-            style: const TextStyle(
-              color: AppColors.primaryColor,
-              fontSize: 16,
-              fontFamily: 'Roboto Flex',
-              fontWeight: FontWeight.w600,
-            ),
+        ),
+        Text(
+          item.pointsDisplay,
+          style: const TextStyle(
+            color: AppColors.primaryColor,
+            fontSize: 16,
+            fontFamily: 'Roboto Flex',
+            fontWeight: FontWeight.w600,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

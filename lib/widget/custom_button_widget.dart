@@ -68,7 +68,7 @@ class CustomButtonWidget extends StatelessWidget {
                     label,
                     style: TextStyle(
                       color: effectiveTextColor,
-                      fontSize: textSize ?? 23,
+                      fontSize: textSize ?? 18,
                       fontFamily: 'Roboto Flex',
                       fontWeight: fontWeight ?? FontWeight.w600,
                     ),
@@ -79,7 +79,7 @@ class CustomButtonWidget extends StatelessWidget {
                 label,
                 style: TextStyle(
                   color: effectiveTextColor,
-                  fontSize: textSize ?? 23,
+                  fontSize: textSize ?? 18,
                   fontFamily: 'Roboto Flex',
                   fontWeight: fontWeight ?? FontWeight.w600,
                 ),
