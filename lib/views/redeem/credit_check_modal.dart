@@ -2,10 +2,7 @@ import '../../export_all.dart';
 
 /// Bottom sheet modal for Credit flow - enter mobile number to check E-Wallet.
 class CreditCheckModal extends StatelessWidget {
-  const CreditCheckModal({
-    super.key,
-    required this.onCheckEWallet,
-  });
+  const CreditCheckModal({super.key, required this.onCheckEWallet});
 
   final void Function(String countryCode, String phone) onCheckEWallet;
 
@@ -28,9 +25,7 @@ class CreditCheckModal extends StatelessWidget {
 }
 
 class _CreditCheckModalContent extends StatefulWidget {
-  const _CreditCheckModalContent({
-    required this.onCheckEWallet,
-  });
+  const _CreditCheckModalContent({required this.onCheckEWallet});
 
   final void Function(String countryCode, String phone) onCheckEWallet;
 
@@ -40,8 +35,17 @@ class _CreditCheckModalContent extends StatefulWidget {
 }
 
 class _CreditCheckModalContentState extends State<_CreditCheckModalContent> {
-  final _phoneController = TextEditingController(text: '898*******');
-  String _countryCode = '+62';
+  final _phoneController = TextEditingController();
+  late CountryCode _selectedCountry;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedCountry = defaultCountryCodes.firstWhere(
+      (c) => c.code == 'ID',
+      orElse: () => defaultCountryCodes.first,
+    );
+  }
 
   @override
   void dispose() {
@@ -49,168 +53,112 @@ class _CreditCheckModalContentState extends State<_CreditCheckModalContent> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-      initialChildSize: 0.5,
-      minChildSize: 0.4,
-      maxChildSize: 0.85,
-      builder: (context, scrollController) {
-        return Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+    final bottomInset = MediaQuery.viewInsetsOf(context).bottom;
+    final height = MediaQuery.sizeOf(context).height * 0.4 + bottomInset;
+
+    return Container(
+      height: height,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          12.ph,
+          Container(
+            width: 40,
+            height: 4,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade300,
+              borderRadius: BorderRadius.circular(2),
+            ),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              12.ph,
-              Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              20.ph,
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        Assets.cardIcon,
-                        width: 32,
-                        height: 32,
-                        color: AppColors.primaryColor,
-                      ),
-                      8.pw,
-                      Text(
-                        'Credit',
-                        style: context.robotoFlexSemiBold(
-                          fontSize: 20,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
+          20.ph,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                CircleAvatar(
+                  radius: 25,
+                  backgroundColor: AppColors.primaryColor,
+                  child: Image.asset(
+                    Assets.cardIcon,
+                    width: 22,
+                    height: 22,
                   ),
-                  Positioned(
-                    right: 20,
-                    child: GestureDetector(
-                      onTap: () => Navigator.of(context).pop(),
-                      child: Container(
-                        width: 36,
-                        height: 36,
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade200,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          Icons.close,
-                          size: 20,
-                          color: Colors.grey.shade700,
-                        ),
-                      ),
+                ),
+                10.pw,
+                Text(
+                  'Credit',
+                  style: context.robotoFlexSemiBold(
+                    fontSize: 20,
+                    color: Colors.black,
+                  ),
+                ),
+                const Spacer(),
+                GestureDetector(
+                  onTap: () => Navigator.of(context).pop(),
+                  child: Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      shape: BoxShape.circle,
                     ),
+                    child: Icon(
+                      Icons.close,
+                      size: 20,
+                      color: Colors.grey.shade700,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 18,
+            ),
+            child:  Divider(
+              color: Colors.grey.shade300,
+            ),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  CountryPhoneFieldWidget(
+                    controller: _phoneController,
+                    initialCountry: _selectedCountry,
+                    onCountryChanged: (c) =>
+                        setState(() => _selectedCountry = c),
+                    label: 'Mobile Number',
+                    hint: '898*******',
+                  ),
+                  24.ph,
+                  CustomButtonWidget(
+                    label: 'Check E-Wallet',
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      widget.onCheckEWallet(
+                        _selectedCountry.dialCode,
+                        _phoneController.text.trim(),
+                      );
+                    },
                   ),
                 ],
               ),
-              24.ph,
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Mobile Number',
-                      style: context.robotoFlexMedium(
-                        fontSize: 16,
-                        color: Colors.black,
-                      ),
-                    ),
-                    12.ph,
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: const Color(0xFFD9D9D9)),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 12,
-                            ),
-                            child: Text(
-                              '🇮🇩',
-                              style: const TextStyle(fontSize: 20),
-                            ),
-                          ),
-                          Text(
-                            '$_countryCode  ',
-                            style: context.robotoFlexMedium(
-                              fontSize: 16,
-                              color: Colors.black,
-                            ),
-                          ),
-                          Icon(
-                            Icons.keyboard_arrow_down,
-                            size: 20,
-                            color: Colors.grey.shade600,
-                          ),
-                          Expanded(
-                            child: TextField(
-                              controller: _phoneController,
-                              keyboardType: TextInputType.phone,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 14,
-                                ),
-                                hintText: '898*******',
-                                hintStyle: TextStyle(
-                                  color: Colors.grey.shade500,
-                                  fontSize: 16,
-                                  fontFamily: 'Roboto Flex',
-                                ),
-                              ),
-                              style: context.robotoFlexMedium(
-                                fontSize: 16,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    24.ph,
-                    CustomButtonWidget(
-                      label: 'Check E-Wallet',
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        widget.onCheckEWallet(
-                          _countryCode,
-                          _phoneController.text.replaceAll('*', ''),
-                        );
-                      },
-                    ),
-                    24.ph,
-                  ],
-                ),
-              ),
-            ],
+            ),
           ),
-        );
-      },
+        ],
+      ),
     );
   }
 }

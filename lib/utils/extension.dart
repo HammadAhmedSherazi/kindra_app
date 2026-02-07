@@ -19,7 +19,7 @@ extension AppContextExtension on BuildContext {
       TextStyle(
         fontFamily: 'Roboto Flex',
         fontWeight: FontWeight.w400,
-        fontSize: fontSize ?? 14,
+        fontSize: fontSize ?? 13,
         color: color ?? AppColors.primaryTextColor,
       );
 
@@ -28,7 +28,7 @@ extension AppContextExtension on BuildContext {
       TextStyle(
         fontFamily: 'Roboto Flex',
         fontWeight: FontWeight.w500,
-        fontSize: fontSize ?? 14,
+        fontSize: fontSize ?? 13,
         color: color ?? AppColors.primaryTextColor,
       );
 
@@ -37,7 +37,7 @@ extension AppContextExtension on BuildContext {
       TextStyle(
         fontFamily: 'Roboto Flex',
         fontWeight: FontWeight.w600,
-        fontSize: fontSize ?? 14,
+        fontSize: fontSize ?? 13,
         color: color ?? AppColors.primaryTextColor,
       );
 
@@ -46,7 +46,7 @@ extension AppContextExtension on BuildContext {
       TextStyle(
         fontFamily: 'Roboto Flex',
         fontWeight: FontWeight.w700,
-        fontSize: fontSize ?? 14,
+        fontSize: fontSize ?? 13,
         color: color ?? AppColors.primaryTextColor,
       );
 }

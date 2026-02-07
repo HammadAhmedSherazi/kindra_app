@@ -51,7 +51,7 @@ class CustomInnerScreenTemplate extends StatelessWidget {
             maxLines: 2,
             style: TextStyle(
               color: Colors.black,
-              fontSize: 22,
+              fontSize: 20,
               fontFamily: 'Roboto Flex',
               fontWeight: FontWeight.w600,
             ),

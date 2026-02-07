@@ -44,5 +44,12 @@ abstract class Assets {
 
   /// Illustration for Used Oil Handover (woman + camera + frame). Optional.
   static const String usedOilHandover = '${imagePath}used_oil_handover.png';
+
+  /// Reward tab icons
+  static const String rewardIcon = '${iconPath}reward_icon.svg';
+  static const String winBadgeIcon = '${iconPath}win_badge_icon.svg';
+  static const String winIcon = '${iconPath}win_icon.svg';
+  static const String giftIcon = '${iconPath}gift_icon.svg';
+  static const String shopBagIcon = '${iconPath}shop_bag_icon.svg';
 }
 

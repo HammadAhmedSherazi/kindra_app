@@ -1,27 +1,5 @@
 import '../../export_all.dart';
 
-class CountryCode {
-  const CountryCode({
-    required this.code,
-    required this.dialCode,
-    required this.flag,
-  });
-  final String code;
-  final String dialCode;
-  final String flag;
-}
-
-const List<CountryCode> _countryCodes = [
-  CountryCode(code: 'PK', dialCode: '+92', flag: '🇵🇰'),
-  CountryCode(code: 'US', dialCode: '+1', flag: '🇺🇸'),
-  CountryCode(code: 'GB', dialCode: '+44', flag: '🇬🇧'),
-  CountryCode(code: 'IN', dialCode: '+91', flag: '🇮🇳'),
-  CountryCode(code: 'AE', dialCode: '+971', flag: '🇦🇪'),
-  CountryCode(code: 'SA', dialCode: '+966', flag: '🇸🇦'),
-  CountryCode(code: 'CA', dialCode: '+1', flag: '🇨🇦'),
-  CountryCode(code: 'AU', dialCode: '+61', flag: '🇦🇺'),
-];
-
 class RegistrationView extends ConsumerStatefulWidget {
   const RegistrationView({super.key});
 
@@ -36,7 +14,7 @@ class _RegistrationViewState extends ConsumerState<RegistrationView> {
   final _passwordController = TextEditingController();
   final _mobileController = TextEditingController();
 
-  CountryCode _selectedCountry = _countryCodes.first;
+  CountryCode _selectedCountry = defaultCountryCodes.first;
 
   @override
   void dispose() {
@@ -60,7 +38,6 @@ class _RegistrationViewState extends ConsumerState<RegistrationView> {
       backgroundColor: Colors.white,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-      
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
@@ -69,9 +46,7 @@ class _RegistrationViewState extends ConsumerState<RegistrationView> {
         leading: Center(
           child: Padding(
             padding: const EdgeInsets.only(left: 12),
-            child: BackButtonWidget(
-              onPressed: () => AppRouter.back(),
-            ),
+            child: BackButtonWidget(onPressed: () => AppRouter.back()),
           ),
         ),
       ),
@@ -102,7 +77,7 @@ class _RegistrationViewState extends ConsumerState<RegistrationView> {
                       'Join with Kindra',
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 29.49,
+                        fontSize: 27.49,
                         fontFamily: 'Roboto Flex',
                         fontWeight: FontWeight.w600,
                       ),
@@ -110,9 +85,7 @@ class _RegistrationViewState extends ConsumerState<RegistrationView> {
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 40
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 40),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -121,12 +94,12 @@ class _RegistrationViewState extends ConsumerState<RegistrationView> {
                           'Sign up now & start your journey to make world Greener',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 17,
-                  fontFamily: 'Roboto Flex',
-                  fontWeight: FontWeight.w300,
-                  height: 1.49,
-                  ),
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontFamily: 'Roboto Flex',
+                            fontWeight: FontWeight.w300,
+                            height: 1.49,
+                          ),
                         ),
                       ),
                     ],
@@ -218,7 +191,17 @@ class _RegistrationViewState extends ConsumerState<RegistrationView> {
                   ),
                 ),
                 30.ph,
-                _buildMobileField(),
+                CountryPhoneFieldWidget(
+                  controller: _mobileController,
+                  initialCountry: _selectedCountry,
+                  onCountryChanged: (c) => setState(() => _selectedCountry = c),
+                  validator: (v) {
+                    if (v == null || v.trim().isEmpty) {
+                      return 'Mobile number is required';
+                    }
+                    return null;
+                  },
+                ),
                 32.ph,
                 CustomButtonWidget(label: 'Registration', onPressed: _onSubmit),
                 24.ph,
@@ -226,7 +209,6 @@ class _RegistrationViewState extends ConsumerState<RegistrationView> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
-                      
                       child: Text.rich(
                         textAlign: TextAlign.center,
                         TextSpan(
@@ -235,7 +217,7 @@ class _RegistrationViewState extends ConsumerState<RegistrationView> {
                               text: 'Already have an account? ',
                               style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 20,
+                                fontSize: 19,
                                 fontFamily: 'Roboto Flex',
                                 fontWeight: FontWeight.w300,
                                 height: 1.08,
@@ -250,7 +232,7 @@ class _RegistrationViewState extends ConsumerState<RegistrationView> {
                                   'Login here',
                                   style: TextStyle(
                                     color: const Color(0xFFDB932C),
-                                    fontSize: 20,
+                                    fontSize: 19,
                                     fontFamily: 'Roboto Flex',
                                     fontWeight: FontWeight.w600,
                                     height: 1.08,
@@ -273,55 +255,4 @@ class _RegistrationViewState extends ConsumerState<RegistrationView> {
     );
   }
 
-  Widget _buildMobileField() {
-    return CustomTextFieldWidget(
-      controller: _mobileController,
-      label: 'Mobile Number',
-      hint: 'Enter number',
-      keyboardType: TextInputType.phone,
-      textInputAction: TextInputAction.done,
-      prefixIconConstraints: const BoxConstraints(minWidth: 100, minHeight: 26),
-      prefixIcon: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 8),
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton<CountryCode>(
-            value: _selectedCountry,
-            isExpanded: false,
-            icon: const Icon(Icons.keyboard_arrow_down, size: 24),
-            items: _countryCodes
-                .map(
-                  (c) => DropdownMenuItem<CountryCode>(
-                    value: c,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(c.flag, style: const TextStyle(fontSize: 20)),
-                        6.pw,
-                        Text(
-                          c.dialCode,
-                          style: TextStyle(
-                            fontSize: 15.87,
-                            fontFamily: 'Roboto Flex',
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-                .toList(),
-            onChanged: (v) {
-              if (v != null) setState(() => _selectedCountry = v);
-            },
-          ),
-        ),
-      ),
-      validator: (v) {
-        if (v == null || v.trim().isEmpty) {
-          return 'Mobile number is required';
-        }
-        return null;
-      },
-    );
-  }
 }

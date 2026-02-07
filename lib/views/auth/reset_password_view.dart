@@ -71,7 +71,7 @@ class _ResetPasswordViewState extends ConsumerState<ResetPasswordView> {
                       'Reset your password',
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 29.49,
+                        fontSize: 27.49,
                         fontFamily: 'Roboto Flex',
                         fontWeight: FontWeight.w600,
                       ),
@@ -92,7 +92,7 @@ class _ResetPasswordViewState extends ConsumerState<ResetPasswordView> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.black,
-                            fontSize: 17,
+                            fontSize: 16,
                             fontFamily: 'Roboto Flex',
                             fontWeight: FontWeight.w300,
                             height: 1.49,

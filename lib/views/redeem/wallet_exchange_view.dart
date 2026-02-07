@@ -5,10 +5,7 @@ import '../../export_all.dart';
 /// Screen 2: Points Redemption - E-wallet exchange (PayPal, Google Pay, Apple Pay).
 /// Enter nominal, select point amount, exchange.
 class WalletExchangeView extends StatefulWidget {
-  const WalletExchangeView({
-    super.key,
-    required this.provider,
-  });
+  const WalletExchangeView({super.key, required this.provider});
 
   final EWalletProvider provider;
 
@@ -91,13 +88,11 @@ class _WalletExchangeViewState extends State<WalletExchangeView> {
               24.ph,
               _EnterNominalSection(
                 controller: _nominalController,
-              ),
-              24.ph,
-              _PointOptionsGrid(
                 options: _pointOptions,
                 selectedIndex: _selectedIndex,
                 onSelected: (i) => setState(() => _selectedIndex = i),
               ),
+
               24.ph,
               Row(
                 children: [
@@ -194,10 +189,13 @@ class _ProviderCard extends StatelessWidget {
           ),
           16.ph,
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: const Color(0xFF90CAF9)),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+            decoration: ShapeDecoration(
+              color: const Color(0xFFF0FBFF),
+              shape: RoundedRectangleBorder(
+                side: BorderSide(width: 1, color: const Color(0xFF80D9FA)),
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
             child: Text(
               'Point that can be redeemed $maxRedeemable',
@@ -214,8 +212,14 @@ class _ProviderCard extends StatelessWidget {
 }
 
 class _EnterNominalSection extends StatelessWidget {
+  final List<(int points, double dollar)> options;
+  final int selectedIndex;
+  final ValueChanged<int> onSelected;
   const _EnterNominalSection({
     required this.controller,
+    required this.options,
+    required this.selectedIndex,
+    required this.onSelected,
   });
 
   final TextEditingController controller;
@@ -229,11 +233,22 @@ class _EnterNominalSection extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: const Color(0xFFD9D9D9)),
       ),
-      child: CustomTextFieldWidget(
-        controller: controller,
-        label: 'Enter Nominal',
-        keyboardType: TextInputType.number,
-        hint: '0',
+      child: Column(
+        children: [
+          CustomTextFieldWidget(
+            controller: controller,
+            label: 'Enter Nominal',
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            keyboardType: TextInputType.number,
+            hint: '0',
+          ),
+          24.ph,
+          _PointOptionsGrid(
+            options: options,
+            selectedIndex: selectedIndex,
+            onSelected: onSelected,
+          ),
+        ],
       ),
     );
   }
@@ -250,16 +265,24 @@ class _PointOptionsGrid extends StatelessWidget {
   final int selectedIndex;
   final ValueChanged<int> onSelected;
 
+  double _responsiveAspectRatio(BuildContext context) {
+    final w = context.screenWidth;
+    if (w < 360) return 1.35;
+    if (w < 400) return 1.5;
+    if (w < 500) return 1.65;
+    return 1.7;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
         mainAxisSpacing: 12,
         crossAxisSpacing: 12,
-        childAspectRatio: 1.2,
+        childAspectRatio: _responsiveAspectRatio(context),
       ),
       itemCount: options.length,
       itemBuilder: (context, index) {
@@ -268,32 +291,55 @@ class _PointOptionsGrid extends StatelessWidget {
         return GestureDetector(
           onTap: () => onSelected(index),
           child: Container(
-            padding: const EdgeInsets.all(12),
+            // padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: isSelected ? AppColors.primaryColor : const Color(0xFFD9D9D9),
+                color: isSelected
+                    ? AppColors.primaryColor
+                    : const Color(0xFFD9D9D9),
                 width: isSelected ? 2 : 1,
               ),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  '${points} Points',
-                  textAlign: TextAlign.center,
-                  style: context.robotoFlexMedium(
-                    fontSize: 13,
-                    color: Colors.black,
+                Expanded(
+                  child: Container(
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                    child: Text(
+                      '$points Points',
+                      textAlign: TextAlign.center,
+                      style: context.robotoFlexMedium(
+                        fontSize: 16,
+                        color: isSelected ? AppColors.primaryColor : Colors.black,
+                      ),
+                    ),
                   ),
                 ),
-                8.ph,
-                Text(
-                  '\$$dollar',
-                  style: context.robotoFlexSemiBold(
-                    fontSize: 14,
-                    color: isSelected ? AppColors.primaryColor : Colors.black,
+                
+                Expanded(
+                  child: Container(
+                    width: double.infinity,
+
+                    decoration: BoxDecoration(
+                      color: isSelected ? AppColors.primaryColor : Color(0xFF9C9C9C).withValues(alpha: 0.33),
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(10),
+                        bottomRight: Radius.circular(10),
+                      ),
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      '\$$dollar',
+                      textAlign: TextAlign.center,
+                      style: context.robotoFlexMedium(
+                        fontSize: 16,
+                        color: isSelected ? Colors.white : Colors.black,
+                      ),
+                    ),
                   ),
                 ),
               ],

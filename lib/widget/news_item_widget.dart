@@ -62,7 +62,7 @@ class NewsItemWidget extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 17,
+                    fontSize: 16,
                     fontFamily: 'Roboto Flex',
                     fontWeight: FontWeight.w600,
                   ),
@@ -73,7 +73,7 @@ class NewsItemWidget extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: Colors.black.withValues(alpha: 0.66),
-                    fontSize: 14,
+                    fontSize: 13,
                     fontFamily: 'Roboto Flex',
                     fontWeight: FontWeight.w300,
                     height: 1.37,
@@ -91,7 +91,7 @@ class NewsItemWidget extends StatelessWidget {
                       dateStr,
                       style: TextStyle(
                         color: Colors.black.withValues(alpha: 0.40),
-                        fontSize: 14,
+                        fontSize: 13,
                         fontFamily: 'Roboto Flex',
                         fontWeight: FontWeight.w300,
                         height: 1.14,

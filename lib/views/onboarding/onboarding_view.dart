@@ -109,7 +109,7 @@ class _OnboardingViewState extends State<OnboardingView> {
               'Welcome to Kindra',
               style: TextStyle(
                 color: Colors.black,
-                fontSize: 38.37,
+                fontSize: 36.37,
                 fontFamily: 'Roboto Flex',
                 fontWeight: FontWeight.w600,
               ),
@@ -119,7 +119,7 @@ class _OnboardingViewState extends State<OnboardingView> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.black,
-                fontSize: 20,
+                fontSize: 19,
                 fontFamily: 'Roboto Flex',
                 fontWeight: FontWeight.w300,
                 height: 1.65,

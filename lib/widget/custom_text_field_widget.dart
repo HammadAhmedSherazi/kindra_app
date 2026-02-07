@@ -29,6 +29,7 @@ class CustomTextFieldWidget extends StatelessWidget {
     this.onTap,
     this.focusNode,
     this.autofocus = false,
+    this.padding,
   });
 
   final TextEditingController? controller;
@@ -54,6 +55,7 @@ class CustomTextFieldWidget extends StatelessWidget {
   final VoidCallback? onTap;
   final FocusNode? focusNode;
   final bool autofocus;
+  final EdgeInsets? padding;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +69,7 @@ class CustomTextFieldWidget extends StatelessWidget {
         if (label != null) ...[
           Text(
             label!,
-            style: context.robotoFlexRegular(fontSize: 18, color: Colors.black),
+            style: context.robotoFlexRegular(fontSize: 17, color: Colors.black),
           ),
           8.ph,
         ],
@@ -90,12 +92,12 @@ class CustomTextFieldWidget extends StatelessWidget {
           onTap: onTap,
           style: theme.textTheme.bodyMedium,
           decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric( vertical: 20),
+            contentPadding: padding ?? EdgeInsets.symmetric( vertical: 20),
             hintText: hint,
             
             hintStyle: TextStyle(
 color: Colors.black.withValues(alpha: 0.3),
-fontSize: 15.87,
+fontSize: 14.87,
 fontFamily: 'Roboto Flex',
 fontWeight: FontWeight.w300,
 height: 1.08,
@@ -127,7 +129,7 @@ height: 1.08,
             errorText: hasError ? errorText : null,
             errorStyle: theme.textTheme.bodySmall?.copyWith(
               color: theme.colorScheme.error,
-              fontSize: 12,
+              fontSize: 11,
             ),
           ),
         ),

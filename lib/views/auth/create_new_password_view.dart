@@ -77,7 +77,7 @@ class _CreateNewPasswordViewState extends ConsumerState<CreateNewPasswordView> {
                       'Create a New Password',
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 29.49,
+                        fontSize: 27.49,
                         fontFamily: 'Roboto Flex',
                         fontWeight: FontWeight.w600,
                       ),
@@ -92,7 +92,7 @@ class _CreateNewPasswordViewState extends ConsumerState<CreateNewPasswordView> {
                       'Create your new password.',
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 20,
+                        fontSize: 19,
                         fontFamily: 'Roboto Flex',
                         fontWeight: FontWeight.w300,
                         height: 1.08,

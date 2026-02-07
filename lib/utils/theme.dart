@@ -33,32 +33,32 @@ class AppTheme {
     textTheme: TextTheme(
       bodyLarge: TextStyle(
         color: AppColors.primaryTextColor,
-        fontSize: 24,
+        fontSize: 23,
         fontWeight: FontWeight.w400,
       ),
       bodyMedium: TextStyle(
         color: AppColors.primaryTextColor,
-        fontSize: 14,
+        fontSize: 13,
         fontWeight: FontWeight.w400,
       ),
       bodySmall: TextStyle(
         color: AppColors.primaryTextColor,
-        fontSize: 12,
+        fontSize: 11,
         fontWeight: FontWeight.w400,
       ),
       titleLarge: TextStyle(
         color: AppColors.primaryTextColor,
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: FontWeight.w600,
       ),
       titleMedium: TextStyle(
         color: AppColors.primaryTextColor,
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: FontWeight.w500,
       ),
       titleSmall: TextStyle(
         color: AppColors.primaryTextColor,
-        fontSize: 14,
+        fontSize: 12,
         fontWeight: FontWeight.w500,
       ),
     ),

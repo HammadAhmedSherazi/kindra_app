@@ -74,7 +74,7 @@ class _CalendarPickerBodyState extends State<_CalendarPickerBody> {
                 headerStyle: HeaderStyle(
                   formatButtonVisible: false,
                   titleTextStyle: context.robotoFlexSemiBold(
-                    fontSize: 18,
+                    fontSize: 17,
                     color: Colors.black,
                   ),
                   leftChevronIcon: Icon(

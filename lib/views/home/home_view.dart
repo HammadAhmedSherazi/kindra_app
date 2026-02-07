@@ -31,7 +31,7 @@ class HomeView extends StatelessWidget {
                               TextSpan(
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 20,
+                                  fontSize: 19,
                                   fontFamily: 'Roboto Flex',
                                   fontWeight: FontWeight.w500,
                                   height: 1.65,
@@ -87,7 +87,7 @@ class HomeView extends StatelessWidget {
                         'Services Menu',
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: 22,
+                          fontSize: 20,
                           fontFamily: 'Roboto Flex',
                           fontWeight: FontWeight.w600,
                         ),
@@ -119,7 +119,7 @@ class HomeView extends StatelessWidget {
                             'Used Oil Collection Point.',
                             style: TextStyle(
                               color: Colors.black,
-                              fontSize: 17,
+                              fontSize: 16,
                               fontFamily: 'Roboto Flex',
                               fontWeight: FontWeight.w600,
                             ),
@@ -128,7 +128,7 @@ class HomeView extends StatelessWidget {
                             'Earn your points',
                             style: TextStyle(
                               color: Colors.black,
-                              fontSize: 14,
+                              fontSize: 13,
                               fontFamily: 'Roboto Flex',
                               fontWeight: FontWeight.w300,
                               height: 1,
@@ -145,7 +145,7 @@ class HomeView extends StatelessWidget {
                             'News',
                             style: TextStyle(
                               color: Colors.black,
-                              fontSize: 22,
+                              fontSize: 20,
                               fontFamily: 'Roboto Flex',
                               fontWeight: FontWeight.w600,
                             ),
@@ -158,7 +158,7 @@ class HomeView extends StatelessWidget {
                               'See All',
                               style: TextStyle(
                                 color: Colors.black.withValues(alpha: 0.40),
-                                fontSize: 16,
+                                fontSize: 15,
                                 fontFamily: 'Roboto Flex',
                                 fontWeight: FontWeight.w400,
                               ),
@@ -237,7 +237,7 @@ class HomeView extends StatelessWidget {
                                     'Your Points',
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 14.04,
+                                      fontSize: 13.04,
                                       fontFamily: 'Roboto Flex',
                                       fontWeight: FontWeight.w500,
                                       height: 0.73,
@@ -247,7 +247,7 @@ class HomeView extends StatelessWidget {
                                     '85000',
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 25.38,
+                                      fontSize: 23.38,
                                       fontFamily: 'Roboto Flex',
                                       fontWeight: FontWeight.w500,
                                       height: 0.73,
@@ -267,7 +267,7 @@ class HomeView extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 18.83,
+                                  fontSize: 17.83,
                                   fontFamily: 'Roboto Flex',
                                   fontWeight: FontWeight.w600,
                                   height: 0.73,

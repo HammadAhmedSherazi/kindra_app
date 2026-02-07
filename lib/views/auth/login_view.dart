@@ -71,7 +71,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                       'Explore Kindra',
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 29.49,
+                        fontSize: 27.49,
                         fontFamily: 'Roboto Flex',
                         fontWeight: FontWeight.w600,
                       ),
@@ -85,7 +85,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                       'Enter your email & password',
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 20,
+                        fontSize: 19,
                         fontFamily: 'Roboto Flex',
                         fontWeight: FontWeight.w300,
                         height: 1.08,
@@ -166,7 +166,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                       'Forget password?',
                       style: TextStyle(
                         color: Colors.black.withValues(alpha: 0.66),
-                        fontSize: 15.87,
+                        fontSize: 14.87,
                         fontFamily: 'Roboto Flex',
                         fontWeight: FontWeight.w300,
                         height: 1.08,
@@ -193,7 +193,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                               text: 'Don`t have an account? ',
                               style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 20,
+                                fontSize: 19,
                                 fontFamily: 'Roboto Flex',
                                 fontWeight: FontWeight.w300,
                                 height: 1.08,
@@ -209,7 +209,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                                   'Register here',
                                   style: TextStyle(
                                     color: const Color(0xFFDB932C),
-                                    fontSize: 20,
+                                    fontSize: 19,
                                     fontFamily: 'Roboto Flex',
                                     fontWeight: FontWeight.w600,
                                     height: 1.08,

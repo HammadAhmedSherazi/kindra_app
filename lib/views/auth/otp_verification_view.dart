@@ -145,7 +145,7 @@ class _OtpVerificationViewState extends ConsumerState<OtpVerificationView> {
                     'OTP code verification',
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 29.49,
+                      fontSize: 27.49,
                       fontFamily: 'Roboto Flex',
                       fontWeight: FontWeight.w600,
                     ),
@@ -162,7 +162,7 @@ class _OtpVerificationViewState extends ConsumerState<OtpVerificationView> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 17,
+                        fontSize: 16,
                         fontFamily: 'Roboto Flex',
                         fontWeight: FontWeight.w300,
                         height: 1.55,
@@ -229,7 +229,7 @@ class _OtpVerificationViewState extends ConsumerState<OtpVerificationView> {
                                 : 'Resend',
                             style: TextStyle(
                               color: const Color(0xFF4C9A31),
-                              fontSize: 17,
+                              fontSize: 16,
                               fontFamily: 'Roboto Flex',
                               fontWeight: FontWeight.w500,
                               height: 1.55,
@@ -288,7 +288,7 @@ class _OtpDigitField extends StatelessWidget {
         textAlign: TextAlign.center,
         maxLength: 1,
         style: TextStyle(
-          fontSize: 22,
+          fontSize: 20,
           fontFamily: 'Roboto Flex',
           fontWeight: FontWeight.w600,
         ),

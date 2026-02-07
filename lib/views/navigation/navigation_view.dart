@@ -152,7 +152,7 @@ class _NavItem extends StatelessWidget {
               label,
               style: TextStyle(
                 color: color,
-                fontSize: 14,
+                fontSize: 13,
                 fontFamily: 'Roboto Flex',
                 fontWeight: FontWeight.w600,
               ),
@@ -211,7 +211,7 @@ class _ExploreTab extends StatelessWidget {
         child: Text(
           'Explore',
           style: TextStyle(
-            fontSize: 20,
+            fontSize: 18,
             fontFamily: 'Roboto Flex',
             color: AppColors.primaryTextColor,
           ),
@@ -236,7 +236,7 @@ class _ActivityTab extends StatelessWidget {
         child: Text(
           'Activity',
           style: TextStyle(
-            fontSize: 20,
+            fontSize: 18,
             fontFamily: 'Roboto Flex',
             color: AppColors.primaryTextColor,
           ),
@@ -261,7 +261,7 @@ class _ProfileTab extends StatelessWidget {
         child: Text(
           'Profile',
           style: TextStyle(
-            fontSize: 20,
+            fontSize: 18,
             fontFamily: 'Roboto Flex',
             color: AppColors.primaryTextColor,
           ),

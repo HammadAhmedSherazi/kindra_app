@@ -75,7 +75,7 @@ class _PasswordSuccessDialog extends StatelessWidget {
               'Successful Update',
               style: TextStyle(
 color: Colors.black,
-fontSize: 28.27,
+fontSize: 26.27,
 fontFamily: 'Roboto Flex',
 fontWeight: FontWeight.w600,
 ),
@@ -86,7 +86,7 @@ fontWeight: FontWeight.w600,
               'Your password has been successfully changed',
               style: TextStyle(
 color: Colors.black,
-fontSize: 20,
+fontSize: 19,
 fontFamily: 'Roboto Flex',
 fontWeight: FontWeight.w300,
 height: 1.18,

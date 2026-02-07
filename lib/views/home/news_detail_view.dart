@@ -71,7 +71,7 @@ class NewsDetailView extends StatelessWidget {
               title,
               style: TextStyle(
                 color: Colors.black,
-                fontSize: 20,
+                fontSize: 18,
                 fontFamily: 'Roboto Flex',
                 fontWeight: FontWeight.w600,
                 height: 1.3,
@@ -90,7 +90,7 @@ class NewsDetailView extends StatelessWidget {
                   dateStr,
                   style: TextStyle(
                     color: Colors.black.withValues(alpha: 0.40),
-                    fontSize: 14,
+                    fontSize: 13,
                     fontFamily: 'Roboto Flex',
                     fontWeight: FontWeight.w300,
                     height: 1.14,
@@ -103,7 +103,7 @@ class NewsDetailView extends StatelessWidget {
               description,
               style: TextStyle(
                 color: Colors.black.withValues(alpha: 0.66),
-                fontSize: 15,
+                fontSize: 14,
                 fontFamily: 'Roboto Flex',
                 fontWeight: FontWeight.w400,
                 height: 1.5,

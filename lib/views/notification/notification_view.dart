@@ -83,7 +83,7 @@ class _NotificationViewState extends State<NotificationView> {
       children: [
         Text(
           sectionTitle,
-          style: context.robotoFlexSemiBold(fontSize: 18, color: Colors.black),
+          style: context.robotoFlexSemiBold(fontSize: 17, color: Colors.black),
         ),
         12.ph,
         ...items.map(
@@ -146,7 +146,7 @@ class _NotificationTile extends StatelessWidget {
                     Text(
                       notification.title,
                       style: context.robotoFlexSemiBold(
-                        fontSize: 16,
+                        fontSize: 15,
                         color: Colors.black,
                       ),
                     ),
@@ -155,7 +155,7 @@ class _NotificationTile extends StatelessWidget {
                       NotificationHelper.formatTime(notification.timestamp),
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 12,
+                        fontSize: 11,
                         fontFamily: 'Roboto Flex',
                         fontWeight: FontWeight.w300,
                         height: 1,

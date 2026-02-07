@@ -56,12 +56,18 @@ class _RedeemMethodSelectionViewState extends State<RedeemMethodSelectionView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                'Select for redeemed points',
-                style: context.robotoFlexRegular(
-                  fontSize: 14,
-                  color: Colors.grey.shade600,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Select for redeemed points',
+                    textAlign: TextAlign.center,
+                    style: context.robotoFlexRegular(
+                      fontSize: 15,
+                      color: Colors.black.withValues(alpha: 0.70),
+                    ),
+                  ),
+                ],
               ),
               24.ph,
               Row(
@@ -129,8 +135,8 @@ class _MethodCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final borderColor =
-        isSelected ? AppColors.primaryColor : const Color(0xFFD9D9D9);
-    final iconColor = isSelected ? AppColors.primaryColor : Colors.grey.shade600;
+        isSelected ? AppColors.primaryColor : const Color(0xFF888888);
+    final iconColor = isSelected ? AppColors.primaryColor : const Color(0xFF888888);
 
     return GestureDetector(
       onTap: onTap,
@@ -142,32 +148,37 @@ class _MethodCard extends StatelessWidget {
           border: Border.all(color: borderColor, width: isSelected ? 2 : 1),
         ),
         child: Stack(
+          alignment: Alignment.center,
           children: [
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (isIconSvg)
-                  SvgPicture.asset(
-                    iconPath,
-                    width: 56,
-                    height: 56,
-                    colorFilter: ColorFilter.mode(
-                      iconColor,
-                      BlendMode.srcIn,
+                // if (isIconSvg)
+                //   SvgPicture.asset(
+                //     iconPath,
+                //     width: 56,
+                //     height: 56,
+                //     colorFilter: ColorFilter.mode(
+                //       iconColor,
+                //       BlendMode.srcIn,
+                //     ),
+                //   )
+                // else
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundColor: iconColor,
+                    child: Image.asset(
+                      iconPath,
+                      width: 30,
+                      height: 30,
+                      // color: iconColor,
                     ),
-                  )
-                else
-                  Image.asset(
-                    iconPath,
-                    width: 56,
-                    height: 56,
-                    color: iconColor,
                   ),
                 12.ph,
                 Text(
                   label,
                   style: context.robotoFlexMedium(
-                    fontSize: 14,
+                    fontSize: 15,
                     color: Colors.black,
                   ),
                 ),
