@@ -18,7 +18,10 @@ class ProfileView extends StatelessWidget {
           slivers: [
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 24,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -121,18 +124,16 @@ class ProfileView extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
+      decoration: ShapeDecoration(
         gradient: LinearGradient(
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-          colors: [
-            const Color(0xFFE8F4E8),
-            const Color(0xFFE0F2E8),
-            AppColors.primaryColor.withValues(alpha: 0.15),
-          ],
+          begin: Alignment(0.00, 0.50),
+          end: Alignment(1.00, 0.50),
+          colors: [const Color(0xFFEEF5FE), const Color(0xFFF0FDF4)],
         ),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.borderColor.withValues(alpha: 0.5)),
+        shape: RoundedRectangleBorder(
+          side: BorderSide(width: 1.05, color: const Color(0xFFBDDAFF)),
+          borderRadius: BorderRadius.circular(12.75),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -143,32 +144,26 @@ class ProfileView extends StatelessWidget {
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
-                  color: AppColors.primaryColor.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(12),
+                  shape: BoxShape.circle,
+                  color: const Color(0xFFDBEAFE),
+                  // borderRadius: BorderRadius.circular(12),
                 ),
-                child: Center(
-                  child: SvgPicture.asset(
-                    Assets.winBadgeIcon,
-                    width: 26,
-                    height: 26,
-                    colorFilter: const ColorFilter.mode(
-                      AppColors.primaryColor,
-                      BlendMode.srcIn,
-                    ),
-                  ),
-                ),
+                child: Icon(Icons.workspace_premium_outlined, size: 22, color: const Color(0xFF2563EB)),
               ),
               12.pw,
-              Text(
-                'Your Rank',
-                style: context.robotoFlexSemiBold(
-                  fontSize: 16,
-                  color: Colors.black,
-                ),
-              ),
-            ],
-          ),
-          20.ph,
+              Expanded(
+                child: Column(
+                  spacing: 10,
+                  crossAxisAlignment: .start,
+                  children: [
+                    Text(
+                      'Your Rank',
+                      style: context.robotoFlexRegular(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
+                     
           Row(
             children: [
               _buildRankStat(
@@ -190,7 +185,13 @@ class ProfileView extends StatelessWidget {
               ),
             ],
           ),
-        ],
+       
+                  ],
+                ),
+              ),
+            ],
+          ),
+          ],
       ),
     );
   }
@@ -207,7 +208,7 @@ class ProfileView extends StatelessWidget {
           value,
           style: TextStyle(
             fontFamily: 'Roboto Flex',
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w300,
             fontSize: 18,
             color: color,
           ),
@@ -267,10 +268,7 @@ class ProfileView extends StatelessWidget {
               Expanded(
                 child: Text(
                   label,
-                  style: context.robotoFlexMedium(
-                    fontSize: 15,
-                    color: color,
-                  ),
+                  style: context.robotoFlexMedium(fontSize: 15, color: color),
                 ),
               ),
               Icon(
@@ -285,4 +283,3 @@ class ProfileView extends StatelessWidget {
     );
   }
 }
-

@@ -51,5 +51,7 @@ abstract class Assets {
   static const String winIcon = '${iconPath}win_icon.svg';
   static const String giftIcon = '${iconPath}gift_icon.svg';
   static const String shopBagIcon = '${iconPath}shop_bag_icon.svg';
+  static const String lockIcon = '${iconPath}lock_icon.svg';
+  
 }
 

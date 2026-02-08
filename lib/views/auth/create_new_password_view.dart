@@ -32,9 +32,9 @@ class _CreateNewPasswordViewState extends ConsumerState<CreateNewPasswordView> {
     showPasswordSuccessDialog(context);
   }
 
-  void _onSkip() {
-    AppRouter.pushAndRemoveUntil(const LoginView());
-  }
+  // void _onSkip() {
+  //   AppRouter.pushAndRemoveUntil(const LoginView());
+  // }
 
   @override
   Widget build(BuildContext context) {

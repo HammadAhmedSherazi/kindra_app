@@ -17,7 +17,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final locale = ref.watch(localeProvider);
-    final prefs = SharedPreferenceManager.sharedInstance;
+    // final prefs = SharedPreferenceManager.sharedInstance;
 
     return MaterialApp(
       navigatorKey: AppRouter.navKey,

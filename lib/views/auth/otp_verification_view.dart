@@ -91,9 +91,9 @@ class _OtpVerificationViewState extends ConsumerState<OtpVerificationView> {
     _startResendTimer();
   }
 
-  void _onSkip() {
-    AppRouter.back();
-  }
+  // void _onSkip() {
+  //   AppRouter.back();
+  // }
 
   void _onOtpChanged(int index, String value) {
     if (value.length == 1) {
