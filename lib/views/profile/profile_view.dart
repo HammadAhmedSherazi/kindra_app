@@ -148,13 +148,17 @@ class ProfileView extends StatelessWidget {
                   color: const Color(0xFFDBEAFE),
                   // borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(Icons.workspace_premium_outlined, size: 22, color: const Color(0xFF2563EB)),
+                child: Icon(
+                  Icons.workspace_premium_outlined,
+                  size: 22,
+                  color: const Color(0xFF2563EB),
+                ),
               ),
               12.pw,
               Expanded(
                 child: Column(
                   spacing: 10,
-                  crossAxisAlignment: .start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'Your Rank',
@@ -163,35 +167,34 @@ class ProfileView extends StatelessWidget {
                         color: Colors.black,
                       ),
                     ),
-                     
-          Row(
-            children: [
-              _buildRankStat(
-                value: '#$_demoRank',
-                label: 'Rank',
-                color: const Color(0xFF2563EB),
-              ),
-              32.pw,
-              _buildRankStat(
-                value: '$_demoPoints',
-                label: 'Points',
-                color: AppColors.primaryColor,
-              ),
-              32.pw,
-              _buildRankStat(
-                value: '$_demoBadges',
-                label: 'Badges',
-                color: const Color(0xFF7C3AED),
-              ),
-            ],
-          ),
-       
+
+                    Row(
+                      children: [
+                        _buildRankStat(
+                          value: '#$_demoRank',
+                          label: 'Rank',
+                          color: const Color(0xFF2563EB),
+                        ),
+                        32.pw,
+                        _buildRankStat(
+                          value: '$_demoPoints',
+                          label: 'Points',
+                          color: AppColors.primaryColor,
+                        ),
+                        32.pw,
+                        _buildRankStat(
+                          value: '$_demoBadges',
+                          label: 'Badges',
+                          color: const Color(0xFF7C3AED),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
             ],
           ),
-          ],
+        ],
       ),
     );
   }

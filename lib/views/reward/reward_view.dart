@@ -75,22 +75,64 @@ class _RewardViewState extends State<RewardView> {
 
   final List<RewardItem> _rewards = [
     RewardItem(
-      title: 'Eco Bag',
-      desc: 'Reusable shopping bag',
-      points: 500,
+      title: 'Eco Warrior Certificate',
+      desc: 'Digital certificate recognizing your environmental contribution.',
+      points: 50,
+      icon: Assets.winBadgeIcon,
+      tagType: 'certificate',
+      tagColor: const Color(0xFF00A63E),
+      canRedeem: true,
+    ),
+    RewardItem(
+      title: '10% Grocery Discount',
+      desc: '10% off on your next grocery shopping at partner stores.',
+      points: 100,
       icon: Assets.shopBagIcon,
+      tagType: 'coupon',
+      tagColor: const Color(0xFF2563EB),
+      partner: 'EcoMart',
+      validity: 'Valid for 30 days',
+      canRedeem: true,
     ),
     RewardItem(
-      title: 'Gift Voucher \$5',
-      desc: 'Redeem at partner stores',
-      points: 1000,
+      title: 'Master Recycler Badge',
+      desc: 'Exclusive digital badge for your profile.',
+      points: 75,
+      icon: Assets.winBadgeIcon,
+      tagType: 'badge',
+      tagColor: const Color(0xFF7C3AED),
+      canRedeem: true,
+    ),
+    RewardItem(
+      title: 'Plant Store Voucher',
+      desc: '₹200 off on plants and gardening supplies.',
+      points: 150,
       icon: Assets.giftIcon,
+      tagType: 'coupon',
+      tagColor: const Color(0xFF2563EB),
+      partner: 'GreenThumb',
+      validity: 'Valid for 60 days',
+      canRedeem: false,
     ),
     RewardItem(
-      title: 'Plant Sapling',
-      desc: 'Plant a tree in your name',
-      points: 2000,
+      title: 'Eco-Friendly Products',
+      desc: '20% discount on sustainable lifestyle products.',
+      points: 120,
+      icon: Assets.giftIcon,
+      tagType: 'discount',
+      tagColor: const Color(0xFFF59E0B),
+      partner: 'EcoStore',
+      validity: 'Valid for 45 days',
+      canRedeem: true,
+    ),
+    RewardItem(
+      title: 'Premium Composting Guide',
+      desc: 'Detailed PDF guide for advanced composting techniques.',
+      points: 30,
       icon: Assets.rewardIcon,
+      tagType: 'certificate',
+      tagColor: const Color(0xFF00A63E),
+      canRedeem: true,
     ),
   ];
 
@@ -1004,6 +1046,11 @@ class _RewardViewState extends State<RewardView> {
                   shape: BoxShape.circle,
                   color: const Color(0xffDCFCE7),
                 ),
+                child: Icon(
+                  Icons.link,
+                  size: 22,
+                  color: const Color(0xFF00A63E),
+                ),
               ),
               Expanded(
                 child: Column(
@@ -1061,7 +1108,7 @@ class _RewardViewState extends State<RewardView> {
             ),
           ),
           child: Column(
-            crossAxisAlignment: .start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 8,
             children: [
               Row(
@@ -1138,40 +1185,92 @@ class _RewardViewState extends State<RewardView> {
           ),
         ),
         Container(
-           padding: const EdgeInsets.all(15),
+          padding: const EdgeInsets.all(15),
           decoration: ShapeDecoration(
-color: Colors.white,
-shape: RoundedRectangleBorder(
-side: BorderSide(
-width: 1.05,
-color: Colors.black.withValues(alpha: 0.10),
-),
-borderRadius: BorderRadius.circular(12.75),
-),
-),
-child: Column(
-  children: [
-     Row(
+            color: Colors.white,
+            shape: RoundedRectangleBorder(
+              side: BorderSide(
+                width: 1.05,
+                color: Colors.black.withValues(alpha: 0.10),
+              ),
+              borderRadius: BorderRadius.circular(12.75),
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 children: [
                   SvgPicture.asset(Assets.giftIcon, width: 18, height: 18),
                   10.pw,
                   Text(
-    'Available Rewards',
-    style: TextStyle(
-        color: const Color(0xFF0A0A0A),
-        fontSize: 14,
-        fontFamily: 'Arimo',
-        fontWeight: FontWeight.w400,
-        height: 1,
-    ),
-)
+                    'Available Rewards',
+                    style: TextStyle(
+                      color: const Color(0xFF0A0A0A),
+                      fontSize: 14,
+                      fontFamily: 'Arimo',
+                      fontWeight: FontWeight.w400,
+                      height: 1,
+                    ),
+                  ),
                 ],
               ),
-
-
-  ],
-),
-        )
+              16.ph,
+              ...List.generate(_rewards.length, (index) {
+                final reward = _rewards[index];
+                return Padding(
+                  padding: EdgeInsets.only(
+                    bottom: index < _rewards.length - 1 ? 16 : 0,
+                  ),
+                  child: _RewardCard(reward: reward, availablePoints: 142),
+                );
+              }),
+            ],
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(15),
+          decoration: ShapeDecoration(
+            color: Colors.white,
+            shape: RoundedRectangleBorder(
+              side: BorderSide(
+                width: 1.05,
+                color: Colors.black.withValues(alpha: 0.10),
+              ),
+              borderRadius: BorderRadius.circular(12.75),
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 12,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.lightbulb_outline,
+                    size: 18,
+                    color: const Color(0xFF0A0A0A),
+                  ),
+                  10.pw,
+                  Text(
+                    'Earn More Points',
+                    style: TextStyle(
+                      color: const Color(0xFF0A0A0A),
+                      fontSize: 14,
+                      fontFamily: 'Arimo',
+                      fontWeight: FontWeight.w400,
+                      height: 1,
+                    ),
+                  ),
+                ],
+              ),
+              _buildEarnPointsItem('Compost food waste', '+15 pts'),
+              _buildEarnPointsItem('Donate clothes to charity', '+20 pts'),
+              _buildEarnPointsItem('Recycle electronics', '+25 pts'),
+              _buildEarnPointsItem('Complete achievements', '+25-200 pts'),
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -1197,6 +1296,34 @@ child: Column(
             fontFamily: 'Arimo',
             fontWeight: FontWeight.w400,
             height: 1,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEarnPointsItem(String activity, String points) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          activity,
+          style: TextStyle(
+            color: const Color(0xFF0A0A0A),
+            fontSize: 12.25,
+            fontFamily: 'Arimo',
+            fontWeight: FontWeight.w400,
+            height: 1.43,
+          ),
+        ),
+        Text(
+          points,
+          style: TextStyle(
+            color: const Color(0xFF0A0A0A),
+            fontSize: 12.25,
+            fontFamily: 'Arimo',
+            fontWeight: FontWeight.w400,
+            height: 1.43,
           ),
         ),
       ],
@@ -1350,7 +1477,7 @@ class AchievementWidgetCard extends StatelessWidget {
         ),
       ),
       child: Row(
-        crossAxisAlignment: .start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 10,
         children: [
           Text(
@@ -1439,8 +1566,7 @@ class AchievementWidgetCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                ?trailing,
-                10.ph,
+                if (trailing != null) trailing!,
               ],
             ),
           ),
@@ -1487,12 +1613,22 @@ class RewardItem {
   final String desc;
   final int points;
   final String icon;
+  final String tagType; // 'certificate', 'coupon', 'badge', 'discount'
+  final Color tagColor;
+  final String? partner;
+  final String? validity;
+  final bool canRedeem;
 
   RewardItem({
     required this.title,
     required this.desc,
     required this.points,
     required this.icon,
+    required this.tagType,
+    required this.tagColor,
+    this.partner,
+    this.validity,
+    required this.canRedeem,
   });
 }
 
@@ -1776,80 +1912,177 @@ class _BadgeCard extends StatelessWidget {
 }
 
 class _RewardCard extends StatelessWidget {
-  const _RewardCard({required this.reward});
+  const _RewardCard({required this.reward, required this.availablePoints});
 
   final RewardItem reward;
+  final int availablePoints;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF9FAFC),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFEEEEEE)),
+      padding: const EdgeInsets.all(15),
+      decoration: ShapeDecoration(
+        color: Colors.white,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            width: 1.05,
+            color: Colors.black.withValues(alpha: 0.10),
+          ),
+          borderRadius: BorderRadius.circular(12.75),
+        ),
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 12,
         children: [
           Container(
-            width: 56,
-            height: 56,
-            padding: const EdgeInsets.all(12),
+            width: 44,
+            height: 44,
             decoration: BoxDecoration(
-              color: AppColors.primaryColor.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(12),
+              shape: BoxShape.circle,
+              color: const Color(0xFFDCFCE7),
             ),
-            child: SvgPicture.asset(reward.icon, width: 32, height: 32),
+            child: Center(
+              child: SvgPicture.asset(
+                reward.icon,
+                width: 22,
+                height: 22,
+                colorFilter: const ColorFilter.mode(
+                  Color(0xFF00A63E),
+                  BlendMode.srcIn,
+                ),
+              ),
+            ),
           ),
-          16.pw,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 6,
               children: [
-                Text(
-                  reward.title,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontFamily: 'Roboto Flex',
-                    fontWeight: FontWeight.w600,
-                  ),
+                Row(
+                  spacing: 6,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        reward.title,
+                        style: TextStyle(
+                          color: const Color(0xFF0A0A0A),
+                          fontSize: 14,
+                          fontFamily: 'Arimo',
+                          fontWeight: FontWeight.w400,
+                          height: 1.43,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: reward.tagColor.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        reward.tagType,
+                        style: TextStyle(
+                          color: reward.tagColor,
+                          fontSize: 10,
+                          fontFamily: 'Arimo',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                4.ph,
                 Text(
                   reward.desc,
                   style: TextStyle(
-                    color: Colors.black54,
-                    fontSize: 13,
-                    fontFamily: 'Roboto Flex',
+                    color: const Color(0xFF717182),
+                    fontSize: 12.25,
+                    fontFamily: 'Arimo',
                     fontWeight: FontWeight.w400,
+                    height: 1.43,
                   ),
+                ),
+                if (reward.partner != null || reward.validity != null) ...[
+                  if (reward.partner != null)
+                    Text(
+                      'Partner: ${reward.partner}',
+                      style: TextStyle(
+                        color: const Color(0xFF717182),
+                        fontSize: 10.50,
+                        fontFamily: 'Arimo',
+                        fontWeight: FontWeight.w400,
+                        height: 1.33,
+                      ),
+                    ),
+                  if (reward.validity != null)
+                    Text(
+                      reward.validity!,
+                      style: TextStyle(
+                        color: const Color(0xFF717182),
+                        fontSize: 10.50,
+                        fontFamily: 'Arimo',
+                        fontWeight: FontWeight.w400,
+                        height: 1.33,
+                      ),
+                    ),
+                ],
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF5F5F5),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        '${reward.points} points',
+                        style: TextStyle(
+                          color: const Color(0xFF0A0A0A),
+                          fontSize: 12,
+                          fontFamily: 'Arimo',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color:
+                            reward.canRedeem && availablePoints >= reward.points
+                            ? const Color(0xFF0A0A0A)
+                            : const Color(0xFFE5E5E5),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        reward.canRedeem && availablePoints >= reward.points
+                            ? 'Redeem'
+                            : 'Not Enough Points',
+                        style: TextStyle(
+                          color:
+                              reward.canRedeem &&
+                                  availablePoints >= reward.points
+                              ? Colors.white
+                              : const Color(0xFF717182),
+                          fontSize: 12,
+                          fontFamily: 'Arimo',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                '${reward.points}',
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: 16,
-                  fontFamily: 'Roboto Flex',
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              Text(
-                'points',
-                style: TextStyle(
-                  color: Colors.black54,
-                  fontSize: 11,
-                  fontFamily: 'Roboto Flex',
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ],
           ),
         ],
       ),
