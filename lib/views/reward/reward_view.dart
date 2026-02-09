@@ -1046,11 +1046,8 @@ class _RewardViewState extends State<RewardView> {
                   shape: BoxShape.circle,
                   color: const Color(0xffDCFCE7),
                 ),
-                child: Icon(
-                  Icons.link,
-                  size: 22,
-                  color: const Color(0xFF00A63E),
-                ),
+                padding: EdgeInsets.all(10),
+                child: SvgPicture.asset(Assets.twoCoinsIcon, width: 22, height: 22, color: AppColors.primaryColor,),
               ),
               Expanded(
                 child: Column(
@@ -1244,26 +1241,16 @@ class _RewardViewState extends State<RewardView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 12,
             children: [
-              Row(
-                children: [
-                  Icon(
-                    Icons.lightbulb_outline,
-                    size: 18,
-                    color: const Color(0xFF0A0A0A),
-                  ),
-                  10.pw,
-                  Text(
-                    'Earn More Points',
-                    style: TextStyle(
-                      color: const Color(0xFF0A0A0A),
-                      fontSize: 14,
-                      fontFamily: 'Arimo',
-                      fontWeight: FontWeight.w400,
-                      height: 1,
-                    ),
-                  ),
-                ],
-              ),
+             Text(
+    '💡 Earn More Points',
+    style: TextStyle(
+        color: const Color(0xFF0A0A0A),
+        fontSize: 14,
+        fontFamily: 'Arimo',
+        fontWeight: FontWeight.w400,
+        height: 1,
+    ),
+),
               _buildEarnPointsItem('Compost food waste', '+15 pts'),
               _buildEarnPointsItem('Donate clothes to charity', '+20 pts'),
               _buildEarnPointsItem('Recycle electronics', '+25 pts'),
@@ -1303,30 +1290,55 @@ class _RewardViewState extends State<RewardView> {
   }
 
   Widget _buildEarnPointsItem(String activity, String points) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          activity,
-          style: TextStyle(
-            color: const Color(0xFF0A0A0A),
-            fontSize: 12.25,
-            fontFamily: 'Arimo',
-            fontWeight: FontWeight.w400,
-            height: 1.43,
+    return Container(
+      // height: 33.56,
+padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+decoration: ShapeDecoration(
+color: const Color(0x4CECECF0),
+shape: RoundedRectangleBorder(
+borderRadius: BorderRadius.circular(3.50),
+),
+),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            activity,
+            style: TextStyle(
+              color: const Color(0xFF0A0A0A),
+              fontSize: 12.25,
+              fontFamily: 'Arimo',
+              fontWeight: FontWeight.w400,
+              height: 1.43,
+            ),
           ),
-        ),
-        Text(
-          points,
-          style: TextStyle(
-            color: const Color(0xFF0A0A0A),
-            fontSize: 12.25,
-            fontFamily: 'Arimo',
-            fontWeight: FontWeight.w400,
-            height: 1.43,
+          Container(
+//             width: 50.94,
+// height: 19.59,
+padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 1.75),
+clipBehavior: Clip.antiAlias,
+decoration: ShapeDecoration(
+shape: RoundedRectangleBorder(
+side: BorderSide(
+width: 1.05,
+color: Colors.black.withValues(alpha: 0.10),
+),
+borderRadius: BorderRadius.circular(6.75),
+),
+),
+            child: Text(
+              points,
+              style: TextStyle(
+                color: const Color(0xFF0A0A0A),
+                fontSize: 12.25,
+                fontFamily: 'Arimo',
+                fontWeight: FontWeight.w400,
+                height: 1.43,
+              ),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

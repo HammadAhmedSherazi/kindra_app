@@ -52,11 +52,9 @@ class _UsedOilHandoverFormViewState extends State<UsedOilHandoverFormView> {
   }
 
   Future<void> _openCalendar() async {
-    final picked = await Navigator.push<DateTime>(
+    final picked = await showCalendarPickerDialog(
       context,
-      MaterialPageRoute(
-        builder: (_) => CalendarPickerView(initialDate: _selectedDate ?? DateTime.now()),
-      ),
+      initialDate: _selectedDate ?? DateTime.now(),
     );
     if (picked != null) {
       setState(() {

@@ -4,7 +4,6 @@ import '../utils/assets.dart';
 import '../utils/colors.dart';
 import '../utils/extension.dart';
 import '../utils/router.dart';
-import '../views/navigation/navigation_view.dart';
 import 'custom_button_widget.dart';
 
 /// Success dialog shown after password is changed.
@@ -44,31 +43,39 @@ class _PasswordSuccessDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Stack(
-              alignment: Alignment.center,
-              clipBehavior: Clip.none,
-              children: [
-                // Decorative translucent circles
-                Positioned(top: -8, right: -70, child: _decoCircle(43)),
-                Positioned(top: 55, right: -46, child: _decoCircle(13)),
-                Positioned(top: 85, right: -65, child: _decoCircle(13)),
-                Positioned(top: 120, right: -45, child: _decoCircle(13)),
-
-                Positioned(top: 25, left: -50, child: _decoCircle(13)),
-                Positioned(top: 100, left: -35, child: _decoCircle(13)),
-                // Main green circle with checkmark
-                Container(
-                  width: 135,
-                  height: 135,
-                  padding: const EdgeInsets.all(35),
-                  decoration: const BoxDecoration(
-                    color: _green,
-                    shape: BoxShape.circle,
-                  ),
+            Builder(
+              builder: (context) {
+                final sw = context.screenWidth;
+                final sh = context.screenHeight;
+                final scale = (sw + sh) * 0.0004;
+                final r = (70 * scale).clamp(50.0, 90.0);
+                final decoSize = (13 * scale).clamp(10.0, 18.0);
+                return Stack(
                   alignment: Alignment.center,
-                  child: Image.asset(Assets.checkedIcon),
-                ),
-              ],
+                  clipBehavior: Clip.none,
+                  children: [
+                    // Decorative translucent circles (screen-responsive)
+                    Positioned(top: -8, right: -r, child: _decoCircle((43 * scale).clamp(35.0, 50.0))),
+                    Positioned(top: 55, right: -(r * 0.65), child: _decoCircle(decoSize)),
+                    Positioned(top: 85, right: -(r * 0.9), child: _decoCircle(decoSize)),
+                    Positioned(top: 120, right: -(r * 0.6), child: _decoCircle(decoSize)),
+                    Positioned(top: 25, left: -(r * 0.7), child: _decoCircle(decoSize)),
+                    Positioned(top: 100, left: -(r * 0.5), child: _decoCircle(decoSize)),
+                    // Main green circle with checkmark
+                    Container(
+                      width: 135,
+                      height: 135,
+                      padding: const EdgeInsets.all(35),
+                      decoration: const BoxDecoration(
+                        color: _green,
+                        shape: BoxShape.circle,
+                      ),
+                      alignment: Alignment.center,
+                      child: Image.asset(Assets.checkedIcon),
+                    ),
+                  ],
+                );
+              },
             ),
             40.ph,
             Text(

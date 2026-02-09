@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import '../../export_all.dart';
 
 class ProfileView extends StatelessWidget {
@@ -25,12 +27,18 @@ class ProfileView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Profile',
-                      style: context.robotoFlexSemiBold(
-                        fontSize: 20,
-                        color: Colors.black,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Profile',
+                          textAlign: TextAlign.center,
+                          style: context.robotoFlexSemiBold(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
                     ),
                     24.ph,
                     _buildUserSection(context),
@@ -47,31 +55,31 @@ class ProfileView extends StatelessWidget {
                     20.ph,
                     _buildMenuItem(
                       context,
-                      icon: Icons.edit_note_rounded,
+                      icon: Assets.editProfileIcon,
                       label: 'Edit Profile',
                       onTap: () => AppRouter.push(const EditProfileView()),
                     ),
                     12.ph,
                     _buildMenuItem(
                       context,
-                      icon: Icons.notifications_outlined,
+                      icon: Assets.notificationIcon,
                       label: 'Notification',
                       onTap: () => AppRouter.push(const NotificationView()),
                     ),
                     12.ph,
                     _buildMenuItem(
                       context,
-                      icon: Icons.star_outline_rounded,
+                      icon: Assets.medalIcon,
                       label: 'Reward',
                       onTap: () => AppRouter.push(const PointsView()),
                     ),
                     12.ph,
                     _buildMenuItem(
                       context,
-                      icon: Icons.logout_rounded,
+                      icon: Assets.logoutIcon,
                       label: 'Logout',
                       isLogout: true,
-                      onTap: () => AppRouter.pushReplacement(const LoginView()),
+                      onTap: () => showExitAppDialog(context),
                     ),
                     40.ph,
                   ],
@@ -85,38 +93,42 @@ class ProfileView extends StatelessWidget {
   }
 
   Widget _buildUserSection(BuildContext context) {
-    return Row(
-      children: [
-        CircleAvatar(
-          radius: 40,
-          backgroundColor: AppColors.borderColor,
-          backgroundImage: AssetImage(Assets.placeholder),
-          onBackgroundImageError: (_, __) {},
-        ),
-        16.pw,
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                _demoName,
-                style: context.robotoFlexSemiBold(
-                  fontSize: 18,
-                  color: Colors.black,
-                ),
-              ),
-              4.ph,
-              Text(
-                _demoEmail,
-                style: context.robotoFlexRegular(
-                  fontSize: 14,
-                  color: AppColors.primaryTextColor.withValues(alpha: 0.8),
-                ),
-              ),
-            ],
+    return GestureDetector(
+      onTap: () => AppRouter.push(const ProfileDetailView()),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 40,
+            backgroundColor: Colors.white,
+            // backgroundImage: AssetImage(Assets.userAvatar,),
+            child: Image.asset(Assets.userAvatar, color: AppColors.primaryColor,),
+            // onBackgroundImageError: (_, __) {},
           ),
-        ),
-      ],
+          16.pw,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _demoName,
+                  style: context.robotoFlexSemiBold(
+                    fontSize: 18,
+                    color: Colors.black,
+                  ),
+                ),
+                4.ph,
+                Text(
+                  _demoEmail,
+                  style: context.robotoFlexRegular(
+                    fontSize: 14,
+                    color: AppColors.primaryTextColor.withValues(alpha: 0.8),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -232,12 +244,17 @@ class ProfileView extends StatelessWidget {
 
   Widget _buildMenuItem(
     BuildContext context, {
-    required IconData icon,
+    required dynamic icon,
     required String label,
     required VoidCallback onTap,
     bool isLogout = false,
   }) {
-    final color = isLogout ? Colors.red : AppColors.primaryTextColor;
+    final color = isLogout ? Colors.red : Color(0xff3A3A3A);
+    final iconWidget = icon is String
+        ? (icon.endsWith('.png')
+            ? Image.asset(icon, color: color, colorBlendMode: BlendMode.srcIn)
+            : SvgPicture.asset(icon, colorFilter: ColorFilter.mode(color, BlendMode.srcIn),width: 24, height: 24,))
+        : Icon(icon as IconData, color: color, size: 24);
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -247,11 +264,14 @@ class ProfileView extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.horizontal(
+              left: Radius.circular(50),
+              right: Radius.circular(50),
+            ),
             border: Border.all(
               color: isLogout
-                  ? Colors.red.withValues(alpha: 0.3)
-                  : AppColors.borderColor,
+                  ? Colors.red
+                  : Color(0xff3A3A3A).withValues(alpha: 0.3),
             ),
           ),
           child: Row(
@@ -259,13 +279,15 @@ class ProfileView extends StatelessWidget {
               Container(
                 width: 44,
                 height: 44,
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: isLogout
-                      ? Colors.red.withValues(alpha: 0.1)
-                      : AppColors.borderColor.withValues(alpha: 0.3),
+                  border: Border.all(color: isLogout
+                      ? Colors.red
+                      : Color(0xff3A3A3A).withValues(alpha: 0.3),),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(icon, size: 22, color: color),
+                alignment: Alignment.center,
+                child: iconWidget,
               ),
               14.pw,
               Expanded(
@@ -274,11 +296,15 @@ class ProfileView extends StatelessWidget {
                   style: context.robotoFlexMedium(fontSize: 15, color: color),
                 ),
               ),
-              Icon(
-                Icons.arrow_forward_ios_rounded,
-                size: 14,
-                color: color.withValues(alpha: 0.7),
+              Transform.rotate(
+                angle: -(45 * math.pi / 180),
+                child: Icon(
+                  Icons.arrow_forward,
+                  size: 24,
+                  color: color,
+                ),
               ),
+              
             ],
           ),
         ),

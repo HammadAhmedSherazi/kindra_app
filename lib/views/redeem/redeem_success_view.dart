@@ -42,19 +42,7 @@ class RedeemSuccessView extends StatelessWidget {
             children: [
               24.ph,
               CardWithOverlayWidget(
-                overlay: Container(
-                  width: 80,
-                  height: 80,
-                  decoration: const BoxDecoration(
-                    color: AppColors.primaryColor,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.check,
-                    size: 44,
-                    color: Colors.white,
-                  ),
-                ),
+                
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [

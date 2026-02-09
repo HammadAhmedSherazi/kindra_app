@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../utils/assets.dart';
+import '../utils/extension.dart';
 
 /// A card with an optional centered overlay (e.g. icon badge) that can overflow
 /// above the card. Use [child] for card content and [overlay] for the top widget.
@@ -44,15 +45,16 @@ class CardWithOverlayWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final responsiveTop = (context.screenHeight * 0.05).clamp(32.0, 56.0);
     return Stack(
       clipBehavior: Clip.none,
       children: [
         Container(
           width: double.infinity,
-          margin: cardMargin ?? const EdgeInsets.only(top: 40),
+          margin: cardMargin ?? EdgeInsets.only(top: responsiveTop),
           padding: cardPadding ??
-              const EdgeInsets.only(
-                top: 56,
+              EdgeInsets.only(
+                top: responsiveTop + 16,
                 left: 20,
                 right: 20,
                 bottom: 24,
@@ -67,7 +69,7 @@ class CardWithOverlayWidget extends StatelessWidget {
           child: child,
         ),
         Positioned(
-          top: overlayTop ?? -40,
+          top: overlayTop ?? -responsiveTop,
           left: 0,
           right: 0,
           child: Center(

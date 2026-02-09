@@ -82,7 +82,7 @@ class HomeView extends StatelessWidget {
                     physics: AlwaysScrollableScrollPhysics(),
                     padding: EdgeInsets.symmetric(horizontal: 20),
                     children: [
-                      130.ph,
+                      (context.screenHeight * 0.16).clamp(100.0, 150.0).ph,
                       Text(
                         'Services Menu',
                         style: TextStyle(
@@ -182,7 +182,7 @@ class HomeView extends StatelessWidget {
                           child: Divider(),
                         ),
                       ),
-                      200.ph,
+                      (context.screenHeight * 0.22).clamp(120.0, 220.0).ph,
                     ],
                   ),
                 ),
@@ -195,7 +195,7 @@ class HomeView extends StatelessWidget {
             right: 20,
             child: Container(
               width: double.infinity,
-              height: 221,
+              height: (context.screenHeight * 0.27).clamp(200.0, 280.0),
               decoration: BoxDecoration(
                 color: Colors.black,
                 borderRadius: BorderRadius.circular(23),

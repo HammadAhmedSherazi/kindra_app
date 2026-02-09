@@ -64,7 +64,7 @@ class PointsView extends StatelessWidget {
                   ],
                 ),
               ),
-              130.ph,
+              (context.screenHeight * 0.16).clamp(100.0, 150.0).ph,
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(

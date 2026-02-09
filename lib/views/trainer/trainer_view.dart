@@ -65,7 +65,7 @@ class TrainerView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: const Color(0xFFF9FAFC),
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -123,41 +123,143 @@ class TrainerView extends StatelessWidget {
             ),
             SliverToBoxAdapter(child: 24.ph),
             SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Text(
-                  'Training Achievements',
-                  style: context.robotoFlexBold(
-                    fontSize: 18,
-                    color: Colors.black,
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                decoration: ShapeDecoration(
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14.50),
                   ),
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(child: 12.ph),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: _AchievementCard(
-                        title: 'Quick Learner',
-                        subtitle: 'First course completed',
-                        icon: Icons.emoji_events_rounded,
-                        color: const Color(0xFFFFF8E1),
-                        iconColor: const Color(0xFFFFB74D),
-                      ),
+                  shadows: [
+                    BoxShadow(
+                      color: Color(0x19000000),
+                      blurRadius: 2,
+                      offset: Offset(0, 1),
+                      spreadRadius: -1,
                     ),
-                    12.pw,
-                    Expanded(
-                      child: _AchievementCard(
-                        title: 'Knowledge Master',
-                        subtitle: 'Complete all courses',
-                        icon: Icons.star_rounded,
-                        color: Colors.white,
-                        iconColor: Colors.grey.shade400,
-                      ),
+                    BoxShadow(
+                      color: Color(0x19000000),
+                      blurRadius: 3,
+                      offset: Offset(0, 1),
+                      spreadRadius: 0,
+                    ),
+                  ],
+                ),
+                child: Column(
+                  spacing: 10,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Training Achievements',
+                      style: context.robotoFlexMedium(fontSize: 16),
+                    ),
+                    Row(
+                      spacing: 20,
+                      children: [
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.all(20),
+                            decoration: ShapeDecoration(
+                              color: const Color(0xFFFEFCE8),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.50),
+                              ),
+                            ),
+                            child: Column(
+                              spacing: 3,
+                              children: [
+                                Container(
+                                  width: 27.95,
+                                  height: 27.95,
+                                  padding: EdgeInsets.all(5),
+                                  decoration: ShapeDecoration(
+                                    color: const Color(0xFFFEF9C2),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                        35289400,
+                                      ),
+                                    ),
+                                  ),
+                                  child: SvgPicture.asset(
+                                    Assets.rewardIcon,
+                                    colorFilter: ColorFilter.mode(
+                                      Color(0xffD08700),
+                                      BlendMode.srcIn,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  'Quick Learner',
+                                  style: context.robotoFlexMedium(
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Text(
+                                  'First course completed',
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  maxLines: 1,
+                                  style: context.robotoFlexRegular(
+                                    fontSize: 12,
+                                    color: Colors.grey.shade600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.all(20),
+                            decoration: ShapeDecoration(
+                              color: const Color(0xFFF9FAFB),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.50),
+                              ),
+                            ),
+                            child: Column(
+                              spacing: 3,
+                              children: [
+                                Container(
+                                  width: 27.95,
+                                  height: 27.95,
+                                  // padding: EdgeInsets.all(5),
+                                  alignment: Alignment.center,
+
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFF3F4F6),
+                                    shape: BoxShape.circle,
+                                  ),
+
+                                  child: Icon(
+                                    Icons.star_outline_rounded,
+                                    color: Color(0xff99A1AF),
+                                    
+                                  ),
+                                ),
+                                Text(
+                                  'Knowledge Master',
+                                  style: context.robotoFlexMedium(
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Text(
+                                  'Complete all courses',
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: context.robotoFlexRegular(
+                                    fontSize: 12,
+                                    color: Colors.grey.shade600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -325,7 +427,11 @@ class _StatCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          SizedBox(width: 31, height: 31, child: iconWidget ?? Icon(icon, size: 22, color: iconColor)),
+          SizedBox(
+            width: 31,
+            height: 31,
+            child: iconWidget ?? Icon(icon, size: 22, color: iconColor),
+          ),
           10.ph,
           Text(
             value,
@@ -383,49 +489,18 @@ class _CourseCard extends StatelessWidget {
     final color = _statusColor();
     switch (course.status) {
       case CourseStatus.completed:
-        return Container(
-          width: 44,
-          height: 44,
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.2),
-            shape: BoxShape.circle,
-          ),
-          child: Icon(Icons.check_rounded, color: color, size: 26),
+        return Image.asset(
+          Assets.checkedIcon,
+          color: AppColors.primaryColor,
+          width: 15,
+          height: 15,
         );
       case CourseStatus.inProgress:
-        return Container(
-          width: 44,
-          height: 44,
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.2),
-            shape: BoxShape.circle,
-          ),
-          child: Icon(Icons.play_arrow_rounded, color: color, size: 26),
-        );
+        return SvgPicture.asset(Assets.playIcon, width: 15, height: 15);
       case CourseStatus.available:
-        return Container(
-          width: 44,
-          height: 44,
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.2),
-            shape: BoxShape.circle,
-          ),
-          child: Icon(Icons.menu_book_rounded, color: color, size: 24),
-        );
+        return SvgPicture.asset(Assets.readIcon, width: 15, height: 15);
       case CourseStatus.locked:
-        return Container(
-          width: 44,
-          height: 44,
-          decoration: BoxDecoration(
-            color: Colors.grey.shade200,
-            shape: BoxShape.circle,
-          ),
-          child: Icon(
-            Icons.lock_rounded,
-            color: Colors.grey.shade600,
-            size: 22,
-          ),
-        );
+        return SvgPicture.asset(Assets.lockIcon, width: 15, height: 15);
     }
   }
 
@@ -460,80 +535,26 @@ class _CourseCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Column(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 20,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _leadingIcon(),
-              14.pw,
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          Column(children: [10.ph, _leadingIcon()]),
+
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       course.title,
-                      style: context.robotoFlexBold(
+                      style: context.robotoFlexRegular(
                         fontSize: 15,
                         color: Colors.black,
                       ),
                     ),
-                    6.ph,
-                    Text(
-                      course.description,
-                      style: context.robotoFlexRegular(
-                        fontSize: 12,
-                        color: Colors.grey.shade600,
-                      ),
-                    ),
-                    10.ph,
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.schedule_rounded,
-                          size: 14,
-                          color: Colors.grey.shade600,
-                        ),
-                        4.pw,
-                        Text(
-                          course.duration,
-                          style: context.robotoFlexRegular(
-                            fontSize: 11,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                        12.pw,
-                        Icon(
-                          Icons.star_rounded,
-                          size: 14,
-                          color: Colors.grey.shade600,
-                        ),
-                        4.pw,
-                        Text(
-                          course.points,
-                          style: context.robotoFlexRegular(
-                            fontSize: 11,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                        12.pw,
-                        Icon(
-                          Icons.people_rounded,
-                          size: 14,
-                          color: Colors.grey.shade600,
-                        ),
-                        4.pw,
-                        Text(
-                          course.participants,
-                          style: context.robotoFlexRegular(
-                            fontSize: 11,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                      ],
-                    ),
-                    10.ph,
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 10,
@@ -553,85 +574,193 @@ class _CourseCard extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
-            ],
-          ),
-          if (course.status == CourseStatus.completed ||
-              course.status == CourseStatus.inProgress) ...[
-            12.ph,
-            ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: LinearProgressIndicator(
-                value: course.progress,
-                minHeight: 6,
-                backgroundColor: Colors.grey.shade200,
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  AppColors.primaryColor,
-                ),
-              ),
-            ),
-            if (course.status == CourseStatus.completed) 4.ph,
-            if (course.status == CourseStatus.completed)
-              Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  '${(course.progress * 100).toInt()}%',
-                  style: context.robotoFlexMedium(
-                    fontSize: 11,
-                    color: AppColors.primaryColor,
+                6.ph,
+                Text(
+                  course.description,
+                  style: context.robotoFlexRegular(
+                    fontSize: 12,
+                    color: Colors.grey.shade600,
                   ),
                 ),
-              ),
-          ],
-          14.ph,
-          SizedBox(
-            width: double.infinity,
-            child: isLocked
-                ? OutlinedButton(
-                    onPressed: null,
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.grey,
-                      side: BorderSide(color: Colors.grey.shade300),
-                      backgroundColor: const Color(0xFFE0F2F1),
+                10.ph,
+                Row(
+                  children: [
+                    Icon(
+                      Icons.schedule_rounded,
+                      size: 14,
+                      color: Colors.grey.shade600,
                     ),
-                    child: Text(
-                      _buttonLabel(),
-                      style: context.robotoFlexSemiBold(
-                        fontSize: 14,
+                    4.pw,
+                    Text(
+                      course.duration,
+                      style: context.robotoFlexRegular(
+                        fontSize: 11,
                         color: Colors.grey.shade600,
                       ),
                     ),
-                  )
-                : course.status == CourseStatus.completed
-                ? OutlinedButton(
-                    onPressed: () {},
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: AppColors.primaryColor,
-                      side: const BorderSide(color: AppColors.primaryColor),
-                      backgroundColor: Colors.white,
+                    12.pw,
+                    Icon(
+                      Icons.star_outline_rounded,
+                      size: 14,
+                      color: Colors.grey.shade600,
                     ),
-                    child: Text(
-                      _buttonLabel(),
-                      style: context.robotoFlexSemiBold(
-                        fontSize: 14,
-                        color: AppColors.primaryColor,
+                    4.pw,
+                    Text(
+                      course.points,
+                      style: context.robotoFlexRegular(
+                        fontSize: 11,
+                        color: Colors.grey.shade600,
                       ),
                     ),
-                  )
-                : ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primaryColor,
-                      foregroundColor: Colors.white,
+                    12.pw,
+                    Icon(
+                      Icons.people_outline_rounded,
+                      size: 14,
+                      color: Colors.grey.shade600,
                     ),
-                    child: Text(
-                      _buttonLabel(),
-                      style: context.robotoFlexSemiBold(
-                        fontSize: 14,
-                        color: Colors.white,
+                    4.pw,
+                    Text(
+                      course.participants,
+                      style: context.robotoFlexRegular(
+                        fontSize: 11,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                  ],
+                ),
+
+                if (course.status == CourseStatus.completed ||
+                    course.status == CourseStatus.inProgress) ...[
+                  10.ph,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Progress',
+                        style: TextStyle(
+                          color: const Color(0xFF1A332E),
+                          fontSize: 10.50,
+                          fontFamily: 'Arimo',
+                          fontWeight: FontWeight.w400,
+                          height: 1.33,
+                        ),
+                      ),
+                      Text(
+                        '100%',
+                        style: TextStyle(
+                          color: const Color(0xFF1A332E),
+                          fontSize: 10.50,
+                          fontFamily: 'Arimo',
+                          fontWeight: FontWeight.w400,
+                          height: 1.33,
+                        ),
+                      ),
+                    ],
+                  ),
+                  8.ph,
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: LinearProgressIndicator(
+                      value: course.progress,
+                      minHeight: 6,
+                      backgroundColor: Colors.grey.shade200,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Color(0xff10B981),
                       ),
                     ),
                   ),
+                  if (course.status == CourseStatus.completed) 4.ph,
+                  if (course.status == CourseStatus.completed)
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        '${(course.progress * 100).toInt()}%',
+                        style: context.robotoFlexMedium(
+                          fontSize: 11,
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
+                    ),
+                ],
+                14.ph,
+                SizedBox(
+                  width: double.infinity,
+                  child: isLocked
+                      ? SizedBox(
+                          height: 30,
+                          child: Opacity(
+                            opacity: 0.50,
+                            child: OutlinedButton(
+                              onPressed: null,
+                              style: OutlinedButton.styleFrom(
+                                padding: EdgeInsets.zero,
+                                foregroundColor: Colors.grey,
+                                side: BorderSide(color: Colors.grey.shade300),
+                                backgroundColor: const Color(0xFF10B981),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.50),
+                                ),
+                              ),
+                              child: Text(
+                                _buttonLabel(),
+                                style: context.robotoFlexMedium(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      : course.status == CourseStatus.completed
+                      ? SizedBox(
+                          height: 30,
+                          child: OutlinedButton(
+                            onPressed: () {},
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: const Color(0xFFF8FFFE),
+
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.50),
+                              ),
+                              side: BorderSide(
+                                width: 1.05,
+                                color: const Color(0x2610B981),
+                              ),
+                              backgroundColor: const Color(0xFFF8FFFE),
+                            ),
+                            child: Text(
+                              _buttonLabel(),
+                              style: context.robotoFlexMedium(
+                                fontSize: 14,
+                                // color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        )
+                      : SizedBox(
+                          height: 30,
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.zero,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.50),
+                              ),
+                              backgroundColor: Color(0xff10B981),
+                              foregroundColor: Colors.white,
+                            ),
+                            child: Text(
+                              _buttonLabel(),
+                              style: context.robotoFlexMedium(
+                                fontSize: 14,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

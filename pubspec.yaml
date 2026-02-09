@@ -78,3 +78,13 @@ flutter:
           weight: 600  # SemiBold
         - asset: assets/fonts/RobotoFlex.ttf
           weight: 700  # Bold
+    - family: Arimo
+      fonts:
+        - asset: assets/fonts/Arimo.ttf
+          weight: 400  # Regular
+        - asset: assets/fonts/Arimo.ttf
+          weight: 500  # Medium
+        - asset: assets/fonts/Arimo.ttf
+          weight: 600  # SemiBold
+        - asset: assets/fonts/Arimo.ttf
+          weight: 700  # Bold

@@ -56,6 +56,14 @@ abstract class Assets {
   static const String downloadIcon = '${iconPath}download_icon.svg';
   static const String clownIcon = '${iconPath}clown_icon.svg';
 
+  // Profile
+  static const String calenderIcon = '${iconPath}calender_icon.png';
+  static const String editProfileIcon = '${iconPath}edit_profile_icon.png';
+  static const String locationIcon = '${iconPath}location_icon.png';
+  static const String logoutIcon = '${iconPath}logout_icon.png';
+  static const String medalIcon = '${iconPath}medal_icon.png';
+  static const String telephoneIcon = '${iconPath}telephone_icon.png';
+
   // Images
   static const String logo = '${imagePath}logo.png';
   static const String kindraTextLogo = '${imagePath}kindra_text_logo.png';
@@ -63,5 +71,6 @@ abstract class Assets {
   static const String onBoarding2 = '${imagePath}onboarding2.png';
   static const String onBoarding3 = '${imagePath}onboarding3.png';
   static const String usedOilHandover = '${imagePath}used_oil_handover.png';
+  static const String userAvatar = '${imagePath}user_avatar.png';
 }
 
