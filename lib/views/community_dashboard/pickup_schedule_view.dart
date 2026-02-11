@@ -2,6 +2,13 @@ import 'package:table_calendar/table_calendar.dart';
 
 import '../../export_all.dart';
 
+/// Indonesian month names and weekday abbreviations to match design reference.
+const List<String> _idMonths = [
+  'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+  'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
+];
+const List<String> _idWeekdays = ['SEN', 'SEL', 'RAB', 'KAM', 'JUM', 'SAB', 'MIN'];
+
 class PickupScheduleView extends ConsumerStatefulWidget {
   const PickupScheduleView({super.key});
 
@@ -14,6 +21,9 @@ class _PickupScheduleViewState extends ConsumerState<PickupScheduleView> {
   late DateTime _selectedDay;
   TimeOfDay _selectedTime = const TimeOfDay(hour: 9, minute: 31);
   bool _isAm = true;
+
+  static const double _headerHeight = 420;
+  static const double _contentTop = 230;
 
   @override
   void initState() {
@@ -43,108 +53,34 @@ class _PickupScheduleViewState extends ConsumerState<PickupScheduleView> {
 
   @override
   Widget build(BuildContext context) {
+    final horizontalPadding = context.screenWidth * 0.05;
+
     return Scaffold(
-      body: Column(
-        children: [
-          _buildCommunityHeader(context, 'Pickup Schedule'),
-          Expanded(
-            child: Container(
-              color: const Color(0xFFF5F5F5),
+      backgroundColor: Colors.white,
+      body: SizedBox(
+        width: double.infinity,
+        height: double.infinity,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            CommunityDashboardHeader(
+              sectionTitle: 'Pickup Schedule',
+              height: _headerHeight,
+              showZoneLabel: false,
+              logoutTextColor: AppColors.primaryColor,
+              onLogout: () {},
+            ),
+            Positioned(
+              top: _contentTop,
+              left: horizontalPadding,
+              right: horizontalPadding,
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.06),
-                            blurRadius: 10,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: TableCalendar(
-                        firstDay: DateTime.now(),
-                        lastDay: DateTime.now().add(const Duration(days: 365)),
-                        focusedDay: _focusedDay,
-                        selectedDayPredicate: (day) =>
-                            _selectedDay.year == day.year &&
-                            _selectedDay.month == day.month &&
-                            _selectedDay.day == day.day,
-                        onDaySelected: (selected, focused) {
-                          setState(() {
-                            _selectedDay = selected;
-                            _focusedDay = focused;
-                          });
-                        },
-                        onPageChanged: (focused) =>
-                            setState(() => _focusedDay = focused),
-                        calendarStyle: CalendarStyle(
-                          selectedDecoration: const BoxDecoration(
-                            color: AppColors.primaryColor,
-                            shape: BoxShape.circle,
-                          ),
-                          todayDecoration: BoxDecoration(
-                            color: AppColors.primaryColor.withValues(alpha: 0.5),
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        headerStyle: HeaderStyle(
-                          formatButtonVisible: false,
-                          titleCentered: true,
-                          titleTextStyle: context.robotoFlexSemiBold(
-                            fontSize: 16,
-                            color: Colors.black,
-                          ),
-                          leftChevronIcon: const Icon(Icons.chevron_left),
-                          rightChevronIcon: const Icon(Icons.chevron_right),
-                        ),
-                      ),
-                    ),
+                    _buildCalendarCard(context),
                     20.ph,
-                    Row(
-                      children: [
-                        Text(
-                          'Time',
-                          style: context.robotoFlexSemiBold(
-                            fontSize: 16,
-                            color: Colors.black,
-                          ),
-                        ),
-                        16.pw,
-                        GestureDetector(
-                          onTap: _selectTime,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 14),
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade200,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Text(
-                              '${_formatTime()} ${_isAm ? "AM" : "PM"}',
-                              style: context.robotoFlexRegular(
-                                fontSize: 15,
-                                color: Colors.black87,
-                              ),
-                            ),
-                          ),
-                        ),
-                        12.pw,
-                        Row(
-                          children: [
-                            _timePeriodChip('AM', _isAm),
-                            8.pw,
-                            _timePeriodChip('PM', !_isAm),
-                          ],
-                        ),
-                      ],
-                    ),
+                    _buildTimeRow(context),
                     32.ph,
                     CustomButtonWidget(
                       label: 'Confirm Pickup',
@@ -152,7 +88,8 @@ class _PickupScheduleViewState extends ConsumerState<PickupScheduleView> {
                         AppRouter.push(
                           PickupScheduledSuccessView(
                             date: _selectedDay,
-                            timeRange: '${_formatTime()} ${_isAm ? "AM" : "PM"} - 12:00 PM',
+                            timeRange:
+                                '${_formatTime()} ${_isAm ? "AM" : "PM"} - 12:00 PM',
                           ),
                         );
                       },
@@ -161,9 +98,129 @@ class _PickupScheduleViewState extends ConsumerState<PickupScheduleView> {
                 ),
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCalendarCard(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
           ),
         ],
       ),
+      child: TableCalendar(
+        firstDay: DateTime.now(),
+        lastDay: DateTime.now().add(const Duration(days: 365)),
+        focusedDay: _focusedDay,
+        selectedDayPredicate: (day) =>
+            _selectedDay.year == day.year &&
+            _selectedDay.month == day.month &&
+            _selectedDay.day == day.day,
+        onDaySelected: (selected, focused) {
+          setState(() {
+            _selectedDay = selected;
+            _focusedDay = focused;
+          });
+        },
+        onPageChanged: (focused) => setState(() => _focusedDay = focused),
+        calendarStyle: CalendarStyle(
+          selectedDecoration: const BoxDecoration(
+            color: AppColors.primaryColor,
+            shape: BoxShape.circle,
+          ),
+          selectedTextStyle: const TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontFamily: 'Roboto Flex',
+            fontWeight: FontWeight.w500,
+          ),
+          todayDecoration: BoxDecoration(
+            color: AppColors.primaryColor.withValues(alpha: 0.5),
+            shape: BoxShape.circle,
+          ),
+          defaultTextStyle: context.robotoFlexRegular(
+            fontSize: 16,
+            color: Colors.black,
+          ),
+          weekendTextStyle: context.robotoFlexRegular(
+            fontSize: 16,
+            color: Colors.black,
+          ),
+        ),
+        headerStyle: HeaderStyle(
+          formatButtonVisible: false,
+          titleCentered: true,
+          titleTextStyle: context.robotoFlexSemiBold(
+            fontSize: 16,
+            color: Colors.black,
+          ),
+          titleTextFormatter: (date, _) =>
+              '${_idMonths[date.month - 1]} ${date.year}',
+          leftChevronIcon: const Icon(Icons.chevron_left, color: Colors.black),
+          rightChevronIcon: const Icon(Icons.chevron_right, color: Colors.black),
+        ),
+        calendarBuilders: CalendarBuilders(
+          dowBuilder: (context, day) {
+            final index = day.weekday - 1;
+            return Center(
+              child: Text(
+                _idWeekdays[index],
+                style: context.robotoFlexRegular(
+                  fontSize: 12,
+                  color: Colors.black87,
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTimeRow(BuildContext context) {
+    return Row(
+      children: [
+        Text(
+          'Time',
+          style: context.robotoFlexSemiBold(
+            fontSize: 16,
+            color: Colors.black,
+          ),
+        ),
+        16.pw,
+        GestureDetector(
+          onTap: _selectTime,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey.shade300),
+            ),
+            child: Text(
+              _formatTime(),
+              style: context.robotoFlexRegular(
+                fontSize: 15,
+                color: Colors.black87,
+              ),
+            ),
+          ),
+        ),
+        12.pw,
+        _timePeriodChip('AM', _isAm),
+        8.pw,
+        _timePeriodChip('PM', !_isAm),
+      ],
     );
   }
 
@@ -173,75 +230,20 @@ class _PickupScheduleViewState extends ConsumerState<PickupScheduleView> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
-          color: selected ? Colors.grey.shade600 : Colors.grey.shade200,
+          color: selected ? Colors.grey.shade200 : Colors.white,
           borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: selected ? Colors.grey.shade400 : Colors.grey.shade300,
+          ),
         ),
         child: Text(
           label,
           style: TextStyle(
-            color: selected ? Colors.white : Colors.black87,
+            color: Colors.black87,
             fontSize: 14,
             fontFamily: 'Roboto Flex',
             fontWeight: FontWeight.w500,
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCommunityHeader(BuildContext context, String title) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.only(
-        top: MediaQuery.paddingOf(context).top + 8,
-        left: 20,
-        right: 20,
-        bottom: 16,
-      ),
-      decoration: const BoxDecoration(color: AppColors.primaryColor),
-      child: SafeArea(
-        bottom: false,
-        child: Row(
-          children: [
-            GestureDetector(
-              onTap: () => AppRouter.back(),
-              child: Container(
-                width: 40,
-                height: 40,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.arrow_back, color: AppColors.primaryColor),
-              ),
-            ),
-            16.pw,
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Community Dashboard',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontFamily: 'Roboto Flex',
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  Text(
-                    title,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontFamily: 'Roboto Flex',
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
         ),
       ),
     );

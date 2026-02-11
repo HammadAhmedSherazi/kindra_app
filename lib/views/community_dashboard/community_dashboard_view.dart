@@ -74,19 +74,19 @@ class _CommunityDashboardViewState
                 onTap: () => setState(() => _currentIndex = 0),
               ),
               _CommunityNavItem(
-                icon: Assets.nextPickupIcon,
+                icon: Assets.pickupIcon,
                 label: 'Pickup',
                 isSelected: _currentIndex == 1,
                 onTap: () => setState(() => _currentIndex = 1),
               ),
               _CommunityNavItem(
-                icon: Assets.communityMemberIcon,
+                icon: Assets.communityIcon,
                 label: 'Member',
                 isSelected: _currentIndex == 2,
                 onTap: () => setState(() => _currentIndex = 2),
               ),
               _CommunityNavItem(
-                icon: Assets.environmentImpactIcon,
+                icon: Assets.impactIcon,
                 label: 'Impact',
                 isSelected: _currentIndex == 3,
                 onTap: () => setState(() => _currentIndex = 3),

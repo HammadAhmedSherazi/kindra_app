@@ -468,7 +468,10 @@ class _DashboardCard extends StatelessWidget {
                 icon,
                 // width: 45,
                 height: 38,
-                color:  color,
+                // color:  color,
+                color: color,
+                colorBlendMode: BlendMode.srcIn,
+                // colorFilter: ColorFilter.mode(color!, BlendMode.color),
               ),
               if (trailing != null) ...[
                 const Spacer(),

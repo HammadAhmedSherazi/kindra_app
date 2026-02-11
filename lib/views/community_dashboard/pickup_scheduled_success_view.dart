@@ -1,5 +1,8 @@
 import '../../export_all.dart';
 
+/// Success screen shown after pickup is scheduled.
+/// Matches eco payment successful design pattern: success icon, title, info card,
+/// and primary CTA button.
 class PickupScheduledSuccessView extends StatelessWidget {
   const PickupScheduledSuccessView({
     super.key,
@@ -13,8 +16,29 @@ class PickupScheduledSuccessView extends StatelessWidget {
   final String location;
 
   static String _formatDate(DateTime d) {
-    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const days = [
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday',
+    ];
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
     return '${days[d.weekday - 1]}, ${months[d.month - 1]} ${d.day}';
   }
 
@@ -26,73 +50,84 @@ class PickupScheduledSuccessView extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              48.ph,
-              Container(
-                width: 100,
-                height: 100,
-                decoration: const BoxDecoration(
-                  color: AppColors.primaryColor,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.check, color: Colors.white, size: 56),
-              ),
-              24.ph,
-              Text(
-                'Pickup Scheduled',
-                style: context.robotoFlexSemiBold(fontSize: 24, color: Colors.black),
-              ),
-              12.ph,
-              Text(
-                'Your used cooking oil pickup has been scheduled.',
-                textAlign: TextAlign.center,
-                style: context.robotoFlexRegular(
-                  fontSize: 16,
-                  color: Colors.black54,
-                ),
-              ),
-              32.ph,
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade100,
-                  borderRadius: BorderRadius.circular(16),
-                ),
+              CardWithOverlayWidget(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    _detailRow(
-                      icon: Icons.calendar_today_outlined,
-                      title: _formatDate(date),
-                      subtitle: timeRange,
+                    // 24.ph,
+                    Text(
+                      'Pickup Scheduled',
+                      textAlign: TextAlign.center,
+                      style: context.robotoFlexBold(
+                        fontSize: 22,
+                        color: Colors.black,
+                      ),
                     ),
-                    Divider(height: 24, color: Colors.grey.shade300),
-                    _detailRow(
-                      icon: Icons.location_on_outlined,
-                      title: location,
-                      subtitle: null,
+                    12.ph,
+                    Text(
+                      'Your used cooking oil pickup has been scheduled.',
+                      textAlign: TextAlign.center,
+                      style: context.robotoFlexRegular(
+                        fontSize: 15,
+                        color: Colors.grey.shade600,
+                      ),
                     ),
-                    Divider(height: 24, color: Colors.grey.shade300),
-                    _detailRow(
-                      icon: Icons.check_circle_outline,
-                      title: 'Status: Scheduled',
-                      subtitle: "We'll notify you before the pickup time",
+                    32.ph,
+                    // Info card - white bg with light grey border (eco success style)
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: Colors.grey.shade300),
+                      ),
+                      child: Column(
+                        children: [
+                          _detailRow(
+                            context: context,
+                            icon: Assets.nextPickupIcon,
+                            title: _formatDate(date),
+                            subtitle: timeRange,
+                          ),
+                          Divider(height: 24, color: Colors.grey.shade300),
+                          _detailRow(
+                            context: context,
+                            icon: Assets.locationIcon,
+                            title: location,
+                            subtitle: null,
+                          ),
+                          Divider(height: 24, color: Colors.grey.shade300),
+                          _detailRow(
+                            context: context,
+                            icon: Assets.checkedIcon,
+                            title: 'Status: Scheduled',
+                            subtitle: "We'll notify you before the pickup time",
+                          ),
+                        ],
+                      ),
                     ),
+              
+                    
                   ],
                 ),
               ),
-              const Spacer(),
-              CustomButtonWidget(
-                label: 'Back to Home',
-                onPressed: () {
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                      builder: (_) => const CommunityDashboardView(initialIndex: 0),
+              30.ph,
+              // const Spacer(),
+                    CustomButtonWidget(
+                      label: 'Back to Home',
+                      onPressed: () {
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                const CommunityDashboardView(initialIndex: 0),
+                          ),
+                          (route) => false,
+                        );
+                      },
                     ),
-                    (route) => false,
-                  );
-                },
-              ),
-              32.ph,
+                    32.ph,
             ],
           ),
         ),
@@ -101,14 +136,15 @@ class PickupScheduledSuccessView extends StatelessWidget {
   }
 
   Widget _detailRow({
-    required IconData icon,
+    required BuildContext context,
+    required String icon,
     required String title,
     String? subtitle,
   }) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 24, color: AppColors.primaryColor),
+        Image.asset(icon, width: 24, height: 24),
         16.pw,
         Expanded(
           child: Column(
@@ -116,10 +152,8 @@ class PickupScheduledSuccessView extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: TextStyle(
+                style: context.robotoFlexSemiBold(
                   fontSize: 16,
-                  fontFamily: 'Roboto Flex',
-                  fontWeight: FontWeight.w600,
                   color: Colors.black,
                 ),
               ),
@@ -127,11 +161,9 @@ class PickupScheduledSuccessView extends StatelessWidget {
                 4.ph,
                 Text(
                   subtitle,
-                  style: TextStyle(
+                  style: context.robotoFlexRegular(
                     fontSize: 14,
-                    fontFamily: 'Roboto Flex',
-                    fontWeight: FontWeight.w400,
-                    color: Colors.black54,
+                    color: Colors.grey.shade600,
                   ),
                 ),
               ],

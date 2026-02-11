@@ -11,6 +11,8 @@ class CommunityDashboardHeader extends StatelessWidget {
     this.sectionTitle = '',
     this.zoneLabel = 'Green Zone',
     this.height = 250,
+    this.showZoneLabel = true,
+    this.logoutTextColor,
     required this.onLogout,
   });
 
@@ -18,6 +20,8 @@ class CommunityDashboardHeader extends StatelessWidget {
   final String sectionTitle;
   final String zoneLabel;
   final double height;
+  final bool showZoneLabel;
+  final Color? logoutTextColor;
   final VoidCallback onLogout;
 
   @override
@@ -84,29 +88,34 @@ class CommunityDashboardHeader extends StatelessWidget {
                   4.ph,
                   Text(
                     'Logout',
-                    style: context.robotoFlexSemiBold(fontSize: 12, color: Colors.white),
+                    style: context.robotoFlexSemiBold(
+                      fontSize: 12,
+                      color: logoutTextColor ?? Colors.white,
+                    ),
                   ),
-                  20.ph,
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: AppColors.primaryColor),
-                    ),
-                    child: Text(
-                      zoneLabel,
-                      style: TextStyle(
-                        color: AppColors.primaryColor,
-                        fontSize: 12,
-                        fontFamily: 'Roboto Flex',
-                        fontWeight: FontWeight.w600,
+                  if (showZoneLabel) ...[
+                    20.ph,
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: AppColors.primaryColor),
+                      ),
+                      child: Text(
+                        zoneLabel,
+                        style: TextStyle(
+                          color: AppColors.primaryColor,
+                          fontSize: 12,
+                          fontFamily: 'Roboto Flex',
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ],
               ),
             ],

@@ -14,10 +14,7 @@ class CommunityImpactTab extends StatelessWidget {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          CommunityDashboardHeader(
-            sectionTitle: 'Impact',
-            onLogout: () {},
-          ),
+          CommunityDashboardHeader(sectionTitle: 'Impact', onLogout: () {}),
           Positioned(
             top: contentTop,
             left: horizontalPadding,
@@ -25,42 +22,47 @@ class CommunityImpactTab extends StatelessWidget {
             child: Container(
               height: context.screenHeight * 0.78,
               color: Colors.transparent,
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _buildImpactCard(
+                          context,
+                          '1230',
+                          'Liters Collected',
+                        ),
+                      ),
+                      12.pw,
+                      Expanded(
+                        child: _buildImpactCard(
+                          context,
+                          '~3,200 KG',
+                          'Pollution Prevented',
+                        ),
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child: ListView(
+                      padding: EdgeInsets.only(bottom: 200),
                       children: [
-                        Expanded(
-                          child: _buildImpactCard(
-                            context,
-                            '1230',
-                            'Liters Collected',
-                          ),
+                        16.ph,
+                        _buildBronzeLevelCard(context),
+                        16.ph,
+                        _buildMonthlyStatsCard(context),
+                        16.ph,
+                        GestureDetector(
+                          onTap: () =>
+                              AppRouter.push(const KindraFriendlyView()),
+                          child: _buildKindraFriendlyCard(context),
                         ),
-                        12.pw,
-                        Expanded(
-                          child: _buildImpactCard(
-                            context,
-                            '~3,200 KG',
-                            'Pollution Prevented',
-                          ),
-                        ),
+                        24.ph,
                       ],
                     ),
-                    16.ph,
-                    _buildBronzeLevelCard(context),
-                    16.ph,
-                    _buildMonthlyStatsCard(context),
-                    16.ph,
-                    GestureDetector(
-                      onTap: () =>
-                          AppRouter.push(const KindraFriendlyView()),
-                      child: _buildKindraFriendlyCard(context),
-                    ),
-                    24.ph,
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -87,27 +89,22 @@ class CommunityImpactTab extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Image.asset(
-            Assets.literIcon,
-            width: 32,
-            height: 32,
-            color: AppColors.primaryColor,
+            Assets.dropIcon,
+            width: 41,
+            height: 41,
+            // color: AppColors.primaryColor,
           ),
           12.ph,
           Text(
             value,
-            style: TextStyle(
-              fontSize: 22,
-              fontFamily: 'Roboto Flex',
-              fontWeight: FontWeight.w700,
-              color: Colors.black,
-            ),
+            style: context.robotoFlexBold(fontSize: 30, color: Colors.black),
           ),
           4.ph,
           Text(
             label,
             style: context.robotoFlexRegular(
               fontSize: 14,
-              color: Colors.black54,
+              // color: Colors.black54,
             ),
           ),
         ],
@@ -132,10 +129,10 @@ class CommunityImpactTab extends StatelessWidget {
       child: Row(
         children: [
           Image.asset(
-            Assets.medalIcon,
-            width: 56,
-            height: 56,
-            fit: BoxFit.contain,
+            Assets.loyalRankIcon,
+            width: 80,
+            height: 80,
+            // fit: BoxFit.contain,
           ),
           16.pw,
           Expanded(
@@ -145,7 +142,7 @@ class CommunityImpactTab extends StatelessWidget {
                 Text(
                   'Bronze Level',
                   style: context.robotoFlexSemiBold(
-                    fontSize: 18,
+                    fontSize: 20,
                     color: Colors.black,
                   ),
                 ),
@@ -281,43 +278,40 @@ class CommunityImpactTab extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
+      child: Column(
         children: [
-          Image.asset(
-            Assets.kindraTextLogo,
-            width: 72,
-            height: 28,
-            fit: BoxFit.contain,
-          ),
-          16.pw,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Kindra Friendly',
-                  style: context.robotoFlexSemiBold(
-                    fontSize: 16,
-                    color: Colors.black,
-                  ),
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Image.asset(
+                      Assets.kindraTextLogo,
+
+                      height: 60,
+                      fit: BoxFit.contain,
+                    ),
+                    16.pw,
+                    Text(
+                      'Kindra Friendly',
+                      style: context.robotoFlexSemiBold(
+                        fontSize: 25,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
                 ),
-                4.ph,
-                Text(
-                  'View, Share, and download your certified badge.',
-                  style: context.robotoFlexRegular(
-                    fontSize: 12,
-                    color: Colors.black54,
-                  ),
-                ),
-              ],
-            ),
+              ),
+              Icon(Icons.qr_code_2, size: 130, color: Colors.black),
+            ],
           ),
-          Container(
-            width: 56,
-            height: 56,
-            color: Colors.grey.shade300,
-            child: const Center(
-              child: Icon(Icons.qr_code_2, size: 36, color: Colors.black54),
+          // 4.ph,
+          Text(
+            'View, Share, and download your certified badge.',
+            style: context.robotoFlexMedium(
+              fontSize: 15,
+              // color: Colors.black54,
             ),
           ),
         ],
