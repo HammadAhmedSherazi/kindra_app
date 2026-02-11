@@ -11,13 +11,24 @@ class AuthProvider extends Notifier<AuthState> {
     return AuthState();
   }
 
-  Future<void> login({required String email, required String password}) async {
+  Future<void> login({
+    required String email,
+    required String password,
+    String? userRole,
+  }) async {
     state = state.copyWith(
         loginApiResponse: ApiResponse<dynamic>.loading());
     try {
+      final body = <String, dynamic>{
+        'email': email,
+        'password': password,
+      };
+      if (userRole != null && userRole.isNotEmpty) {
+        body['user_type'] = userRole;
+      }
       final response = await MyHttpClient.instance.post(
         ApiEndpoints.login,
-        {'email': email, 'password': password},
+        body,
         isToken: false,
       );
       state = state.copyWith(

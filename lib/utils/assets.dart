@@ -20,6 +20,13 @@ abstract class Assets {
   static const String navTrainerIcon = '${iconPath}nav_trainer.png';
   static const String navUserIcon = '${iconPath}nav_user.png';
 
+  // Community Dashboard
+  static const String kindraTextWhiteLogo = '${iconPath}kindra_text_white_logo.png';
+  static const String communityMemberIcon = '${iconPath}community_member_icon.png';
+  static const String environmentImpactIcon = '${iconPath}environment_impact_icon.png';
+  static const String nextPickupIcon = '${iconPath}next_pickup_icon.png';
+  static const String loyalRankIcon = '${iconPath}loyal_rank_icon.png';
+
   // Home & services
   static const String scanDocIcon = '${iconPath}scan_doc_icon.png';
   static const String notificationIcon = '${iconPath}notification_icon.png';
@@ -72,5 +79,7 @@ abstract class Assets {
   static const String onBoarding3 = '${imagePath}onboarding3.png';
   static const String usedOilHandover = '${imagePath}used_oil_handover.png';
   static const String userAvatar = '${imagePath}user_avatar.png';
+  static const String communityDashboardBackground = '${imagePath}community_dashboard_background.png';
+  static const String homeLogoutIcon = '${iconPath}home_logout_icon.png';
 }
 

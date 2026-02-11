@@ -74,6 +74,15 @@ export 'views/scan_waste/used_oil_image_confirmation_view.dart';
 export 'views/scan_waste/used_oil_verification_result_view.dart';
 export 'views/scan_waste/used_oil_handover_form_view.dart';
 export 'views/scan_waste/calendar_picker_view.dart';
+export 'views/community_dashboard/community_dashboard_view.dart';
+export 'views/community_dashboard/community_home_tab.dart';
+export 'views/community_dashboard/community_pickup_tab.dart';
+export 'views/community_dashboard/community_member_tab.dart';
+export 'views/community_dashboard/community_impact_tab.dart';
+export 'views/community_dashboard/pickup_schedule_view.dart';
+export 'views/community_dashboard/pickup_scheduled_success_view.dart';
+export 'views/community_dashboard/kindra_friendly_view.dart';
+export 'views/community_dashboard/member_detail_view.dart';
 
 export 'views/onboarding/splash_view.dart';
 
@@ -90,3 +99,4 @@ export 'widget/exit_app_dialog.dart';
 export 'widget/custom_inner_screen_template.dart';
 export 'widget/kindra_logo_with_rings_widget.dart';
 export 'widget/card_with_overlay_widget.dart';
+export 'widget/community_dashboard_header.dart';

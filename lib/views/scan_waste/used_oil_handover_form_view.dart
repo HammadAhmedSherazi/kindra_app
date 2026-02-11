@@ -162,7 +162,11 @@ class _UsedOilHandoverFormViewState extends State<UsedOilHandoverFormView> {
                 label: 'How Many Liters?',
                 hint: 'Enter quantity (liters)',
                 keyboardType: TextInputType.number,
-                prefixIcon: Icon(Icons.water_drop_outlined, color: Colors.grey.shade600),
+                prefixIconConstraints: BoxConstraints(minWidth: 28, minHeight: 28),
+                prefixIcon: Padding(
+                  padding: const EdgeInsets.only(left: 15, right: 5),
+                  child: Image.asset(Assets.literIcon, width: 28, height: 28, color: Colors.grey.shade600),
+                ),
               ),
               16.ph,
               CustomTextFieldWidget(
@@ -171,7 +175,11 @@ class _UsedOilHandoverFormViewState extends State<UsedOilHandoverFormView> {
                 hint: 'Enter Date',
                 readOnly: true,
                 onTap: _openCalendar,
-                prefixIcon: Icon(Icons.calendar_today_outlined, color: Colors.grey.shade600),
+                prefixIconConstraints: BoxConstraints(minWidth: 28, minHeight: 28),
+                prefixIcon: Padding(
+                  padding: const EdgeInsets.only(left: 15, right: 5),
+                  child: Image.asset(Assets.dateIcon, width: 28, height: 28, color: Colors.grey.shade600),
+                ),
               ),
               16.ph,
               CustomTextFieldWidget(
@@ -180,7 +188,11 @@ class _UsedOilHandoverFormViewState extends State<UsedOilHandoverFormView> {
                 hint: 'Enter Time',
                 readOnly: true,
                 onTap: _openTimePicker,
-                prefixIcon: Icon(Icons.access_time_outlined, color: Colors.grey.shade600),
+                prefixIconConstraints: BoxConstraints(minWidth: 28, minHeight: 28),
+                prefixIcon: Padding(
+                  padding: const EdgeInsets.only(left: 15, right: 5),
+                  child: Image.asset(Assets.timeIcon, width: 28, height: 28, color: Colors.grey.shade600),
+                ),
               ),
               32.ph,
               CustomButtonWidget(

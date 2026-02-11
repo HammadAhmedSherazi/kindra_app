@@ -74,24 +74,27 @@ class _CalendarPickerDialogState extends State<CalendarPickerDialog> {
                 ),
               ),
               headerStyle: HeaderStyle(
+                formatButtonPadding: EdgeInsets.zero,
                 formatButtonVisible: false,
+                titleCentered: true,
                 titleTextStyle: context.robotoFlexSemiBold(
                   fontSize: 17,
                   color: Colors.black,
                 ),
                 leftChevronIcon: Icon(
                   Icons.chevron_left,
-                  color: AppColors.primaryColor,
+                  
                 ),
                 rightChevronIcon: Icon(
                   Icons.chevron_right,
-                  color: AppColors.primaryColor,
+             
                 ),
               ),
             ),
             16.ph,
             CustomButtonWidget(
               label: 'Confirm Date',
+              textSize: 14,
               onPressed: () {
                 Navigator.of(context).pop(_selectedDay);
               },

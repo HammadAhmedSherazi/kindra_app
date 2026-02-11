@@ -11,6 +11,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  LoginUserRole _selectedUserRole = LoginUserRole.householder;
 
   @override
   void dispose() {
@@ -21,7 +22,54 @@ class _LoginViewState extends ConsumerState<LoginView> {
 
   Future<void> _onSubmit() async {
     if (!_formKey.currentState!.validate()) return;
-    AppRouter.pushAndRemoveUntil(const NavigationView());
+    if (mounted) {
+        if (_selectedUserRole == LoginUserRole.communities) {
+          AppRouter.pushAndRemoveUntil(const CommunityDashboardView());
+        } else {
+          AppRouter.pushAndRemoveUntil(const NavigationView());
+        }
+      }
+    // await ref.read(authProvider.notifier).login(
+    //       email: _emailController.text.trim(),
+    //       password: _passwordController.text,
+    //       userRole: _selectedUserRole.name,
+    //     );
+    // final authState = ref.read(authProvider);
+    // if (authState.loginApiResponse.status == Status.completed) {
+    //   AppConstant.userType = _loginRoleToUserType(_selectedUserRole);
+    //   if (mounted) {
+    //     if (_selectedUserRole == LoginUserRole.communities) {
+    //       AppRouter.pushAndRemoveUntil(const CommunityDashboardView());
+    //     } else {
+    //       AppRouter.pushAndRemoveUntil(const NavigationView());
+    //     }
+    //   }
+    // } else if (authState.loginApiResponse.status == Status.error &&
+    //     mounted) {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     SnackBar(
+    //       content: Text(
+    //         authState.loginApiResponse.message.isNotEmpty
+    //             ? authState.loginApiResponse.message
+    //             : 'Login failed. Please try again.',
+    //       ),
+    //     ),
+    //   );
+    // }
+  }
+
+  static UserType _loginRoleToUserType(LoginUserRole role) {
+    switch (role) {
+      case LoginUserRole.globalAdmin:
+        return UserType.manager;
+      case LoginUserRole.drivers:
+        return UserType.staff;
+      case LoginUserRole.householder:
+      case LoginUserRole.communities:
+      case LoginUserRole.businesses:
+      case LoginUserRole.coastalGroups:
+        return UserType.customer;
+    }
   }
 
   @override
@@ -175,6 +223,8 @@ class _LoginViewState extends ConsumerState<LoginView> {
                   ),
                 ),
                 24.ph,
+                _buildSelectUserDropdown(context),
+                24.ph,
                 CustomButtonWidget(
                   label: context.tr('login'),
                   onPressed: _onSubmit,
@@ -229,6 +279,60 @@ class _LoginViewState extends ConsumerState<LoginView> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildSelectUserDropdown(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          'Select User',
+          style: context.robotoFlexRegular(fontSize: 17, color: Colors.black),
+        ),
+        8.ph,
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(29),
+            border: Border.all(width: 1, color: const Color(0xFF393939)),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<LoginUserRole>(
+              value: _selectedUserRole,
+              isExpanded: true,
+              icon: Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Icon(
+                  Icons.keyboard_arrow_down,
+                  color: Colors.black.withValues(alpha: 0.5),
+                ),
+              ),
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 14.87,
+                fontFamily: 'Roboto Flex',
+                fontWeight: FontWeight.w300,
+                height: 1.08,
+              ),
+              items: LoginUserRole.values
+                  .map(
+                    (role) => DropdownMenuItem<LoginUserRole>(
+                      value: role,
+                      child: Text(role.displayName),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (LoginUserRole? value) {
+                if (value != null) {
+                  setState(() => _selectedUserRole = value);
+                }
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
