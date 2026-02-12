@@ -100,3 +100,4 @@ export 'widget/custom_inner_screen_template.dart';
 export 'widget/kindra_logo_with_rings_widget.dart';
 export 'widget/card_with_overlay_widget.dart';
 export 'widget/community_dashboard_header.dart';
+export 'widget/bar_chart_widget.dart';

@@ -299,10 +299,9 @@ class CommunityHomeTab extends StatelessWidget {
   }
 
   Widget _buildMonthlyStatsCard(BuildContext context) {
-    final months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-    final values1 = [420.0, 380.0, 450.0, 500.0, 480.0, 520.0];
-    final values2 = [80.0, 120.0, 90.0, 100.0, 110.0, 95.0];
-    final maxVal = 600.0;
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+    const values1 = [450.0, 480.0, 470.0, 490.0, 490.0, 500.0];
+    const values2 = [50.0, 50.0, 50.0, 40.0, 40.0, 30.0];
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -324,52 +323,27 @@ class CommunityHomeTab extends StatelessWidget {
             style: context.robotoFlexSemiBold(fontSize: 18, color: Colors.black),
           ),
           20.ph,
-          SizedBox(
-            height: 180,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: List.generate(months.length, (i) {
-                return Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 12,
-                              height: (values1[i] / maxVal) * 120,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFDB932C),
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                            ),
-                            4.pw,
-                            Container(
-                              width: 12,
-                              height: (values2[i] / maxVal) * 120,
-                              decoration: BoxDecoration(
-                                color: AppColors.secondaryColor,
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                            ),
-                          ],
-                        ),
-                        8.ph,
-                        Text(
-                          months[i],
-                          style: context.robotoFlexRegular(
-                            fontSize: 11,
-                            color: Colors.black54,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: BarChartWidget(
+              labels: months,
+              series: [
+                BarChartSeries(
+                  values: values1,
+                  color: const Color(0xFFE5A842),
+                ),
+                BarChartSeries(
+                  values: values2,
+                  color: const Color(0xFF0A4D59),
+                ),
+              ],
+              maxY: 600,
+              yTickCount: 5,
+              barRadius: 6,
+              barGap: 6,
+              darkTheme: false,
+              chartHeight: 220,
+              yLabelFormat: (v) => v >= 1000 ? '${(v / 1000).toStringAsFixed(0)}K' : v.toStringAsFixed(0),
             ),
           ),
         ],

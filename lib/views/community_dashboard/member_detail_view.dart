@@ -5,22 +5,9 @@ class MemberDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.transparent,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 12),
-          child: BackButtonWidget(onPressed: () => AppRouter.back()),
-        ),
-        title: Text(
-          'Members',
-          style: context.robotoFlexSemiBold(fontSize: 18, color: Colors.black),
-        ),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
+    return CustomInnerScreenTemplate(
+      title: 'Members',
+      child: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
@@ -57,7 +44,7 @@ class MemberDetailView extends StatelessWidget {
               alignment: Alignment.centerLeft,
               child: Text(
                 'Activity History',
-                style: context.robotoFlexSemiBold(fontSize: 18, color: Colors.black),
+                style: context.robotoFlexSemiBold(fontSize: 22, color: Colors.black),
               ),
             ),
             12.ph,
@@ -70,6 +57,8 @@ class MemberDetailView extends StatelessWidget {
             CustomButtonWidget(
               label: 'View Full History',
               onPressed: () {},
+              backgroundColor: Colors.grey.shade400,
+              variant: CustomButtonVariant.primary,
             ),
             12.ph,
             CustomButtonWidget(
@@ -94,60 +83,71 @@ class MemberDetailView extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
+         
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.grey.shade300),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            spacing: 15,
             children: [
               Image.asset(
-                Assets.literIcon,
+                Assets.dropIcon,
                 width: 36,
                 height: 36,
                 color: AppColors.primaryColor,
               ),
-              12.pw,
-              Text(
-                '22.5 Liters',
-                style: context.robotoFlexSemiBold(
-                  fontSize: 20,
-                  color: Colors.black,
+             
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '22.5 Liters',
+                      style: context.robotoFlexSemiBold(
+                        fontSize: 26,
+                        color: Colors.black,
+                      ),
+                    ),
+                    Text(
+                      'Last Contribution : Apr 14, 2025',
+                      style: context.robotoFlexMedium(fontSize: 14, color: Colors.black),
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
+        
+          
           12.ph,
-          Text(
-            'Last Contribution : Apr 14, 2025',
-            style: context.robotoFlexRegular(fontSize: 13, color: Colors.black54),
-          ),
-          8.ph,
-          Row(
-            children: [
-              Image.asset(
-                Assets.literIcon,
-                width: 20,
-                height: 20,
-                color: Colors.grey,
-              ),
-              6.pw,
-              Text(
-                '12 Liters / Month',
-                style: context.robotoFlexRegular(
-                  fontSize: 13,
-                  color: Colors.black54,
+          Divider(height: 1, color: Colors.black.withValues(alpha: 0.12)),
+          12.ph,
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 10
+            ),
+            child: Row(
+              spacing: 15,
+              children: [
+                Image.asset(
+                  Assets.dropIcon,
+                  width: 20,
+                  height: 20,
+                  color: Colors.black45,
                 ),
-              ),
-            ],
+               
+                Text(
+                  '12 Liters / Month',
+                  style: context.robotoFlexRegular(
+                    fontSize: 13,
+                    color: Colors.black87,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -158,15 +158,9 @@ class MemberDetailView extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.grey.shade300),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,26 +168,34 @@ class MemberDetailView extends StatelessWidget {
           Row(
             children: [
               Image.asset(
-                Assets.literIcon,
+                Assets.dropIcon,
                 width: 36,
                 height: 36,
                 color: AppColors.primaryColor,
               ),
               12.pw,
-              Text(
-                '135 Points',
-                style: context.robotoFlexSemiBold(
-                  fontSize: 20,
-                  color: Colors.black,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '135 Points',
+                      style: context.robotoFlexSemiBold(
+                        fontSize: 24,
+                        color: Colors.black,
+                      ),
+                    ),
+                    Text(
+                      'Eco-Points Redeemed: 45 Points',
+                      style: context.robotoFlexMedium(fontSize: 14, color: Colors.black),
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
-          12.ph,
-          Text(
-            'Eco-Points Redeemed: 45 Points',
-            style: context.robotoFlexRegular(fontSize: 13, color: Colors.black54),
-          ),
+          
+          
         ],
       ),
     );
@@ -209,7 +211,7 @@ class MemberDetailView extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color:  Colors.white,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -228,7 +230,7 @@ class MemberDetailView extends StatelessWidget {
                 Text(
                   date,
                   style: context.robotoFlexSemiBold(
-                    fontSize: 14,
+                    fontSize: 18,
                     color: Colors.black,
                   ),
                 ),
@@ -236,8 +238,8 @@ class MemberDetailView extends StatelessWidget {
                 Text(
                   quantity,
                   style: context.robotoFlexRegular(
-                    fontSize: 13,
-                    color: Colors.black54,
+                    fontSize: 16,
+                    color: Colors.black87,
                   ),
                 ),
               ],
@@ -262,9 +264,9 @@ class MemberDetailView extends StatelessWidget {
           8.pw,
           Text(
             '$points points',
-            style: context.robotoFlexRegular(
-              fontSize: 13,
-              color: Colors.black87,
+            style: context.robotoFlexSemiBold(
+              fontSize: 22,
+              color: Colors.black,
             ),
           ),
         ],

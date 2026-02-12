@@ -142,9 +142,10 @@ class PickupScheduledSuccessView extends StatelessWidget {
     String? subtitle,
   }) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Image.asset(icon, width: 24, height: 24),
+        Image.asset(icon, width: 28, height: 28, color: Colors.black,),
         16.pw,
         Expanded(
           child: Column(

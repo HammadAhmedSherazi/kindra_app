@@ -86,5 +86,6 @@ abstract class Assets {
   static const String homeLogoutIcon = '${iconPath}home_logout_icon.png';
 
   static const String dropIcon = '${iconPath}drop_icon.png';
+  static const String kindraLeaveIcon = '${iconPath}kindra_leave_icon.png';
 }
 
