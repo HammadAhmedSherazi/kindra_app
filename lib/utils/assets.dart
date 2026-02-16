@@ -28,7 +28,9 @@ abstract class Assets {
   static const String environmentImpactIcon = '${iconPath}environment_impact_icon.png';
   static const String pickupIcon = '${iconPath}pickup_icon.png';
   static const String nextPickupIcon = '${iconPath}next_pickup_icon.png';
+  static const String deliverIcon = '${iconPath}deliver_icon.png';
   static const String loyalRankIcon = '${iconPath}loyal_rank_icon.png';
+  static const String trashCanIcon = '${iconPath}trash_can_icon.png';
 
   // Home & services
   static const String scanDocIcon = '${iconPath}scan_doc_icon.png';
@@ -41,6 +43,7 @@ abstract class Assets {
 
   // Payment
   static const String applePayIcon = '${iconPath}apple_pay_icon.svg';
+  static const String paymentIcon = '${iconPath}payment_icon.png';
   static const String cardIcon = '${iconPath}card_icon.png';
   static const String dateIcon = '${iconPath}date_icon.png';
   static const String googlePayIcon = '${iconPath}google_pay_icon.svg';

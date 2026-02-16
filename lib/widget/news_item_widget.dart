@@ -5,10 +5,12 @@ class NewsItemWidget extends StatelessWidget {
     super.key,
     required this.news,
     this.onTap,
+    this.showWatchVideo = false,
   });
 
   final NewsModel news;
   final VoidCallback? onTap;
+  final bool showWatchVideo;
 
   static const List<String> _monthNames = [
     'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
@@ -56,6 +58,7 @@ class NewsItemWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                1.ph,
                 Text(
                   title,
                   maxLines: 1,
@@ -80,23 +83,38 @@ class NewsItemWidget extends StatelessWidget {
                   ),
                 ),
                 Row(
-                  spacing: 4,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(
-                      Icons.schedule,
-                      color: Colors.black.withValues(alpha: 0.40),
-                      size: 18,
+                    Row(
+                      spacing: 4,
+                      children: [
+                        Icon(
+                          Icons.schedule,
+                          color: Colors.black.withValues(alpha: 0.40),
+                          size: 18,
+                        ),
+                        Text(
+                          dateStr,
+                          style: TextStyle(
+                            color: Colors.black.withValues(alpha: 0.40),
+                            fontSize: 13,
+                            fontFamily: 'Roboto Flex',
+                            fontWeight: FontWeight.w300,
+                            height: 1.14,
+                          ),
+                        ),
+                      ],
                     ),
-                    Text(
-                      dateStr,
-                      style: TextStyle(
-                        color: Colors.black.withValues(alpha: 0.40),
-                        fontSize: 13,
-                        fontFamily: 'Roboto Flex',
-                        fontWeight: FontWeight.w300,
-                        height: 1.14,
+                    if (showWatchVideo)
+                      Text(
+                        'Watch video',
+                        style: TextStyle(
+                          color: Colors.red.shade700,
+                          fontSize: 13,
+                          fontFamily: 'Roboto Flex',
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
                   ],
                 ),
               ],

@@ -1,9 +1,8 @@
 import '../../export_all.dart';
 
-/// Success screen shown after pickup is scheduled.
-/// Shows green check, "Pickup Confirmed!", pickup details card, driver status, and Back to Home.
-class PickupScheduledSuccessView extends StatelessWidget {
-  const PickupScheduledSuccessView({
+/// Success screen for business pickup flow. "Back to Home" returns to [BusinessDashboardView].
+class BusinessPickupScheduledSuccessView extends StatelessWidget {
+  const BusinessPickupScheduledSuccessView({
     super.key,
     required this.date,
     required this.timeRange,
@@ -16,27 +15,12 @@ class PickupScheduledSuccessView extends StatelessWidget {
 
   static String _formatDate(DateTime d) {
     const days = [
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-      'Sunday',
+      'Monday', 'Tuesday', 'Wednesday', 'Thursday',
+      'Friday', 'Saturday', 'Sunday',
     ];
     const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December',
     ];
     return '${days[d.weekday - 1]}, ${months[d.month - 1]} ${d.day}';
   }
@@ -49,8 +33,10 @@ class PickupScheduledSuccessView extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
+            // crossAxisAlignment: CrossAxisAlignment.center,
+            // mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Spacer(flex: 1),
+              const Spacer(flex: 2),
               // Card with green check overlay and pickup details
               CardWithOverlayWidget(
                 child: Column(
@@ -65,27 +51,43 @@ class PickupScheduledSuccessView extends StatelessWidget {
                       ),
                     ),
                     8.ph,
-                    Text(
-                      'Your pickup has been scheduled successfully',
-                      textAlign: TextAlign.center,
-                      style: context.robotoFlexRegular(
-                        fontSize: 15,
-                        color: Colors.grey.shade600,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                      ),
+                      child: Text(
+                        'Your pickup has been scheduled successfully',
+                        textAlign: TextAlign.center,
+                        style: context.robotoFlexRegular(
+                          fontSize: 15,
+                          color: Colors.grey.shade600,
+                        ),
                       ),
                     ),
                     24.ph,
-                    _detailRow(
-                      context: context,
-                      icon: Assets.calenderIcon,
-                      title: location,
-                      subtitle: '${_formatDate(date)}\n$timeRange',
-                    ),
-                    Divider(height: 24, color: Colors.grey.shade300),
-                    _detailRow(
-                      context: context,
-                      icon: Assets.communityMemberIcon,
-                      title: 'Driver Not Yet Assigned',
-                      subtitle: "You'll be notified once a driver is assigned",
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey.shade300),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        children: [
+                          _detailRow(
+                            context: context,
+                            icon: Assets.dateIcon,
+                            title: location,
+                            subtitle: '${_formatDate(date)}\n$timeRange',
+                          ),
+                          Divider(height: 24, color: Colors.grey.shade300),
+                          _detailRow(
+                            context: context,
+                            icon: Assets.communityMemberIcon,
+                            title: 'Driver Not Yet Assigned',
+                            subtitle: "You'll be notified once a driver is assigned",
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -97,7 +99,7 @@ class PickupScheduledSuccessView extends StatelessWidget {
                   Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
                       builder: (_) =>
-                          const CommunityDashboardView(initialIndex: 0),
+                          const BusinessDashboardView(initialIndex: 0),
                     ),
                     (route) => false,
                   );
@@ -124,7 +126,7 @@ class PickupScheduledSuccessView extends StatelessWidget {
           icon,
           width: 28,
           height: 28,
-          color: AppColors.primaryColor,
+          color: Colors.black.withValues(alpha: 0.80),
         ),
         16.pw,
         Expanded(
@@ -144,7 +146,7 @@ class PickupScheduledSuccessView extends StatelessWidget {
                   subtitle,
                   style: context.robotoFlexRegular(
                     fontSize: 14,
-                    color: Colors.grey.shade600,
+                    // color: Colors.grey.shade600,
                   ),
                 ),
               ],

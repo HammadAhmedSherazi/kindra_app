@@ -142,7 +142,7 @@ class CommunityHomeTab extends StatelessWidget {
           ),
           6.ph,
           Row(
-            mainAxisAlignment: .center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 '${(progress * 100).toInt()}% to Goal',

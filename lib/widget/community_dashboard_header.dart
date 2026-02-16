@@ -4,6 +4,7 @@ import '../export_all.dart';
 /// Use [subtitle] for the small label (e.g. "Community Dashboard"),
 /// [sectionTitle] for the main heading when needed,
 /// [zoneLabel] for the badge (e.g. "Green Zone"), and [onLogout] for logout.
+/// Set [showNotificationIcon] true (e.g. business flow) to show notification icon instead of logout.
 class CommunityDashboardHeader extends StatelessWidget {
   const CommunityDashboardHeader({
     super.key,
@@ -14,6 +15,8 @@ class CommunityDashboardHeader extends StatelessWidget {
     this.showZoneLabel = true,
     this.logoutTextColor,
     required this.onLogout,
+    this.showNotificationIcon = false,
+    this.onNotificationTap,
   });
 
   final String subtitle;
@@ -23,6 +26,8 @@ class CommunityDashboardHeader extends StatelessWidget {
   final bool showZoneLabel;
   final Color? logoutTextColor;
   final VoidCallback onLogout;
+  final bool showNotificationIcon;
+  final VoidCallback? onNotificationTap;
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +73,7 @@ class CommunityDashboardHeader extends StatelessWidget {
               Column(
                 children: [
                   GestureDetector(
-                    onTap: onLogout,
+                    onTap: showNotificationIcon ? (onNotificationTap ?? () {}) : onLogout,
                     child: Container(
                       width: 48,
                       height: 48,
@@ -78,16 +83,16 @@ class CommunityDashboardHeader extends StatelessWidget {
                       ),
                       padding: const EdgeInsets.all(12),
                       child: Image.asset(
-                        Assets.homeLogoutIcon,
+                        showNotificationIcon ? Assets.notificationIcon : Assets.homeLogoutIcon,
                         width: 24,
                         height: 24,
-                        color: AppColors.primaryColor,
+                        color: showNotificationIcon ? null : AppColors.primaryColor,
                       ),
                     ),
                   ),
                   4.ph,
                   Text(
-                    'Logout',
+                    showNotificationIcon ? 'Notifications' : 'Logout',
                     style: context.robotoFlexSemiBold(
                       fontSize: 12,
                       color: logoutTextColor ?? Colors.white,

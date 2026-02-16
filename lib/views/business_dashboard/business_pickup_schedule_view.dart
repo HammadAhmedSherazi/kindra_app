@@ -2,21 +2,23 @@ import 'package:table_calendar/table_calendar.dart';
 
 import '../../export_all.dart';
 
-/// Indonesian month names and weekday abbreviations to match design reference.
 const List<String> _idMonths = [
   'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
   'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
 ];
 const List<String> _idWeekdays = ['SEN', 'SEL', 'RAB', 'KAM', 'JUM', 'SAB', 'MIN'];
 
-class PickupScheduleView extends ConsumerStatefulWidget {
-  const PickupScheduleView({super.key});
+/// Pickup schedule screen for business flow. On success navigates to [BusinessPickupScheduledSuccessView].
+class BusinessPickupScheduleView extends ConsumerStatefulWidget {
+  const BusinessPickupScheduleView({super.key});
 
   @override
-  ConsumerState<PickupScheduleView> createState() => _PickupScheduleViewState();
+  ConsumerState<BusinessPickupScheduleView> createState() =>
+      _BusinessPickupScheduleViewState();
 }
 
-class _PickupScheduleViewState extends ConsumerState<PickupScheduleView> {
+class _BusinessPickupScheduleViewState
+    extends ConsumerState<BusinessPickupScheduleView> {
   late DateTime _focusedDay;
   late DateTime _selectedDay;
   TimeOfDay _selectedTime = const TimeOfDay(hour: 9, minute: 31);
@@ -64,11 +66,14 @@ class _PickupScheduleViewState extends ConsumerState<PickupScheduleView> {
           clipBehavior: Clip.none,
           children: [
             CommunityDashboardHeader(
+              subtitle: 'Business Dashboard',
               sectionTitle: 'Pickup Schedule',
               height: _headerHeight,
               showZoneLabel: false,
               logoutTextColor: AppColors.primaryColor,
               onLogout: () {},
+              showNotificationIcon: true,
+              onNotificationTap: () {},
             ),
             Positioned(
               top: _contentTop,
@@ -86,11 +91,26 @@ class _PickupScheduleViewState extends ConsumerState<PickupScheduleView> {
                       label: 'Confirm Pickup',
                       onPressed: () {
                         AppRouter.push(
-                          PickupScheduledSuccessView(
+                          BusinessPickupScheduledSuccessView(
                             date: _selectedDay,
                             timeRange:
                                 '${_formatTime()} ${_isAm ? "AM" : "PM"} - 12:00 PM',
-                            location: 'Community Pickup Location',
+                            location: 'Urban Bites Pickup Point',
+                          ),
+                        );
+                      },
+                    ),
+                    20.ph,
+                    CustomButtonWidget(
+                      label: 'Back',
+                      backgroundColor: Colors.grey.shade600.withValues(alpha: 0.10),
+                      onPressed: () {
+                        AppRouter.push(
+                          BusinessPickupScheduledSuccessView(
+                            date: _selectedDay,
+                            timeRange:
+                                '${_formatTime()} ${_isAm ? "AM" : "PM"} - 12:00 PM',
+                            location: 'Urban Bites Pickup Point',
                           ),
                         );
                       },

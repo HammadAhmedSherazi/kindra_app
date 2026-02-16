@@ -25,6 +25,8 @@ class _LoginViewState extends ConsumerState<LoginView> {
     if (mounted) {
         if (_selectedUserRole == LoginUserRole.communities) {
           AppRouter.pushAndRemoveUntil(const CommunityDashboardView());
+        } else if (_selectedUserRole == LoginUserRole.businesses) {
+          AppRouter.pushAndRemoveUntil(const BusinessDashboardView());
         } else {
           AppRouter.pushAndRemoveUntil(const NavigationView());
         }
