@@ -73,7 +73,7 @@ class _BusinessPickupScheduleViewState
               logoutTextColor: AppColors.primaryColor,
               onLogout: () {},
               showNotificationIcon: true,
-              onNotificationTap: () {},
+              onNotificationTap: () => AppRouter.push(const NotificationView()),
             ),
             Positioned(
               top: _contentTop,
@@ -105,14 +105,7 @@ class _BusinessPickupScheduleViewState
                       label: 'Back',
                       backgroundColor: Colors.grey.shade600.withValues(alpha: 0.10),
                       onPressed: () {
-                        AppRouter.push(
-                          BusinessPickupScheduledSuccessView(
-                            date: _selectedDay,
-                            timeRange:
-                                '${_formatTime()} ${_isAm ? "AM" : "PM"} - 12:00 PM',
-                            location: 'Urban Bites Pickup Point',
-                          ),
-                        );
+                        AppRouter.back();
                       },
                     ),
                   ],

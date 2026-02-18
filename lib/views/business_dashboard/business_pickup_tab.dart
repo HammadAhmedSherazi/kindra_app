@@ -39,7 +39,7 @@ class _BusinessPickupTabState extends State<BusinessPickupTab>
             sectionTitle: 'Pickup',
             onLogout: () {},
             showNotificationIcon: true,
-            onNotificationTap: () {},
+            onNotificationTap: () => AppRouter.push(const NotificationView()),
           ),
           Expanded(
             child: Column(
@@ -146,34 +146,57 @@ class _PastPickupList extends StatelessWidget {
   Widget build(BuildContext context) {
     final pastItems = [
       _PastPickupItem(
-        date: 'Tuesday, April 16',
-        quantity: '13.5 Liters',
+        date: 'Wednesday, July 3, 2025',
+        quantity: '560 Liters',
         points: '50 Points',
         statusText: 'Completed',
+        pickupId: '#5125698',
+        redemptionId: '0 123 456 ****',
+        typeOfWeight: 'Non-organic waste',
+        pointsEarned: 280,
+        totalPoints: 200,
       ),
       _PastPickupItem(
         date: 'Tuesday, April 16',
         quantity: '13.5 Liters',
         points: '50 Points',
         statusText: 'Rejected',
+        pickupId: '#5125697',
+        redemptionId: '0 123 456 ****',
+        typeOfWeight: 'Non-organic waste',
+        totalPoints: 200,
       ),
       _PastPickupItem(
         date: 'Tuesday, April 16',
         quantity: '13.5 Liters',
         points: '50 Points',
         statusText: 'Completed',
+        pickupId: '#5125696',
+        redemptionId: '0 123 456 ****',
+        typeOfWeight: 'Non-organic waste',
+        pointsEarned: 50,
+        totalPoints: 200,
       ),
       _PastPickupItem(
         date: 'Tuesday, April 16',
         quantity: '13.5 Liters',
         points: '50 Points',
         statusText: 'Rejected',
+        pickupId: '#5125695',
+        redemptionId: '0 123 456 ****',
+        typeOfWeight: 'Non-organic waste',
+        totalPoints: 200,
       ),
       _PastPickupItem(
         date: 'Tuesday, April 16',
         quantity: '13.5 Liters',
         points: '50 Points',
         statusText: 'Completed',
+        pickupId: '#5125694',
+        redemptionId: '0 123 456 ****',
+        typeOfWeight: 'Non-organic waste',
+        pointsEarned: 50,
+        totalPoints: 200,
       ),
     ];
 
@@ -190,6 +213,23 @@ class _PastPickupList extends StatelessWidget {
                 statusText: e.statusText,
                 quantity: e.quantity,
                 points: e.points,
+                onTap: () {
+                  final detailData = PastPickupDetailData(
+                    pickupId: e.pickupId,
+                    redemptionId: e.redemptionId,
+                    typeOfWeight: e.typeOfWeight,
+                    wasteQuantity: e.quantity,
+                    date: e.date,
+                    pointsEarned: e.pointsEarned,
+                    totalPoints: e.totalPoints,
+                  );
+                  AppRouter.push(
+                    PastPickupDetailView(
+                      data: detailData,
+                      isCompleted: e.statusText == 'Completed',
+                    ),
+                  );
+                },
               ),
             ),
           ),
@@ -205,11 +245,21 @@ class _PastPickupItem {
     required this.quantity,
     required this.points,
     required this.statusText,
+    this.pickupId = '#5125698',
+    this.redemptionId = '0 123 456 ****',
+    this.typeOfWeight = 'Non-organic waste',
+    this.pointsEarned,
+    this.totalPoints = 200,
   });
   final String date;
   final String quantity;
   final String points;
   final String statusText;
+  final String pickupId;
+  final String redemptionId;
+  final String typeOfWeight;
+  final int? pointsEarned;
+  final int totalPoints;
 }
 
 class _PickupItem {

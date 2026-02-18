@@ -91,8 +91,11 @@ export 'views/business_dashboard/business_pickup_tab.dart';
 export 'views/business_dashboard/business_payment_tab.dart';
 export 'views/business_dashboard/business_impact_tab.dart';
 export 'views/business_dashboard/business_profile_tab.dart';
+export 'views/business_dashboard/business_edit_profile_view.dart';
 export 'views/business_dashboard/business_pickup_schedule_view.dart';
 export 'views/business_dashboard/business_pickup_scheduled_success_view.dart';
+export 'views/business_dashboard/pickup_scheduled_detail_view.dart';
+export 'views/business_dashboard/past_pickup_detail_view.dart';
 
 export 'views/onboarding/splash_view.dart';
 
@@ -112,3 +115,5 @@ export 'widget/card_with_overlay_widget.dart';
 export 'widget/community_dashboard_header.dart';
 export 'widget/pickup_schedule_card.dart';
 export 'widget/bar_chart_widget.dart';
+export 'widget/kindra_friendly_card.dart';
+export 'widget/line_chart_widget.dart';

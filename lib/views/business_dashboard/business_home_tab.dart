@@ -42,7 +42,7 @@ class _BusinessHomeTabState extends State<BusinessHomeTab>
             subtitle: 'Business Dashboard',
             onLogout: () {},
             showNotificationIcon: true,
-            onNotificationTap: () {},
+            onNotificationTap: () => AppRouter.push(const NotificationView()),
           ),
           Positioned(
             top: contentTop,
@@ -140,7 +140,15 @@ class _BusinessHomeTabState extends State<BusinessHomeTab>
                 ],
               ),),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  AppRouter.push(
+                    PickupScheduledDetailView(
+                      date: DateTime(2025, 4, 18),
+                      timeRange: '9:00 AM - 12:00 PM',
+                      location: 'Urban Store Pickup Point',
+                    ),
+                  );
+                },
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(

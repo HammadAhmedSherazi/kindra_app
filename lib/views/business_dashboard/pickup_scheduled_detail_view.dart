@@ -1,12 +1,13 @@
 import '../../export_all.dart';
 
-/// Success screen for business pickup flow. "Back to Home" returns to [BusinessDashboardView].
-class BusinessPickupScheduledSuccessView extends StatelessWidget {
-  const BusinessPickupScheduledSuccessView({
+/// New "Pickup Scheduled" success screen matching the design:
+/// Green check, title, subtitle, card with Date/Time, Location, Status, green Back to Home.
+class PickupScheduledDetailView extends StatelessWidget {
+  const PickupScheduledDetailView({
     super.key,
     required this.date,
     required this.timeRange,
-    this.location = 'Urban Bites Pickup Point',
+    this.location = 'Community Pickup Location',
   });
 
   final DateTime date;
@@ -40,7 +41,7 @@ class BusinessPickupScheduledSuccessView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      'Pickup Confirmed!',
+                      'Pickup Scheduled',
                       textAlign: TextAlign.center,
                       style: context.robotoFlexBold(
                         fontSize: 24,
@@ -49,11 +50,9 @@ class BusinessPickupScheduledSuccessView extends StatelessWidget {
                     ),
                     8.ph,
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
                       child: Text(
-                        'Your pickup has been scheduled successfully',
+                        'Your used cooking oil pickup has been scheduled.',
                         textAlign: TextAlign.center,
                         style: context.robotoFlexRegular(
                           fontSize: 15,
@@ -73,15 +72,22 @@ class BusinessPickupScheduledSuccessView extends StatelessWidget {
                           _detailRow(
                             context: context,
                             icon: Assets.dateIcon,
-                            title: location,
-                            subtitle: '${_formatDate(date)}\n$timeRange',
+                            title: _formatDate(date),
+                            subtitle: timeRange,
                           ),
                           Divider(height: 24, color: Colors.grey.shade300),
                           _detailRow(
                             context: context,
-                            icon: Assets.communityMemberIcon,
-                            title: 'Driver Not Yet Assigned',
-                            subtitle: "You'll be notified once a driver is assigned",
+                            icon: Assets.locationIcon,
+                            title: location,
+                          ),
+                          Divider(height: 24, color: Colors.grey.shade300),
+                          _detailRow(
+                            context: context,
+                            icon: Assets.checkedIcon,
+                            title: 'Status: Scheduled',
+                            subtitle: "We'll notify you before the pickup time",
+                            // iconColor: AppColors.primaryColor,
                           ),
                         ],
                       ),
@@ -115,6 +121,7 @@ class BusinessPickupScheduledSuccessView extends StatelessWidget {
     required String icon,
     required String title,
     String? subtitle,
+    Color? iconColor,
   }) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,7 +130,7 @@ class BusinessPickupScheduledSuccessView extends StatelessWidget {
           icon,
           width: 28,
           height: 28,
-          color: Colors.black.withValues(alpha: 0.80),
+          color: iconColor ?? Colors.black.withValues(alpha: 0.80),
         ),
         16.pw,
         Expanded(

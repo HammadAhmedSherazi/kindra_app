@@ -21,12 +21,12 @@ class _BusinessDashboardViewState extends ConsumerState<BusinessDashboardView> {
     _currentIndex = widget.initialIndex.clamp(0, 4);
   }
 
-  final List<Widget> _tabs = const [
-    BusinessHomeTab(),
-    BusinessPickupTab(),
-    BusinessPaymentTab(),
-    BusinessImpactTab(),
-    BusinessProfileTab(),
+  List<Widget> get _tabs => [
+    const BusinessHomeTab(),
+    const BusinessPickupTab(),
+    const BusinessPaymentTab(),
+    const BusinessImpactTab(),
+    const BusinessProfileTab(),
   ];
 
   @override
@@ -68,7 +68,7 @@ class _BusinessDashboardViewState extends ConsumerState<BusinessDashboardView> {
                 onTap: () => setState(() => _currentIndex = 0),
               ),
               _BusinessNavItem(
-                icon: Assets.deliverIcon,
+                icon: Assets.pickupIcon,
                 label: 'Pickup',
                 isSelected: _currentIndex == 1,
                 onTap: () => setState(() => _currentIndex = 1),

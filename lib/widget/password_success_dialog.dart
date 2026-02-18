@@ -6,18 +6,54 @@ import '../utils/extension.dart';
 import '../utils/router.dart';
 import 'custom_button_widget.dart';
 
-/// Success dialog shown after password is changed.
-/// Shows "Successful Update", subtitle, and "Continue to Home" button.
-void showPasswordSuccessDialog(BuildContext context) {
+/// Generic success dialog: green checkmark, title, subtitle, "Continue to Home" button.
+/// [onContinue] is called after dialog is closed. If null, navigates to app home.
+void showSuccessDialog(
+  BuildContext context, {
+  required String title,
+  required String subtitle,
+  VoidCallback? onContinue,
+}) {
   showDialog<void>(
     context: context,
     barrierDismissible: false,
-    builder: (ctx) => const _PasswordSuccessDialog(),
+    builder: (ctx) => _SuccessDialog(
+      title: title,
+      subtitle: subtitle,
+      onContinue: onContinue,
+    ),
   );
 }
 
-class _PasswordSuccessDialog extends StatelessWidget {
-  const _PasswordSuccessDialog();
+/// Success dialog shown after password is changed.
+void showPasswordSuccessDialog(BuildContext context) {
+  showSuccessDialog(
+    context,
+    title: 'Successful Update',
+    subtitle: 'Your password has been successfully changed',
+  );
+}
+
+/// Success dialog shown after profile is updated.
+void showProfileUpdateSuccessDialog(BuildContext context, {VoidCallback? onContinue}) {
+  showSuccessDialog(
+    context,
+    title: 'Successful Update Profile',
+    subtitle: 'Your profile has been successfully updated',
+    onContinue: onContinue,
+  );
+}
+
+class _SuccessDialog extends StatelessWidget {
+  const _SuccessDialog({
+    required this.title,
+    required this.subtitle,
+    this.onContinue,
+  });
+
+  final String title;
+  final String subtitle;
+  final VoidCallback? onContinue;
 
   static const Color _green = AppColors.primaryColor;
  
@@ -79,25 +115,25 @@ class _PasswordSuccessDialog extends StatelessWidget {
             ),
             40.ph,
             Text(
-              'Successful Update',
+              title,
               style: TextStyle(
-color: Colors.black,
-fontSize: 26.27,
-fontFamily: 'Roboto Flex',
-fontWeight: FontWeight.w600,
-),
+                color: Colors.black,
+                fontSize: 26.27,
+                fontFamily: 'Roboto Flex',
+                fontWeight: FontWeight.w600,
+              ),
               textAlign: TextAlign.center,
             ),
             12.ph,
             Text(
-              'Your password has been successfully changed',
+              subtitle,
               style: TextStyle(
-color: Colors.black,
-fontSize: 19,
-fontFamily: 'Roboto Flex',
-fontWeight: FontWeight.w300,
-height: 1.18,
-),
+                color: Colors.black,
+                fontSize: 19,
+                fontFamily: 'Roboto Flex',
+                fontWeight: FontWeight.w300,
+                height: 1.18,
+              ),
               textAlign: TextAlign.center,
             ),
             32.ph,
@@ -105,7 +141,11 @@ height: 1.18,
               label: 'Continue to Home',
               onPressed: () {
                 Navigator.of(context).pop();
-                AppRouter.backToHome();
+                if (onContinue != null) {
+                  onContinue!();
+                } else {
+                  AppRouter.backToHome();
+                }
               },
             ),
           ],
