@@ -96,6 +96,9 @@ export 'views/business_dashboard/business_pickup_schedule_view.dart';
 export 'views/business_dashboard/business_pickup_scheduled_success_view.dart';
 export 'views/business_dashboard/pickup_scheduled_detail_view.dart';
 export 'views/business_dashboard/past_pickup_detail_view.dart';
+export 'views/business_dashboard/eco_tips_education_view.dart';
+export 'views/business_dashboard/eco_tip_detail_view.dart';
+export 'views/business_dashboard/eco_challenge_completed_view.dart';
 
 export 'views/onboarding/splash_view.dart';
 

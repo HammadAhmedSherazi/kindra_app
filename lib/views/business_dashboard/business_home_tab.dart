@@ -1,5 +1,4 @@
 import '../../export_all.dart';
-import 'dart:math' as math;
 
 /// Home tab for business dashboard (third flow).
 /// Matches design: Next Pickup, Active/Past/Payment tabs, Liters & Points cards,
@@ -378,7 +377,7 @@ class _BusinessHomeTabState extends State<BusinessHomeTab>
         12.ph,
         CustomButtonWidget(
           label: 'View Eco-tips',
-          onPressed: () {},
+          onPressed: () => AppRouter.push(const EcoTipsEducationView()),
           backgroundColor: Colors.grey.shade300,
           textColor: Colors.black87,
           textSize: 16,
