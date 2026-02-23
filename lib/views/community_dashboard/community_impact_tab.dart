@@ -98,6 +98,8 @@ class CommunityImpactTab extends StatelessWidget {
           4.ph,
           Text(
             label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: context.robotoFlexRegular(
               fontSize: 14,
               // color: Colors.black54,

@@ -133,22 +133,23 @@ class _PointsSummaryCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(23),
         ),
       ),
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          // Subtle pattern (right & bottom)
-          // Positioned(
-          //   right: -20,
-          //   bottom: -20,
-          //   child: Opacity(
-          //     opacity: 0.06,
-          //     child: CustomPaint(
-          //       size: Size(120, 120),
-          //       painter: _SwirlPatternPainter(),
-          //     ),
-          //   ),
-          // ),
-          Column(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final cardWidth = constraints.maxWidth;
+          final iconSize = (cardWidth * 0.48).clamp(120.0, 200.0);
+          final offset = (cardWidth * 0.05).clamp(12.0, 24.0);
+          return Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Positioned(
+                right: -offset,
+                top: -offset,
+                child: Image.asset(
+                  Assets.kindraColorCardIcon,
+                  width: iconSize,
+                ),
+              ),
+              Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
@@ -202,12 +203,7 @@ class _PointsSummaryCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const KindraLogoWithRingsWidget(
-                    logoWidth: 72,
-                    logoHeight: 28,
-                    width: 100,
-                    height: 56,
-                  ),
+                 
                 ],
               ),
               20.ph,
@@ -225,7 +221,7 @@ class _PointsSummaryCard extends StatelessWidget {
                   ),
                 ],
               ),
-              20.ph,
+              28.ph,
               _buildDottedDivider(),
               20.ph,
               SizedBox(
@@ -241,7 +237,9 @@ class _PointsSummaryCard extends StatelessWidget {
               ),
             ],
           ),
-        ],
+            ],
+          );
+        },
       ),
     );
   }

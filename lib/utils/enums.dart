@@ -11,7 +11,7 @@ enum LoginUserRole {
   businesses,
   coastalGroups,
   drivers,
-  globalAdmin,
+  // globalAdmin,
 }
 
 extension LoginUserRoleExtension on LoginUserRole {
@@ -27,8 +27,8 @@ extension LoginUserRoleExtension on LoginUserRole {
         return 'Coastal groups';
       case LoginUserRole.drivers:
         return 'Drivers';
-      case LoginUserRole.globalAdmin:
-        return 'Global Admin';
+      // case LoginUserRole.globalAdmin:
+      //   return 'Global Admin';
     }
   }
 }

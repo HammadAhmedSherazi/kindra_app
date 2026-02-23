@@ -62,8 +62,8 @@ class _LoginViewState extends ConsumerState<LoginView> {
 
   static UserType _loginRoleToUserType(LoginUserRole role) {
     switch (role) {
-      case LoginUserRole.globalAdmin:
-        return UserType.manager;
+      // case LoginUserRole.globalAdmin:
+      //   return UserType.manager;
       case LoginUserRole.drivers:
         return UserType.staff;
       case LoginUserRole.householder:

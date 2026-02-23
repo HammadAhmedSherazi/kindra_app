@@ -200,9 +200,23 @@ class HomeView extends StatelessWidget {
                 color: Colors.black,
                 borderRadius: BorderRadius.circular(23),
               ),
-              child: Stack(
-                children: [
-                  Padding(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final cardWidth = constraints.maxWidth;
+                  final iconSize = (cardWidth * 0.48).clamp(120.0, 200.0);
+                  final offset = (cardWidth * 0.01).clamp(2.0, 6.0);
+                  return Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Positioned(
+                        right: -offset,
+                        top: -offset,
+                        child: Image.asset(
+                          Assets.kindraCardIcon,
+                          width: iconSize,
+                        ),
+                      ),
+                      Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 13,
                       vertical: 20,
@@ -306,7 +320,9 @@ class HomeView extends StatelessWidget {
                       ],
                     ),
                   ),
-                ],
+                    ],
+                  );
+                },
               ),
             ),
           ),

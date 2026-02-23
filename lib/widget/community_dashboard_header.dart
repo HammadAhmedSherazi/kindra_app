@@ -73,7 +73,9 @@ class CommunityDashboardHeader extends StatelessWidget {
               Column(
                 children: [
                   GestureDetector(
-                    onTap: showNotificationIcon ? (onNotificationTap ?? () {}) : onLogout,
+                    onTap: showNotificationIcon ? (onNotificationTap ?? () {}) : (){
+                      AppRouter.pushAndRemoveUntil(LoginView());
+                    },
                     child: Container(
                       width: 48,
                       height: 48,

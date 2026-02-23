@@ -150,14 +150,14 @@ class EcoTipsEducationView extends StatelessWidget {
                   return Stack(
                     fit: StackFit.expand,
                     children: [
-                      // Left ~2/3: image
-                      Positioned(
+                      // Left ~2/3: image (used cooking oil – like reference)
+                      Positioned.fill(
                         left: 0,
                         top: 0,
                         bottom: 0,
-                        width: w * 0.62,
-                        child: Image.network(
-                          'https://media.istockphoto.com/id/539201186/photo/cooking-oil.jpg?s=170667a&w=0&k=20&c=-9nMoAH1p-iAoAHJ_FVLVDIM93TXG4XNrieTRH-FNRE=',
+                        // width: w * 0.62,
+                        child: Image.asset(
+                          Assets.usedCookingOilCard,
                           fit: BoxFit.cover,
                           errorBuilder: (_, __, ___) => Container(
                             color: Colors.grey.shade300,
@@ -165,56 +165,27 @@ class EcoTipsEducationView extends StatelessWidget {
                           ),
                         ),
                       ),
-                      // Gradient blend: transparent -> green (right side)
-                      Positioned.fill(
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              colors: [
-                                Colors.transparent,
-                                AppColors.primaryColor.withValues(alpha: 0.4),
-                                AppColors.primaryColor,
-                              ],
-                              stops: const [0.5, 0.7, 0.88],
-                            ),
-                          ),
-                        ),
-                      ),
-                      // Right: solid green area (so text is readable)
-                      Positioned(
-                        right: 0,
-                        top: 0,
-                        bottom: 0,
-                        width: w * 0.42,
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            color: AppColors.primaryColor,
-                            borderRadius: BorderRadius.horizontal(
-                              left: Radius.circular(12),
-                            ),
-                          ),
-                        ),
-                      ),
-                      // Content on right (on green)
+                     // // Content on right (on green)
                       Positioned(
                         right: 16,
                         top: 16,
                         bottom: 16,
-                        left: w * 0.38,
+                        left: w * 0.45,
                         child: Column(
+                          mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
                               challengeTitle,
-                              style: context.robotoFlexSemiBold(
-                                fontSize: 16,
+                              style: context.robotoFlexBold(
+                                fontSize: 18,
                                 color: Colors.white,
                               ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            12.ph,
+                            8.ph,
                             Row(
                               children: [
                                 Expanded(
@@ -222,27 +193,27 @@ class EcoTipsEducationView extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(4),
                                     child: LinearProgressIndicator(
                                       value: progress / total,
-                                      backgroundColor: Colors.white.withValues(alpha: 0.3),
-                                      valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
-                                      minHeight: 8,
+                                      backgroundColor: Color(0xffD9D9D9),
+                                      valueColor: const AlwaysStoppedAnimation<Color>(Colors.black),
+                                      minHeight: 6,
                                     ),
                                   ),
                                 ),
-                                8.pw,
+                                6.pw,
                                 Text(
                                   '$progress/$total',
                                   style: context.robotoFlexSemiBold(
-                                    fontSize: 14,
+                                    fontSize: 13,
                                     color: Colors.white,
                                   ),
                                 ),
                               ],
                             ),
-                            12.ph,
+                            8.ph,
                             Row(
                               children: [
                                 SizedBox(
-                                  height: 40,
+                                  height: 36,
                                   child: ElevatedButton(
                                     onPressed: () => AppRouter.push(
                                       EcoTipDetailView(
@@ -259,32 +230,34 @@ class EcoTipsEducationView extends StatelessWidget {
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.white,
                                       foregroundColor: AppColors.primaryColor,
-                                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                                      padding: const EdgeInsets.symmetric(horizontal: 16),
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
+                                        borderRadius: BorderRadius.circular(18),
                                       ),
                                     ),
                                     child: Text(
                                       'Track Progress',
-                                      style: context.robotoFlexSemiBold(fontSize: 14),
+                                      style: context.robotoFlexSemiBold(fontSize: 13),
                                     ),
                                   ),
                                 ),
-                                12.pw,
-                                Text(
-                                  '+${points}Points',
-                                  style: context.robotoFlexSemiBold(
-                                    fontSize: 14,
-                                    color: Colors.white,
+                                8.pw,
+                                Expanded(
+                                  child: Text(
+                                    '+${points}Points',
+                                    style: context.robotoFlexSemiBold(
+                                      fontSize: 11,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
-                            ],
-                          ),
+                          ],
                         ),
-                ],
-              );
+                      ),
+                    ],
+                  );
                 },
               ),
             ),

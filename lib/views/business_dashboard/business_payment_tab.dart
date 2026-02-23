@@ -87,25 +87,23 @@ class BusinessPaymentTab extends StatelessWidget {
           ),
         ],
       ),
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          // Kindra logo overlay (subtle grey)
-          Positioned(
-            right: -8,
-            top: -8,
-            child: Opacity(
-              opacity: 0.15,
-              child: Image.asset(
-                Assets.kindraTextLogo,
-                height: 80,
-                fit: BoxFit.contain,
-                color: Colors.white,
-                colorBlendMode: BlendMode.modulate,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final cardWidth = constraints.maxWidth;
+          final iconSize = (cardWidth * 0.42).clamp(120.0, 200.0);
+          final offset = (cardWidth * 0.05).clamp(12.0, 24.0);
+          return Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Positioned(
+                right: -offset,
+                top: -offset,
+                child: Image.asset(
+                  Assets.kindraCardIcon,
+                  width: iconSize,
+                ),
               ),
-            ),
-          ),
-          Column(
+              Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Total Eco-Point row
@@ -154,7 +152,9 @@ class BusinessPaymentTab extends StatelessWidget {
               ),
             ],
           ),
-        ],
+            ],
+          );
+        },
       ),
     );
   }
