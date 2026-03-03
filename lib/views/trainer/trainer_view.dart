@@ -66,22 +66,32 @@ class TrainerView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF9FAFC),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        title: Text(
+          'Training',
+          style: context.robotoFlexBold(
+            fontSize: 22,
+            color: Colors.black,
+          ),
+        ),
+      ),
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
-                child: Text(
-                  'Training',
-                  textAlign: TextAlign.center,
-                  style: context.robotoFlexBold(
-                    fontSize: 22,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            ),
+            // SliverToBoxAdapter(
+            //   child: Padding(
+            //     padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
+            //     child: Text(
+            //       'Training',
+            //       textAlign: TextAlign.center,
+            //       style: context.robotoFlexBold(
+            //         fontSize: 22,
+            //         color: Colors.black,
+            //       ),
+            //     ),
+            //   ),
+            // ),
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),

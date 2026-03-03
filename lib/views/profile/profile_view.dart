@@ -15,6 +15,16 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        title: Text(
+          'Profile',
+          style: context.robotoFlexBold(
+            fontSize: 22,
+            color: Colors.black,
+          ),
+        ),
+      ),
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -27,20 +37,20 @@ class ProfileView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Profile',
-                          textAlign: TextAlign.center,
-                          style: context.robotoFlexSemiBold(
-                            fontSize: 20,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
-                    ),
-                    24.ph,
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     Text(
+                    //       'Profile',
+                    //       textAlign: TextAlign.center,
+                    //       style: context.robotoFlexSemiBold(
+                    //         fontSize: 20,
+                    //         color: Colors.black,
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                    // 24.ph,
                     _buildUserSection(context),
                     28.ph,
                     Text(
