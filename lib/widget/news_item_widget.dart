@@ -125,4 +125,5 @@ class NewsItemWidget extends StatelessWidget {
       ),
     );
   }
+
 }

@@ -78,6 +78,7 @@ class _BusinessHomeTabState extends State<BusinessHomeTab>
               ],
             ),
           ),
+        
         ],
       ),
     );

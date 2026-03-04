@@ -46,8 +46,12 @@ abstract class Assets {
   static const String deliverIcon = '${iconPath}deliver_icon.png';
   static const String loyalRankIcon = '${iconPath}loyal_rank_icon.png';
   static const String trashCanIcon = '${iconPath}trash_can_icon.png';
+  static const String trashIcon = '${iconPath}trash_icon.png';
   static const String dropIcon = '${iconPath}drop_icon.png';
   static const String kindraLeaveIcon = '${iconPath}kindra_leave_icon.png';
+  static const String bottleOnOceanIcon = '${iconPath}bottle_on_ocean_icon.png';
+  static const String cleanupIcon = '${iconPath}cleanup_icon.png';
+  static const String reportIcon = '${iconPath}report_icon.png';
 
   // ——— Home & services ———
   static const String scanDocIcon = '${iconPath}scan_doc_icon.png';
@@ -74,6 +78,7 @@ abstract class Assets {
   static const String winBadgeIcon = '${iconPath}win_badge_icon.svg';
   static const String winIcon = '${iconPath}win_icon.svg';
   static const String giftIcon = '${iconPath}gift_icon.svg';
+  static const String giftIconPng = '${iconPath}gift_icon.png';
   static const String shopBagIcon = '${iconPath}shop_bag_icon.svg';
   static const String twoCoinsIcon = '${iconPath}two_coins_icon.svg';
 

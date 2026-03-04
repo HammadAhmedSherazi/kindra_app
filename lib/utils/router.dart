@@ -49,7 +49,6 @@ class AppRouter {
     );
   }
 
-
   static Future<void> pushWithAnimation(Widget page) async {
     await Navigator.push(
       navKey.currentContext!,

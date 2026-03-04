@@ -84,6 +84,14 @@ export 'views/community_dashboard/pickup_scheduled_success_view.dart';
 export 'views/community_dashboard/kindra_friendly_view.dart';
 export 'views/community_dashboard/member_detail_view.dart';
 
+// Coastal Group flow
+export 'views/coastal_group/coastal_group_navigation_view.dart';
+export 'views/coastal_group/coastal_group_dashboard_tab.dart';
+export 'views/coastal_group/coastal_group_cleanups_tab.dart';
+export 'views/coastal_group/coastal_group_report_tab.dart';
+export 'views/coastal_group/coastal_group_reward_tab.dart';
+export 'views/coastal_group/coastal_group_profile_tab.dart';
+
 // Business dashboard (third flow)
 export 'views/business_dashboard/business_dashboard_view.dart';
 export 'views/business_dashboard/business_home_tab.dart';
@@ -120,3 +128,4 @@ export 'widget/pickup_schedule_card.dart';
 export 'widget/bar_chart_widget.dart';
 export 'widget/kindra_friendly_card.dart';
 export 'widget/line_chart_widget.dart';
+export 'widget/coastal_group_header.dart';
