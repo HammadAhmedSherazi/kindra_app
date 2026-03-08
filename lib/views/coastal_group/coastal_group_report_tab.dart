@@ -15,7 +15,7 @@ class _CoastalGroupReportTabState extends ConsumerState<CoastalGroupReportTab> {
   @override
   Widget build(BuildContext context) {
     final horizontalPadding = context.screenWidth * 0.05;
-    final contentTop = context.screenHeight * 0.22;
+    final contentTop = context.screenHeight * 0.24;
 
     return SizedBox(
       width: double.infinity,
@@ -25,7 +25,7 @@ class _CoastalGroupReportTabState extends ConsumerState<CoastalGroupReportTab> {
         children: [
           CoastalGroupHeader(
             sectionTitle: 'Report Waste',
-            height: context.screenHeight * 0.28,
+            height: context.screenHeight * 0.30,
             onNotificationTap: () => AppRouter.push(const NotificationView()),
           ),
           Positioned(
@@ -42,7 +42,12 @@ class _CoastalGroupReportTabState extends ConsumerState<CoastalGroupReportTab> {
                 16.ph,
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: EdgeInsets.fromLTRB(horizontalPadding, 0, horizontalPadding, 24),
+                    padding: EdgeInsets.fromLTRB(
+                      horizontalPadding,
+                      0,
+                      horizontalPadding,
+                      24,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -54,7 +59,7 @@ class _CoastalGroupReportTabState extends ConsumerState<CoastalGroupReportTab> {
                         24.ph,
                         CustomButtonWidget(
                           label: 'Submit Report',
-                          onPressed: () {},
+                          onPressed: () => _showReportSubmittedDialog(context),
                           height: 52,
                         ),
                         100.ph,
@@ -72,6 +77,7 @@ class _CoastalGroupReportTabState extends ConsumerState<CoastalGroupReportTab> {
 
   Widget _LocationCard() {
     return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -88,49 +94,57 @@ class _CoastalGroupReportTabState extends ConsumerState<CoastalGroupReportTab> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            height: 140,
+            height: 170,
+            margin: EdgeInsets.symmetric(vertical: 10),
             width: double.infinity,
-            color: AppColors.primaryColor.withValues(alpha: 0.15),
-            child: Center(
-              child: Icon(Icons.map_rounded, size: 48, color: AppColors.primaryColor.withValues(alpha: 0.5)),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(14),
-            child: Column(
-              children: [
-                TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Arcata Bay, CA 95521',
-                    hintStyle: context.robotoFlexRegular(fontSize: 14, color: Colors.grey.shade600),
-                    prefixIcon: Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Image.asset(Assets.locationIcon, width: 22, height: 22),
-                    ),
-                    filled: true,
-                    fillColor: Colors.grey.shade50,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                ),
-                12.ph,
-                SizedBox(
-                  width: double.infinity,
-                  height: 48,
-                  child: OutlinedButton(
-                    onPressed: () {},
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.black87,
-                      side: BorderSide(color: Colors.grey.shade400),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    ),
-                    child: Text('Confirm Location', style: context.robotoFlexSemiBold(fontSize: 14, color: Colors.black87)),
-                  ),
+            decoration: BoxDecoration(
+              color: AppColors.primaryColor.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.06),
+                  blurRadius: 12,
+                  offset: const Offset(0, 2),
                 ),
               ],
             ),
+            child: Center(
+              child: Icon(
+                Icons.map_rounded,
+                size: 48,
+                color: AppColors.primaryColor.withValues(alpha: 0.5),
+              ),
+            ),
+          ),
+          Column(
+            children: [
+              CustomTextFieldWidget(
+                hint: 'Arcata Bay, CA 95521',
+                padding: EdgeInsets.symmetric(vertical: 10),
+                prefixIcon: Padding(
+                  padding: EdgeInsets.only(left: 20, right: 10),
+                  child: Image.asset(
+                    Assets.locationIcon,
+                    width: 22,
+                    height: 22,
+                    color: Colors.black.withValues(alpha: 0.3),
+                  ),
+                ),
+                prefixIconConstraints: BoxConstraints(
+                  minWidth: 22,
+                  minHeight: 22,
+                ),
+              ),
+              12.ph,
+              CustomButtonWidget(
+                label: 'Confirm Location',
+                onPressed: () => _showLocationConfirmedDialog(context),
+                backgroundColor: Color(0xff414141),
+                height: 48,
+                expandWidth: true,
+              ),
+              15.ph,
+            ],
           ),
         ],
       ),
@@ -139,7 +153,7 @@ class _CoastalGroupReportTabState extends ConsumerState<CoastalGroupReportTab> {
 
   Widget _WasteTypeCard() {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -156,7 +170,7 @@ class _CoastalGroupReportTabState extends ConsumerState<CoastalGroupReportTab> {
         children: [
           Text(
             'Waste Type',
-            style: context.robotoFlexBold(fontSize: 16, color: Colors.black),
+            style: context.robotoFlexBold(fontSize: 22, color: Colors.black),
           ),
           12.ph,
           Wrap(
@@ -167,15 +181,20 @@ class _CoastalGroupReportTabState extends ConsumerState<CoastalGroupReportTab> {
               return GestureDetector(
                 onTap: () => setState(() => _selectedWasteTypeIndex = i),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 18,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
-                    color: selected ? AppColors.primaryColor : Colors.grey.shade200,
+                    color: selected
+                        ? AppColors.primaryColor
+                        : Colors.grey.shade200,
                     borderRadius: BorderRadius.circular(24),
                   ),
                   child: Text(
                     _wasteTypes[i],
                     style: context.robotoFlexSemiBold(
-                      fontSize: 14,
+                      fontSize: 12,
                       color: selected ? Colors.white : Colors.grey.shade700,
                     ),
                   ),
@@ -189,86 +208,247 @@ class _CoastalGroupReportTabState extends ConsumerState<CoastalGroupReportTab> {
   }
 
   Widget _UploadPhotoCard() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Upload Photo',
-            style: context.robotoFlexBold(fontSize: 16, color: Colors.black),
-          ),
-          12.ph,
-          TextField(
-            readOnly: true,
-            onTap: () {},
-            decoration: InputDecoration(
-              hintText: 'Upload Photo',
-              hintStyle: context.robotoFlexRegular(fontSize: 14, color: Colors.grey.shade600),
-              prefixIcon: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Icon(Icons.camera_alt_outlined, size: 22, color: Colors.grey.shade600),
-              ),
-              filled: true,
-              fillColor: Colors.grey.shade50,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide.none,
-              ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Upload Photo',
+          style: context.robotoFlexBold(fontSize: 16, color: Colors.black),
+        ),
+        12.ph,
+        CustomTextFieldWidget(
+          hint: 'Upload Photo',
+          prefixIcon: Padding(
+            padding: const EdgeInsets.only(
+              left: 20,
+              right: 10,
+            ),
+            child: Icon(
+              Icons.camera_alt,
+              size: 22,
+              color: Colors.grey.shade600,
             ),
           ),
-        ],
-      ),
+          prefixIconConstraints: BoxConstraints(
+            minWidth: 22,
+            minHeight: 22,
+          ),
+          readOnly: true,
+          onTap: () {},
+        )
+      ],
     );
   }
 
   Widget _DescriptionCard() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Description',
+          style: context.robotoFlexBold(fontSize: 16, color: Colors.black),
+        ),
+        12.ph,
+        CustomTextFieldWidget(
+          hint: 'Add a short description',
+          maxLines: 6,
+          padding: EdgeInsets.symmetric(
+            vertical: 20,
+            horizontal: 20,
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Description',
-            style: context.robotoFlexBold(fontSize: 16, color: Colors.black),
-          ),
-          12.ph,
-          TextField(
-            maxLines: 4,
-            decoration: InputDecoration(
-              hintText: 'Add a short description',
-              hintStyle: context.robotoFlexRegular(fontSize: 14, color: Colors.grey.shade600),
-              filled: true,
-              fillColor: Colors.grey.shade50,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide.none,
+        ),
+      ],
+    );
+  }
+
+  void _showLocationConfirmedDialog(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      barrierColor: Colors.black54,
+      builder: (ctx) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: EdgeInsets.symmetric(
+          horizontal: context.screenWidth * 0.06,
+        ),
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.15),
+                blurRadius: 20,
+                offset: const Offset(0, 4),
               ),
-            ),
+            ],
           ),
-        ],
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'Location Confirmed',
+                style: context.robotoFlexBold(
+                  fontSize: 22,
+                  color: Colors.black,
+                ),
+              ),
+              12.ph,
+              Row(
+                children: [
+                  Image.asset(
+                    Assets.locationIcon,
+                    width: 20,
+                    height: 20,
+                    color: Colors.black87,
+                  ),
+                  8.pw,
+                  Expanded(
+                    child: Text(
+                      'Arcata Bay, CA 95521',
+                      style: context.robotoFlexMedium(
+                        fontSize: 15,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              4.ph,
+              Padding(
+                padding: EdgeInsets.only(left: 28),
+                child: Text(
+                  'Location recorded: Arcata Bay, CA',
+                  style: context.robotoFlexRegular(
+                    fontSize: 13,
+                    color: Colors.grey.shade600,
+                  ),
+                ),
+              ),
+              16.ph,
+              Container(
+                height: 160,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: AppColors.primaryColor.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Icon(
+                      Icons.map_rounded,
+                      size: 48,
+                      color: AppColors.primaryColor.withValues(alpha: 0.5),
+                    ),
+                    Positioned(
+                      bottom: 24,
+                      child: Icon(
+                        Icons.location_on,
+                        size: 40,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              20.ph,
+              CustomButtonWidget(
+                label: 'Continue',
+                onPressed: () => Navigator.of(ctx).pop(),
+                height: 50,
+              ),
+              12.ph,
+              CustomButtonWidget(
+                label: 'Back',
+                onPressed: () => Navigator.of(ctx).pop(),
+                backgroundColor: const Color(0xff414141),
+                height: 50,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showReportSubmittedDialog(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      barrierColor: Colors.black54,
+      builder: (ctx) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: EdgeInsets.symmetric(
+          horizontal: context.screenWidth * 0.06,
+        ),
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.15),
+                blurRadius: 20,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Center(
+                child: Text(
+                  'Report Submitted!',
+                  style: context.robotoFlexBold(
+                    fontSize: 22,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              16.ph,
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(
+                  Assets.oceanGuardiansImage,
+                  height: 180,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              16.ph,
+              Center(
+                child: Text(
+                  'Your report has been submitted successfully',
+                  style: context.robotoFlexMedium(
+                    fontSize: 15,
+                    color: Colors.black87,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              4.ph,
+              Center(
+                child: Text(
+                  'Thank you for helping protect our coastline!',
+                  style: context.robotoFlexRegular(
+                    fontSize: 14,
+                    color: Colors.grey.shade700,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              20.ph,
+              CustomButtonWidget(
+                label: 'Done',
+                onPressed: () => Navigator.of(ctx).pop(),
+                height: 50,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

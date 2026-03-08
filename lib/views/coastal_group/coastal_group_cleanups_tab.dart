@@ -109,6 +109,12 @@ class _CleanupList extends StatelessWidget {
               child: CleanupEventCard(
                 event: event,
                 isUpcoming: isUpcoming,
+                onTap: isUpcoming
+                    ? () => AppRouter.push(JoinedEventDetailView(event: event))
+                    : null,
+                onActionPressed: isUpcoming
+                    ? () => AppRouter.push(JoinedEventDetailView(event: event))
+                    : null,
               ),
             ),
           ),

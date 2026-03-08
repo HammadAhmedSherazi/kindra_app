@@ -7,11 +7,17 @@ class CoastalGroupHeader extends StatelessWidget {
     required this.sectionTitle,
     this.height = 200,
     this.onNotificationTap,
+    this.leading,
+    this.trailing,
   });
 
   final String sectionTitle;
   final double height;
   final VoidCallback? onNotificationTap;
+  /// Optional leading widget (e.g. back button) for inner screens.
+  final Widget? leading;
+  /// Optional trailing widget (e.g. "Joined" pill) for inner screens.
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +37,10 @@ class CoastalGroupHeader extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if (leading != null) ...[
+                leading!,
+                const SizedBox(width: 8),
+              ],
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,6 +96,10 @@ class CoastalGroupHeader extends StatelessWidget {
                   ],
                 ),
               ),
+              if (trailing != null) ...[
+                const SizedBox(width: 8),
+                trailing!,
+              ],
             ],
           ),
         ],
