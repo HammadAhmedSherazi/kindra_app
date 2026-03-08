@@ -84,11 +84,22 @@ class CoastalGroupDashboardTab extends StatelessWidget {
         spacing: 20,
         children: [
           Container(
-            height: 160,
-            width: double.infinity,
-            color: AppColors.primaryColor.withValues(alpha: 0.2),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0x26000000),
+                  offset: const Offset(0, 2),
+                  blurRadius: 4,
+                ),
+              ],
+              border: Border.all(width: 1, color: const Color(0xFFE3E3E3)),
+            ),
+            clipBehavior: Clip.antiAlias,
             child: Image.asset(
-              Assets.placeholder,
+              Assets.oceanGuardiansImage,
+              height: 160,
+              width: double.infinity,
               fit: BoxFit.cover,
               errorBuilder: (c, e, st) => Center(
                 child: Icon(
@@ -168,11 +179,6 @@ class CoastalGroupDashboardTab extends StatelessWidget {
   }
 
   Widget _UpcomingSection(BuildContext context) {
-    const demoCleanups = [
-      ('Beach Cleanup in Arcata Bay', 'Arcata Bay, CA', '157', '20 Jun 2025'),
-      ('Beach Cleanup in Arcata Bay', 'Arcata Bay, CA', '157', '20 Jun 2025'),
-      ('Beach Cleanup in Arcata Bay', 'Arcata Bay, CA', '157', '20 Jun 2025'),
-    ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -200,14 +206,12 @@ class CoastalGroupDashboardTab extends StatelessWidget {
           shrinkWrap: true,
           padding: EdgeInsets.zero,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: demoCleanups.length,
+          itemCount: demoUpcomingCleanupEvents.length,
           itemBuilder: (context, index) {
-            final e = demoCleanups[index];
-            return _CleanupEventCard(
-              title: e.$1,
-              location: e.$2,
-              members: e.$3,
-              date: e.$4,
+            final event = demoUpcomingCleanupEvents[index];
+            return CleanupEventCard(
+              event: event,
+              isUpcoming: true,
             );
           },
           separatorBuilder: (context, index) => Padding(
@@ -274,142 +278,6 @@ class _StatCard extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _CleanupEventCard extends StatelessWidget {
-  const _CleanupEventCard({
-    required this.title,
-    required this.location,
-    required this.members,
-    required this.date,
-  });
-
-  final String title;
-  final String location;
-  final String members;
-  final String date;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {},
-      borderRadius: BorderRadius.circular(13),
-      child: SizedBox(
-        height: 114,
-        child: Row(
-          spacing: 10,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(13),
-              child: Image.asset(
-                Assets.placeholder,
-                height: double.infinity,
-                width: 114,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
-                  height: double.infinity,
-                  width: 114,
-                  color: Colors.grey.shade300,
-                  child: Icon(Icons.image_not_supported),
-                ),
-              ),
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // 1.ph,
-                  Text(
-                    title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontFamily: 'Roboto Flex',
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Text(
-                    '$location · $members Members',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: Colors.black.withValues(alpha: 0.66),
-                      fontSize: 13,
-                      fontFamily: 'Roboto Flex',
-                      fontWeight: FontWeight.w300,
-                      height: 1.37,
-                    ),
-                  ),
-                  Row(
-                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Row(
-                          spacing: 4,
-                          children: [
-                            Image.asset(
-                              Assets.communityMemberIcon,
-                              width: 18,
-                              height: 18,
-                              color: Colors.black.withValues(alpha: 0.40),
-                            ),
-                            Text(
-                              date,
-                              style: TextStyle(
-                                color: Colors.black.withValues(alpha: 0.40),
-                                fontSize: 13,
-                                fontFamily: 'Roboto Flex',
-                                fontWeight: FontWeight.w300,
-                                height: 1.14,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Row(
-                          spacing: 4,
-                          children: [
-                            Icon(
-                              Icons.schedule,
-                              color: Colors.black.withValues(alpha: 0.40),
-                              size: 18,
-                            ),
-                            Text(
-                              date,
-                              style: TextStyle(
-                                color: Colors.black.withValues(alpha: 0.40),
-                                fontSize: 13,
-                                fontFamily: 'Roboto Flex',
-                                fontWeight: FontWeight.w300,
-                                height: 1.14,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      // CustomButtonWidget(
-                      //   height: 32,
-                      //   label: "Join Event",
-                      //   onPressed: (){},
-                      // ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

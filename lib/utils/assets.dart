@@ -19,8 +19,7 @@ abstract class Assets {
   static const String usedCookingOilCard = '${imagePath}used_cooking_oil_card.png';
   static const String userAvatar = '${imagePath}user_avatar.png';
   static const String communityDashboardBackground = '${imagePath}community_dashboard_background.png';
-
-  // ——— Auth & common icons ———
+  static const String oceanGuardiansImage = '${imagePath}ocean_guardians.jpg';
   static const String emailIcon = '${iconPath}email_icon.png';
   static const String passwordIcon = '${iconPath}pasword_icon.png';
   static const String eyeIcon = '${iconPath}eye_icon.png';
