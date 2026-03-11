@@ -41,31 +41,62 @@ class _EventCheckinViewState extends ConsumerState<EventCheckinView> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryColor.withValues(alpha: 0.2),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                  Container(
-                    width: 64,
-                    height: 64,
-                    decoration: const BoxDecoration(
-                      color: AppColors.primaryColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.check,
-                      color: Colors.white,
-                      size: 36,
-                    ),
-                  ),
-                ],
+              Builder(
+                builder: (context) {
+                  final sw = context.screenWidth;
+                  final sh = context.screenHeight;
+                  final scale = (sw + sh) * 0.0004;
+                  final r = (70 * scale).clamp(50.0, 90.0);
+                  final decoSize = (13 * scale).clamp(10.0, 18.0);
+
+                  return Stack(
+                    alignment: Alignment.center,
+                    clipBehavior: Clip.none,
+                    children: [
+                      Positioned(
+                        top: -8,
+                        right: -r,
+                        child: _decoCircle((43 * scale).clamp(35.0, 50.0)),
+                      ),
+                      Positioned(
+                        top: 55,
+                        right: -(r * 0.65),
+                        child: _decoCircle(decoSize),
+                      ),
+                      Positioned(
+                        top: 85,
+                        right: -(r * 0.9),
+                        child: _decoCircle(decoSize),
+                      ),
+                      Positioned(
+                        top: 120,
+                        right: -(r * 0.6),
+                        child: _decoCircle(decoSize),
+                      ),
+                      Positioned(
+                        top: 25,
+                        left: -(r * 0.7),
+                        child: _decoCircle(decoSize),
+                      ),
+                      Positioned(
+                        top: 100,
+                        left: -(r * 0.5),
+                        child: _decoCircle(decoSize),
+                      ),
+                      Container(
+                        width: 135,
+                        height: 135,
+                        padding: const EdgeInsets.all(35),
+                        decoration: const BoxDecoration(
+                          color: AppColors.primaryColor,
+                          shape: BoxShape.circle,
+                        ),
+                        alignment: Alignment.center,
+                        child: Image.asset(Assets.checkedIcon),
+                      ),
+                    ],
+                  );
+                },
               ),
               20.ph,
               Text(
@@ -471,6 +502,17 @@ class _EventCheckinViewState extends ConsumerState<EventCheckinView> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _decoCircle(double size) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: AppColors.primaryColor.withValues(alpha: 0.22),
       ),
     );
   }

@@ -6,7 +6,7 @@ class CoastalGroupRewardTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final horizontalPadding = context.screenWidth * 0.05;
-    final contentTop = context.screenHeight * 0.22;
+    final contentTop = context.screenHeight * 0.24;
 
     return SizedBox(
       width: double.infinity,
@@ -16,7 +16,7 @@ class CoastalGroupRewardTab extends StatelessWidget {
         children: [
           CoastalGroupHeader(
             sectionTitle: 'Reward & Funding',
-            height: context.screenHeight * 0.28,
+            height: context.screenHeight * 0.30,
             onNotificationTap: () => AppRouter.push(const NotificationView()),
           ),
           Positioned(
@@ -39,7 +39,7 @@ class CoastalGroupRewardTab extends StatelessWidget {
                       children: [
                         CustomButtonWidget(
                           label: 'Withdraw Funds',
-                          onPressed: () {},
+                          onPressed: () => AppRouter.push(const WithdrawFundsView()),
                           height: 52,
                         ),
                         24.ph,
@@ -131,25 +131,7 @@ class CoastalGroupRewardTab extends StatelessWidget {
           Expanded(
             child: Row(
               children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: const BoxDecoration(
-                    color: AppColors.primaryColor,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Center(
-                    child: Text(
-                      '\$',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Roboto Flex',
-                      ),
-                    ),
-                  ),
-                ),
+                Image.asset(Assets.coinDollarIcon, width: 40, height: 40),
                 12.pw,
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

@@ -94,6 +94,7 @@ export 'views/coastal_group/coastal_group_reward_tab.dart';
 export 'views/coastal_group/coastal_group_profile_tab.dart';
 export 'views/coastal_group/joined_event_detail_view.dart';
 export 'views/coastal_group/event_checkin_view.dart';
+export 'views/coastal_group/withdraw_funds_view.dart';
 export 'views/coastal_group/send_message_view.dart';
 export 'views/coastal_group/cleanup_instructions_view.dart';
 

@@ -80,6 +80,7 @@ abstract class Assets {
   static const String giftIconPng = '${iconPath}gift_icon.png';
   static const String shopBagIcon = '${iconPath}shop_bag_icon.svg';
   static const String twoCoinsIcon = '${iconPath}two_coins_icon.svg';
+  static const String coinDollarIcon = '${iconPath}coin_dollar_icon.png';
 
   // ——— Training ———
   static const String lockIcon = '${iconPath}lock_icon.svg';
