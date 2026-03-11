@@ -142,7 +142,7 @@ class _WithdrawFundsViewState extends State<WithdrawFundsView> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Color(0xffFFF3E6),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -154,7 +154,7 @@ class _WithdrawFundsViewState extends State<WithdrawFundsView> {
       ),
       child: Row(
         children: [
-          Image.asset(Assets.coinDollarIcon, width: 40, height: 40),
+          Image.asset(Assets.amountDisplayIcon, width: 30, height: 30, color: Colors.black.withValues(alpha: 0.7),),
           14.pw,
           Expanded(
             child: Text(
@@ -168,82 +168,55 @@ class _WithdrawFundsViewState extends State<WithdrawFundsView> {
   }
 
   Widget _buildAmountSection(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Enter Withdrawal Amount',
-          style: context.robotoFlexRegular(fontSize: 17, color: Colors.black),
+    return CustomTextFieldWidget(
+      controller: _amountController,
+      label: 'Enter Withdrawal Amount',
+      hint: '20.00',
+      fontSize: 18,
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      prefixIcon: Padding(
+        padding: const EdgeInsets.only(left: 20, right: 12),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '\$',
+              style: context.robotoFlexBold(fontSize: 22, color: Colors.black.withValues(alpha: 0.7)),
+            ),
+            Container(
+              width: 1,
+              height: 24,
+              margin: const EdgeInsets.only(left: 12),
+              color: Colors.black.withValues(alpha: 0.7),
+            ),
+          ],
         ),
-        8.ph,
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.grey.shade300),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
+      ),
+      prefixIconConstraints: const BoxConstraints(minWidth: 50, minHeight: 26),
+      suffixIcon: Padding(
+        padding: const EdgeInsets.only(right: 8),
+        child: TextButton(
+          onPressed: _setMaxAmount,
+          style: TextButton.styleFrom(
+            backgroundColor: Color(0xff828181).withValues(alpha: 0.33),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.horizontal(
+                left: Radius.circular(30),
+                right: Radius.circular(30),
               ),
-            ],
+            ),
           ),
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 16),
-                child: Text(
-                  '\$',
-                  style: context.robotoFlexBold(fontSize: 18, color: Colors.black),
-                ),
-              ),
-              Container(
-                width: 1,
-                height: 24,
-                margin: const EdgeInsets.symmetric(horizontal: 12),
-                color: Colors.grey.shade400,
-              ),
-              Expanded(
-                child: TextFormField(
-                  controller: _amountController,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  decoration: InputDecoration(
-                    hintText: '20.00',
-                    hintStyle: context.robotoFlexRegular(
-                      fontSize: 16,
-                      color: Colors.grey.shade500,
-                    ),
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  ),
-                  style: context.robotoFlexSemiBold(fontSize: 16, color: Colors.black),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 12),
-                child: TextButton(
-                  onPressed: _setMaxAmount,
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.grey.shade200,
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: Text(
-                    'Max',
-                    style: context.robotoFlexSemiBold(
-                      fontSize: 14,
-                      color: Colors.black87,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+          child: Text(
+            'Max',
+            style: context.robotoFlexSemiBold(
+              fontSize: 14,
+              color: Colors.black87,
+            ),
           ),
         ),
-      ],
+      ),
+      suffixIconConstraints: const BoxConstraints(minWidth: 56, minHeight: 40),
     );
   }
 

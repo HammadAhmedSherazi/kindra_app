@@ -30,6 +30,7 @@ class CustomTextFieldWidget extends StatelessWidget {
     this.focusNode,
     this.autofocus = false,
     this.padding,
+    this.fontSize,
   });
 
   final TextEditingController? controller;
@@ -56,6 +57,7 @@ class CustomTextFieldWidget extends StatelessWidget {
   final FocusNode? focusNode;
   final bool autofocus;
   final EdgeInsets? padding;
+  final double? fontSize;
 
   @override
   Widget build(BuildContext context) {
@@ -90,14 +92,19 @@ class CustomTextFieldWidget extends StatelessWidget {
           onChanged: onChanged,
           onFieldSubmitted: onSubmitted,
           onTap: onTap,
-          style: theme.textTheme.bodyMedium,
+          style: TextStyle(
+            fontSize: fontSize ?? 14.87,
+            fontFamily: 'Roboto Flex',
+            fontWeight: FontWeight.w300,
+            height: 1.08,
+          ),
           decoration: InputDecoration(
             contentPadding: padding ?? EdgeInsets.symmetric( vertical: 20),
             hintText: hint,
             
             hintStyle: TextStyle(
 color: Colors.black.withValues(alpha: 0.3),
-fontSize: 14.87,
+fontSize: fontSize ?? 14.87,
 fontFamily: 'Roboto Flex',
 fontWeight: FontWeight.w300,
 height: 1.08,
