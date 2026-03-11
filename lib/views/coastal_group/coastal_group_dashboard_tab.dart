@@ -46,7 +46,9 @@ class CoastalGroupDashboardTab extends StatelessWidget {
                         20.ph,
                         CustomButtonWidget(
                           label: 'Report Waste',
-                          onPressed: () {},
+                          onPressed: () => AppRouter.push(
+                            const CoastalGroupNavigationView(initialIndex: 2),
+                          ),
                           height: 52,
                         ),
                         24.ph,

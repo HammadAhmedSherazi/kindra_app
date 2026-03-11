@@ -32,17 +32,17 @@ class _JoinedEventDetailViewState extends ConsumerState<JoinedEventDetailView> {
               sectionTitle: 'Upcoming Cleanups',
               height: context.screenHeight * 0.30,
               onNotificationTap: () => AppRouter.push(const NotificationView()),
-              leading: GestureDetector(
-                onTap: () => AppRouter.back(),
-                child: const Padding(
-                  padding: EdgeInsets.only(top: 4),
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.white,
-                    size: 22,
-                  ),
-                ),
-              ),
+              // leading: GestureDetector(
+              //   onTap: () => AppRouter.back(),
+              //   child: const Padding(
+              //     padding: EdgeInsets.only(top: 4),
+              //     child: Icon(
+              //       Icons.arrow_back_ios,
+              //       color: Colors.white,
+              //       size: 22,
+              //     ),
+              //   ),
+              // ),
               trailing: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                 decoration: BoxDecoration(
@@ -63,51 +63,60 @@ class _JoinedEventDetailViewState extends ConsumerState<JoinedEventDetailView> {
               left: 0,
               right: 0,
               bottom: 0,
-              child: SingleChildScrollView(
-                padding: EdgeInsets.fromLTRB(
-                  horizontalPadding,
-                  16,
-                  horizontalPadding,
-                  24,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildParticipatingCard(),
-                    12.ph,
-                    Text(
-                      'Sunday, April 28 | 10:00 AM - 1:00 PM',
-                      style: context.robotoFlexMedium(
-                        fontSize: 14,
-                        color: Colors.black87,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+                    child: _buildParticipatingCard(),
+                  ),
+                  16.ph,
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: EdgeInsets.fromLTRB(
+                        horizontalPadding,
+                        0,
+                        horizontalPadding,
+                        24,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            'Sunday, April 28 | 10:00 AM - 1:00 PM',
+                            style: context.robotoFlexMedium(
+                              fontSize: 14,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          16.ph,
+                          _buildVolunteerTasksCard(),
+                          16.ph,
+                          _buildMyTeamCard(context),
+                          16.ph,
+                          _buildAnnouncementCard(),
+                          24.ph,
+                          CustomButtonWidget(
+                            label: 'Message Team',
+                            onPressed: () => AppRouter.push(
+                              SendMessageView(event: widget.event),
+                            ),
+                            height: 52,
+                          ),
+                          12.ph,
+                          CustomButtonWidget(
+                            label: 'Mark Attendance',
+                            onPressed: () => AppRouter.push(
+                              EventCheckinView(event: widget.event),
+                            ),
+                            backgroundColor: const Color(0xff414141),
+                            height: 52,
+                          ),
+                          100.ph,
+                        ],
                       ),
                     ),
-                    16.ph,
-                    _buildVolunteerTasksCard(),
-                    16.ph,
-                    _buildMyTeamCard(context),
-                    16.ph,
-                    _buildAnnouncementCard(),
-                    24.ph,
-                    CustomButtonWidget(
-                      label: 'Message Team',
-                      onPressed: () => AppRouter.push(
-                        SendMessageView(event: widget.event),
-                      ),
-                      height: 52,
-                    ),
-                    12.ph,
-                    CustomButtonWidget(
-                      label: 'Mark Attendance',
-                      onPressed: () => AppRouter.push(
-                        EventCheckinView(event: widget.event),
-                      ),
-                      backgroundColor: const Color(0xff414141),
-                      height: 52,
-                    ),
-                    100.ph,
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -139,7 +148,14 @@ class _JoinedEventDetailViewState extends ConsumerState<JoinedEventDetailView> {
               color: AppColors.primaryColor,
               shape: BoxShape.circle,
             ),
-            child: const Icon(Icons.check, color: Colors.white, size: 28),
+            child: Center(
+              child: Image.asset(
+                Assets.checkBlackIcon,
+                width: 28,
+                height: 28,
+                color: Colors.white,
+              ),
+            ),
           ),
           16.pw,
           Expanded(

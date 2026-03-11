@@ -69,17 +69,17 @@ class _WithdrawFundsViewState extends State<WithdrawFundsView> {
               sectionTitle: 'Withdraw Funds',
               height: context.screenHeight * 0.30,
               onNotificationTap: () => AppRouter.push(const NotificationView()),
-              leading: GestureDetector(
-                onTap: () => AppRouter.back(),
-                child: const Padding(
-                  padding: EdgeInsets.only(top: 4),
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.white,
-                    size: 22,
-                  ),
-                ),
-              ),
+              // leading: GestureDetector(
+              //   onTap: () => AppRouter.back(),
+              //   child: const Padding(
+              //     padding: EdgeInsets.only(top: 4),
+              //     child: Icon(
+              //       Icons.arrow_back_ios,
+              //       color: Colors.white,
+              //       size: 22,
+              //     ),
+              //   ),
+              // ),
             ),
             Positioned(
               top: contentTop,

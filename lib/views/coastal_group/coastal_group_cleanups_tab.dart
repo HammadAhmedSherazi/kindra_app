@@ -118,13 +118,13 @@ class _CleanupList extends StatelessWidget {
               ),
             ),
           ),
-          if (isUpcoming) ...[
-            16.ph,
-            CustomButtonWidget(
-              label: 'Find Cleanup',
-              onPressed: () {},
-            ),
-          ],
+          // if (isUpcoming) ...[
+          //   16.ph,
+          //   CustomButtonWidget(
+          //     label: 'Find Cleanup',
+          //     onPressed: () {},
+          //   ),
+          // ],
           24.ph,
         ],
       ),

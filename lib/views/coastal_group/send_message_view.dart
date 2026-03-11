@@ -2,10 +2,7 @@ import '../../export_all.dart';
 
 /// Send message to cleanup participants. Shows event context and team leader message.
 class SendMessageView extends ConsumerStatefulWidget {
-  const SendMessageView({
-    super.key,
-    required this.event,
-  });
+  const SendMessageView({super.key, required this.event});
 
   final CleanupEventItem event;
 
@@ -36,59 +33,116 @@ class _SendMessageViewState extends ConsumerState<SendMessageView> {
           clipBehavior: Clip.none,
           children: [
             CoastalGroupHeader(
-              sectionTitle: 'Send Message',
+              sectionTitle: '',
               height: context.screenHeight * 0.30,
               onNotificationTap: () => AppRouter.push(const NotificationView()),
-              leading: GestureDetector(
-                onTap: () => AppRouter.back(),
-                child: const Padding(
-                  padding: EdgeInsets.only(top: 4),
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.white,
-                    size: 22,
-                  ),
-                ),
-              ),
+              // leading: GestureDetector(
+              //   onTap: () => AppRouter.back(),
+              //   child: const Padding(
+              //     padding: EdgeInsets.only(top: 4),
+              //     child: Icon(
+              //       Icons.arrow_back_ios,
+              //       color: Colors.white,
+              //       size: 22,
+              //     ),
+              //   ),
+              // ),
             ),
             Positioned(
               top: contentTop,
-              left: 0,
-              right: 0,
+              left: 20,
+              right: 20,
               bottom: 0,
-              child: SingleChildScrollView(
-                padding: EdgeInsets.fromLTRB(
-                  horizontalPadding,
-                  16,
-                  horizontalPadding,
-                  24,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildEventCard(),
-                    20.ph,
-                    _buildTeamLeaderMessage(),
-                    24.ph,
-                    CustomTextFieldWidget(
-                      controller: _messageController,
-                      hint: 'Write a Message',
-                      maxLines: 4,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 14,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(child: _buildMainCard(context)),
+                  100.ph,
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMainCard(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(28),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: () => AppRouter.back(),
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    padding: const EdgeInsets.only(left: 8),
+                    decoration: ShapeDecoration(
+                      color: Colors.white,
+                      shape: OvalBorder(
+                        side: BorderSide(
+                          width: 1,
+                          color: const Color(0xFFC9C9C9),
+                        ),
                       ),
                     ),
-                    16.ph,
-                    CustomButtonWidget(
-                      label: 'Send',
-                      onPressed: () {},
-                      backgroundColor: const Color(0xff414141),
-                      height: 50,
-                    ),
-                    100.ph,
-                  ],
+                    child: const Icon(Icons.arrow_back_ios, size: 18),
+                  ),
                 ),
+
+                Text(
+                  'Send Message',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontFamily: 'Roboto Flex',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(width: 40),
+              ],
+            ),
+            20.ph,
+            _buildEventCard(),
+            20.ph,
+            _buildTeamLeaderMessage(),
+            Spacer(),
+            CustomTextFieldWidget(
+              controller: _messageController,
+              hint: 'Write a Message',
+              maxLines: 1,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              suffixIcon: Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: CustomButtonWidget(
+                  label: 'Send',
+                  onPressed: () {},
+                  backgroundColor: const Color(0xff414141),
+                  height: 40,
+                  expandWidth: false,
+                  textSize: 14,
+                ),
+              ),
+              suffixIconConstraints: const BoxConstraints(
+                minWidth: 80,
+                minHeight: 40,
               ),
             ),
           ],
@@ -102,21 +156,22 @@ class _SendMessageViewState extends ConsumerState<SendMessageView> {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.grey.shade200,
+        color: Color(0xffFAFAFA),
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade200),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             widget.event.title,
-            style: context.robotoFlexBold(fontSize: 16, color: Colors.black),
+            style: context.robotoFlexBold(fontSize: 14, color: Colors.black),
           ),
           6.ph,
           Text(
             'Sending to: All Cleanup Participants',
             style: context.robotoFlexRegular(
-              fontSize: 13,
+              fontSize: 10,
               color: Colors.grey.shade700,
             ),
           ),
@@ -127,7 +182,7 @@ class _SendMessageViewState extends ConsumerState<SendMessageView> {
 
   Widget _buildTeamLeaderMessage() {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -139,58 +194,56 @@ class _SendMessageViewState extends ConsumerState<SendMessageView> {
           ),
         ],
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
         children: [
-          CircleAvatar(
-            radius: 24,
-            backgroundColor: AppColors.primaryColor.withValues(alpha: 0.3),
-            child: Text(
-              'S',
-              style: context.robotoFlexBold(
-                fontSize: 18,
-                color: AppColors.primaryColor,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CircleAvatar(
+                radius: 22,
+                backgroundColor: AppColors.primaryColor.withValues(alpha: 0.3),
+                child: Text(
+                  'S',
+                  style: context.robotoFlexBold(
+                    fontSize: 18,
+                    color: AppColors.primaryColor,
+                  ),
+                ),
               ),
-            ),
-          ),
-          12.pw,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Sam',
-                  style: context.robotoFlexSemiBold(
-                    fontSize: 15,
-                    color: Colors.black,
-                  ),
-                ),
-                Text(
-                  'Team leader',
-                  style: context.robotoFlexRegular(
-                    fontSize: 12,
-                    color: Colors.grey.shade600,
-                  ),
-                ),
-                10.ph,
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 12,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    "Let's gather at the meeting point by the lifeguard station when you're ready!",
-                    style: context.robotoFlexRegular(
-                      fontSize: 14,
-                      color: Colors.black87,
+              12.pw,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Sam',
+                      style: context.robotoFlexSemiBold(
+                        fontSize: 15,
+                        color: Colors.black,
+                      ),
                     ),
-                  ),
+                    Text(
+                      'Team leader',
+                      style: context.robotoFlexRegular(
+                        fontSize: 12,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
+            ],
+          ),
+          // 10.ph,
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+
+            child: Text(
+              "Let's gather at the meeting point by the lifeguard station when you're ready!",
+              style: context.robotoFlexRegular(
+                fontSize: 12,
+                color: Colors.black87,
+              ),
             ),
           ),
         ],

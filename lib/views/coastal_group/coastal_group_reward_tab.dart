@@ -159,7 +159,7 @@ class CoastalGroupRewardTab extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: _ImpactCard(value: '+2,150', label: 'Eco Point Earned'),
+          child: _ImpactCard(value: '+2,150', label: 'Eco Point\nEarned'),
         ),
         12.pw,
         Expanded(
@@ -243,8 +243,8 @@ class _AchievementTile extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Image.asset(Assets.medalIcon, width: 40, height: 40),
-          14.pw,
+          // Image.asset(Assets.medalIcon, width: 40, height: 40),
+          // 14.pw,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

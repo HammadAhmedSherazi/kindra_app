@@ -34,15 +34,35 @@ class CleanupEventCard extends StatelessWidget {
                 height: double.infinity,
                 width: 114,
                 color: Colors.grey.shade200,
-                child: event.imagePath != null
-                    ? Image.asset(
-                        event.imagePath!,
+                child: event.imageUrl != null
+                    ? Image.network(
+                        event.imageUrl!,
                         height: double.infinity,
                         width: 114,
                         fit: BoxFit.cover,
                         errorBuilder: (_, __, ___) => _buildIconFallback(),
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      (loadingProgress.expectedTotalBytes ?? 1)
+                                  : null,
+                              strokeWidth: 2,
+                            ),
+                          );
+                        },
                       )
-                    : _buildIconFallback(),
+                    : event.imagePath != null
+                        ? Image.asset(
+                            event.imagePath!,
+                            height: double.infinity,
+                            width: 114,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => _buildIconFallback(),
+                          )
+                        : _buildIconFallback(),
               ),
             ),
             Expanded(

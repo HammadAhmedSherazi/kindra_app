@@ -62,7 +62,10 @@ class CoastalGroupHeader extends StatelessWidget {
                   ],
                 ),
               ),
-              GestureDetector(
+             trailing != null ? Column(
+              spacing: 30,
+              children: [
+                GestureDetector(
                 onTap: onNotificationTap ?? () {},
                 child: Stack(
                   clipBehavior: Clip.none,
@@ -96,10 +99,43 @@ class CoastalGroupHeader extends StatelessWidget {
                   ],
                 ),
               ),
-              if (trailing != null) ...[
-                const SizedBox(width: 8),
                 trailing!,
               ],
+             ) : GestureDetector(
+                onTap: onNotificationTap ?? () {},
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Container(
+                      width: 44,
+                      height: 44,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                      ),
+                      padding: const EdgeInsets.all(10),
+                      child: Image.asset(
+                        Assets.notificationIcon,
+                        width: 22,
+                        height: 22,
+                      ),
+                    ),
+                    Positioned(
+                      top: -2,
+                      right: -2,
+                      child: Container(
+                        width: 12,
+                        height: 12,
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+             
             ],
           ),
         ],
