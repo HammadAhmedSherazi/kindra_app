@@ -114,6 +114,15 @@ export 'views/business_dashboard/eco_tips_education_view.dart';
 export 'views/business_dashboard/eco_tip_detail_view.dart';
 export 'views/business_dashboard/eco_challenge_completed_view.dart';
 
+// Driver dashboard (driver flow)
+export 'views/driver_dashboard/driver_dashboard_view.dart';
+export 'views/driver_dashboard/driver_home_tab.dart';
+export 'views/driver_dashboard/driver_requests_tab.dart';
+export 'views/driver_dashboard/driver_pickup_detail_view.dart';
+export 'views/driver_dashboard/driver_earning_tab.dart';
+export 'views/driver_dashboard/driver_impact_tab.dart';
+export 'views/driver_dashboard/driver_profile_tab.dart';
+
 export 'views/onboarding/splash_view.dart';
 
 // Widgets
@@ -127,6 +136,7 @@ export 'widget/cleanup_event_card.dart';
 export 'widget/country_phone_field_widget.dart';
 export 'widget/password_success_dialog.dart';
 export 'widget/exit_app_dialog.dart';
+export 'widget/driver_pickup_dialogs.dart';
 export 'widget/custom_inner_screen_template.dart';
 export 'widget/kindra_logo_with_rings_widget.dart';
 export 'widget/card_with_overlay_widget.dart';

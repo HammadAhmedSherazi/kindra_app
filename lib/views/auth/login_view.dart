@@ -29,6 +29,8 @@ class _LoginViewState extends ConsumerState<LoginView> {
           AppRouter.pushAndRemoveUntil(const BusinessDashboardView());
         } else if (_selectedUserRole == LoginUserRole.coastalGroups) {
           AppRouter.pushAndRemoveUntil(const CoastalGroupNavigationView());
+        } else if (_selectedUserRole == LoginUserRole.drivers) {
+          AppRouter.pushAndRemoveUntil(const DriverDashboardView());
         } else {
           AppRouter.pushAndRemoveUntil(const NavigationView());
         }

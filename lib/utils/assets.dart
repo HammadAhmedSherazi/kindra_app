@@ -41,6 +41,10 @@ abstract class Assets {
   static const String impactIcon = '${iconPath}impact_icon.png';
   static const String environmentImpactIcon = '${iconPath}environment_impact_icon.png';
   static const String pickupIcon = '${iconPath}pickup_icon.png';
+  /// Driver flow: Earning tab (bar chart + dollar). Replace with earning_icon.png when provided.
+  static const String earningIcon = '${iconPath}earning_icon.png';
+  /// Driver flow: Requests tab (document/list).
+  static const String requestsIcon = '${iconPath}requests_icon.png';
   static const String nextPickupIcon = '${iconPath}next_pickup_icon.png';
   static const String deliverIcon = '${iconPath}deliver_icon.png';
   static const String loyalRankIcon = '${iconPath}loyal_rank_icon.png';
