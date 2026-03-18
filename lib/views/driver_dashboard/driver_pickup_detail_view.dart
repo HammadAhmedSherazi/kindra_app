@@ -85,7 +85,9 @@ class DriverPickupDetailView extends StatelessWidget {
                     24.ph,
                     CustomButtonWidget(
                       label: 'Start Navigation',
-                      onPressed: () {},
+                      onPressed: () {
+                        AppRouter.push(DriverStartNavigationView(data: data));
+                      },
                       backgroundColor: AppColors.primaryColor,
                       textColor: Colors.white,
                       height: 52,
