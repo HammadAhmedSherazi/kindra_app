@@ -77,88 +77,88 @@ class _DriverReportIssueViewState extends State<DriverReportIssueView> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(18),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.06),
-                          blurRadius: 10,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        _IssueRadioTile(
-                          label: 'Too Far',
-                          selected: _selected == _ReportIssueOption.tooFar,
-                          onTap: () => setState(() => _selected = _ReportIssueOption.tooFar),
-                        ),
-                        _IssueRadioTile(
-                          label: 'Busy',
-                          selected: _selected == _ReportIssueOption.busy,
-                          onTap: () => setState(() => _selected = _ReportIssueOption.busy),
-                        ),
-                        _IssueRadioTile(
-                          label: 'Vehicle issue',
-                          selected: _selected == _ReportIssueOption.vehicleIssue,
-                          onTap: () => setState(() => _selected = _ReportIssueOption.vehicleIssue),
-                        ),
-                        _IssueRadioTile(
-                          label: 'Other (please specify)',
-                          selected: _selected == _ReportIssueOption.other,
-                          onTap: () => setState(() => _selected = _ReportIssueOption.other),
-                        ),
-                        if (_selected == _ReportIssueOption.other) ...[
-                          12.ph,
-                          TextField(
-                            controller: _otherController,
-                            maxLines: 4,
-                            decoration: InputDecoration(
-                              hintText: 'Describe the issue…',
-                              hintStyle: context.robotoFlexRegular(
-                                fontSize: 14,
-                                color: Colors.grey.shade500,
-                              ),
-                              contentPadding: const EdgeInsets.all(14),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(color: Colors.grey.shade300),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(color: Colors.grey.shade300),
-                              ),
-                            ),
-                            style: context.robotoFlexRegular(
-                              fontSize: 15,
-                              color: Colors.black,
-                            ),
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(18),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.06),
+                            blurRadius: 10,
+                            offset: const Offset(0, 2),
                           ),
                         ],
-                      ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _IssueRadioTile(
+                            label: 'Too Far',
+                            selected: _selected == _ReportIssueOption.tooFar,
+                            onTap: () => setState(() => _selected = _ReportIssueOption.tooFar),
+                          ),
+                          _IssueRadioTile(
+                            label: 'Busy',
+                            selected: _selected == _ReportIssueOption.busy,
+                            onTap: () => setState(() => _selected = _ReportIssueOption.busy),
+                          ),
+                          _IssueRadioTile(
+                            label: 'Vehicle issue',
+                            selected: _selected == _ReportIssueOption.vehicleIssue,
+                            onTap: () => setState(() => _selected = _ReportIssueOption.vehicleIssue),
+                          ),
+                          _IssueRadioTile(
+                            label: 'Other (please specify)',
+                            selected: _selected == _ReportIssueOption.other,
+                            onTap: () => setState(() => _selected = _ReportIssueOption.other),
+                          ),
+                          if (_selected == _ReportIssueOption.other) ...[
+                            12.ph,
+                            TextField(
+                              controller: _otherController,
+                              maxLines: 4,
+                              decoration: InputDecoration(
+                                hintText: 'Describe the issue…',
+                                hintStyle: context.robotoFlexRegular(
+                                  fontSize: 14,
+                                  color: Colors.grey.shade500,
+                                ),
+                                contentPadding: const EdgeInsets.all(14),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide(color: Colors.grey.shade300),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide(color: Colors.grey.shade300),
+                                ),
+                              ),
+                              style: context.robotoFlexRegular(
+                                fontSize: 15,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
                     ),
-                  ),
-                  24.ph,
-                  CustomButtonWidget(
-                    label: 'Submit',
-                    onPressed: _onSubmit,
-                    height: 54,
-                    backgroundColor: const Color(0xFFE53935),
-                    textColor: Colors.white,
-                  ),
-                  12.ph,
-                  CustomButtonWidget(
-                    label: 'Cancel',
-                    onPressed: _onCancel,
-                    height: 54,
-                    backgroundColor: const Color(0xff2F2F2F),
-                    textColor: Colors.white,
-                    variant: CustomButtonVariant.secondary,
-                  ),
+                    24.ph,
+                    CustomButtonWidget(
+                      label: 'Submit',
+                      onPressed: _onSubmit,
+                      height: 54,
+                      backgroundColor: const Color(0xFFE53935),
+                      textColor: Colors.white,
+                    ),
+                    12.ph,
+                    CustomButtonWidget(
+                      label: 'Cancel',
+                      onPressed: _onCancel,
+                      height: 54,
+                      backgroundColor: const Color(0xff2F2F2F),
+                      textColor: Colors.white,
+                      variant: CustomButtonVariant.secondary,
+                    ),
                   ],
                 ),
               ),
