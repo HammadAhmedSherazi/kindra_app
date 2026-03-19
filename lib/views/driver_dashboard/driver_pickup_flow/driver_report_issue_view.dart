@@ -41,42 +41,42 @@ class _DriverReportIssueViewState extends State<DriverReportIssueView> {
   @override
   Widget build(BuildContext context) {
     final horizontalPadding = context.screenWidth * 0.05;
+    final contentTop = context.screenHeight * 0.20;
     return Scaffold(
       backgroundColor: const Color(0xffF9FAFC),
       bottomNavigationBar: const DriverFlowBottomNavBar(currentIndex: 1),
-      body: Stack(
-        children: [
-          CommunityDashboardHeader(
-            subtitle: 'Driver',
-            sectionTitle: 'Report Issue',
-            showZoneLabel: false,
-            onLogout: () {},
-            showNotificationIcon: true,
-            onNotificationTap: () => AppRouter.push(const NotificationView()),
-            height: 280,
-           
-         
-           
-            headerCaption: 'What is the reason for this issue?',
-           
-          ),
-          Positioned(
-            top: 330,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: SingleChildScrollView(
-              padding: EdgeInsets.fromLTRB(
-                horizontalPadding,
-                8,
-                horizontalPadding,
-                120,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                 
-                  Container(
+      body: SizedBox(
+        width: double.infinity,
+        height: double.infinity,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            CommunityDashboardHeader(
+              subtitle: 'Driver',
+              sectionTitle: 'Report Issue',
+              showZoneLabel: false,
+              onLogout: () {},
+              showNotificationIcon: true,
+              onNotificationTap: () => AppRouter.push(const NotificationView()),
+              height: 180,
+              headerCaption: 'What is the reason for this issue?',
+            ),
+            Positioned(
+              top: contentTop,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: SingleChildScrollView(
+                padding: EdgeInsets.fromLTRB(
+                  horizontalPadding,
+                  8,
+                  horizontalPadding,
+                  120,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -159,11 +159,12 @@ class _DriverReportIssueViewState extends State<DriverReportIssueView> {
                     textColor: Colors.white,
                     variant: CustomButtonVariant.secondary,
                   ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
