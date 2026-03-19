@@ -78,7 +78,7 @@ class EcoTipDetailView extends StatelessWidget {
                             width: double.infinity,
                             height: 200,
                             fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) => Container(
+                            errorBuilder: (_, _, _) => Container(
                               width: double.infinity,
                               height: 200,
                               color: Colors.grey.shade300,

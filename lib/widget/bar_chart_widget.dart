@@ -138,7 +138,7 @@ class _BarChartPainter extends CustomPainter {
     final bgRect = Rect.fromLTWH(0, 0, size.width, size.height);
     canvas.drawRect(bgRect, Paint()..color = backgroundColor);
 
-    final textPainter = (String text, double fontSize, Color color) {
+    TextPainter textPainter(String text, double fontSize, Color color) {
       final tp = TextPainter(
         text: TextSpan(
           text: text,
@@ -153,7 +153,7 @@ class _BarChartPainter extends CustomPainter {
       );
       tp.layout();
       return tp;
-    };
+    }
 
     // Y-axis labels and horizontal dashed lines
     for (int i = 0; i < yTickCount; i++) {

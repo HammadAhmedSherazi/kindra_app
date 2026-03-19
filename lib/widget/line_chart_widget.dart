@@ -118,7 +118,7 @@ class _LineChartPainter extends CustomPainter {
     final gridColor = Colors.black.withValues(alpha: 0.12);
     final axisColor = Colors.black54;
 
-    final textPainter = (String text, double fontSize, Color c) {
+    TextPainter textPainter(String text, double fontSize, Color c) {
       final tp = TextPainter(
         text: TextSpan(
           text: text,
@@ -133,7 +133,7 @@ class _LineChartPainter extends CustomPainter {
       );
       tp.layout();
       return tp;
-    };
+    }
 
     // Y-axis labels and horizontal dashed lines
     for (int i = 0; i < yTickCount; i++) {

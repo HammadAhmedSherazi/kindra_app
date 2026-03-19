@@ -1,5 +1,4 @@
 import '../../export_all.dart';
-import 'driver_pickup_detail_view.dart';
 
 /// Driver Requests tab: list of pickup requests. Tapping a card opens Pickup Detail.
 /// Accept/Reject dialogs follow the same style as the previously created dialogs.

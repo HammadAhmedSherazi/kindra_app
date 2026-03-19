@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
 
 import '../../export_all.dart';
-import '../../widget/driver_pickup_dialogs.dart';
 
 /// Data for a driver pickup request (used in list and detail).
 class DriverPickupRequestData {
@@ -78,7 +76,7 @@ class DriverPickupDetailView extends StatelessWidget {
                     12.ph,
                     _buildInfoCard(
                       context,
-                      icon: Icons.local_gas_station_rounded,
+                      imagePath: 'assets/icons/liter_icon.png',
                       title: 'Used Cooking Oil',
                       value: data.quantity,
                     ),
@@ -254,7 +252,8 @@ class DriverPickupDetailView extends StatelessWidget {
 
   Widget _buildInfoCard(
     BuildContext context, {
-    required IconData icon,
+    IconData? icon,
+    String? imagePath,
     required String title,
     required String value,
   }) {
@@ -280,7 +279,12 @@ class DriverPickupDetailView extends StatelessWidget {
               color: AppColors.primaryColor,
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, color: Colors.white, size: 24),
+            child: imagePath != null
+                ? Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Image.asset(imagePath, color: Colors.white),
+                  )
+                : Icon(icon, color: Colors.white, size: 24),
           ),
           16.pw,
           Expanded(

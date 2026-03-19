@@ -25,6 +25,10 @@ abstract class Assets {
   static const String eyeIcon = '${iconPath}eye_icon.png';
   static const String userIcon = '${iconPath}user_icon.png';
   static const String checkedIcon = '${iconPath}checked_icon.png';
+  /// Driver pickup complete / earnings success (leaf mark) — replaces check in flow.
+  static const String driverPickupSuccessIcon = '${iconPath}driver_pickup_success_icon.svg';
+  /// Driver report issue flow — warning triangle (#E0A02F in asset).
+  static const String reportIssueWarningIcon = '${iconPath}report_issue_warning_icon.svg';
   static const String checkBlackIcon = '${iconPath}check_black_icon.png';
 
   // ——— Navigation ———

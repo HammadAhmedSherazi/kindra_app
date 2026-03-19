@@ -159,7 +159,7 @@ class EcoTipsEducationView extends StatelessWidget {
                         child: Image.asset(
                           Assets.usedCookingOilCard,
                           fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) => Container(
+                          errorBuilder: (_, _, _) => Container(
                             color: Colors.grey.shade300,
                             child: const Icon(Icons.image_not_supported, size: 48),
                           ),
@@ -316,7 +316,7 @@ class _EcoTipListItem extends StatelessWidget {
                 height: double.infinity,
                 width: 114,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
+                errorBuilder: (_, _, _) => Container(
                   height: double.infinity,
                   width: 114,
                   color: Colors.grey.shade300,

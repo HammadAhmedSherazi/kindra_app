@@ -253,7 +253,7 @@ class _SelectPointAmountSection extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        '${points} Points',
+                        '$points Points',
                         textAlign: TextAlign.center,
                         style: context.robotoFlexMedium(
                           fontSize: 13,

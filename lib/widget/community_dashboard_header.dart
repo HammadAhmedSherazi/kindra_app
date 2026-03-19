@@ -17,6 +17,13 @@ class CommunityDashboardHeader extends StatelessWidget {
     required this.onLogout,
     this.showNotificationIcon = false,
     this.onNotificationTap,
+    this.backgroundColor,
+    this.logoAsset,
+    this.subtitleColor,
+    this.sectionTitleColor,
+    this.headerCaption,
+    this.headerCaptionColor,
+    this.sideActionLabelColor,
   });
 
   final String subtitle;
@@ -28,6 +35,15 @@ class CommunityDashboardHeader extends StatelessWidget {
   final VoidCallback onLogout;
   final bool showNotificationIcon;
   final VoidCallback? onNotificationTap;
+  /// When set (e.g. report-issue cream header), overrides primary green.
+  final Color? backgroundColor;
+  /// Defaults to [Assets.kindraTextWhiteLogo] on green headers; use [Assets.kindraTextLogo] on light headers.
+  final String? logoAsset;
+  final Color? subtitleColor;
+  final Color? sectionTitleColor;
+  final String? headerCaption;
+  final Color? headerCaptionColor;
+  final Color? sideActionLabelColor;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +56,7 @@ class CommunityDashboardHeader extends StatelessWidget {
         right: 20,
         bottom: 16,
       ),
-      decoration: const BoxDecoration(color: AppColors.primaryColor),
+      decoration: BoxDecoration(color: backgroundColor ?? AppColors.primaryColor),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -52,19 +68,35 @@ class CommunityDashboardHeader extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Image.asset(
-                      Assets.kindraTextWhiteLogo,
+                      logoAsset ?? Assets.kindraTextWhiteLogo,
                       width: 160,
                     ),
                     4.ph,
                     Text(
                       subtitle,
-                      style: context.robotoFlexMedium(fontSize: 20, color: Colors.white),
+                      style: context.robotoFlexMedium(
+                        fontSize: 20,
+                        color: subtitleColor ?? Colors.white,
+                      ),
                     ),
                     if (sectionTitle.isNotEmpty) ...[
                       8.ph,
                       Text(
                         sectionTitle,
-                        style: context.robotoFlexSemiBold(fontSize: 28, color: Colors.white),
+                        style: context.robotoFlexSemiBold(
+                          fontSize: 28,
+                          color: sectionTitleColor ?? Colors.white,
+                        ),
+                      ),
+                    ],
+                    if (headerCaption != null && headerCaption!.isNotEmpty) ...[
+                      6.ph,
+                      Text(
+                        headerCaption!,
+                        style: context.robotoFlexRegular(
+                          fontSize: 16,
+                          color: headerCaptionColor ?? Colors.white,
+                        ),
                       ),
                     ],
                   ],
@@ -97,7 +129,8 @@ class CommunityDashboardHeader extends StatelessWidget {
                     showNotificationIcon ? 'Notifications' : 'Logout',
                     style: context.robotoFlexSemiBold(
                       fontSize: 12,
-                      color: logoutTextColor ?? Colors.white,
+                      color:
+                          sideActionLabelColor ?? logoutTextColor ?? Colors.white,
                     ),
                   ),
                   if (showZoneLabel) ...[

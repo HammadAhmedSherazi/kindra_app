@@ -45,7 +45,7 @@ class NewsItemWidget extends StatelessWidget {
               height: double.infinity,
               width: 114,
               fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Container(
+              errorBuilder: (_, _, _) => Container(
                 height: double.infinity,
                 width: 114,
                 color: Colors.grey.shade300,

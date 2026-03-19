@@ -112,7 +112,7 @@ class _UsedOilHandoverFormViewState extends State<UsedOilHandoverFormView> {
       status: 'Success',
       redemptionId: '0 123 456 ****',
       typeOfWaste: 'Non-organic waste',
-      garbageWeight: '${liters} liter',
+      garbageWeight: '$liters liter',
       date: _formatDate(_selectedDate!),
       totalPoints: 200,
     );

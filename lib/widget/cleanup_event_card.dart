@@ -40,7 +40,7 @@ class CleanupEventCard extends StatelessWidget {
                         height: double.infinity,
                         width: 114,
                         fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => _buildIconFallback(),
+                        errorBuilder: (_, _, _) => _buildIconFallback(),
                         loadingBuilder: (context, child, loadingProgress) {
                           if (loadingProgress == null) return child;
                           return Center(
@@ -60,7 +60,7 @@ class CleanupEventCard extends StatelessWidget {
                             height: double.infinity,
                             width: 114,
                             fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) => _buildIconFallback(),
+                            errorBuilder: (_, _, _) => _buildIconFallback(),
                           )
                         : _buildIconFallback(),
               ),
@@ -172,7 +172,7 @@ class CleanupEventCard extends StatelessWidget {
         height: 48,
         color: Colors.grey.shade600,
         fit: BoxFit.contain,
-        errorBuilder: (_, __, ___) => Icon(Icons.clean_hands, size: 48, color: Colors.grey.shade400),
+        errorBuilder: (_, _, _) => Icon(Icons.clean_hands, size: 48, color: Colors.grey.shade400),
       ),
     );
   }
