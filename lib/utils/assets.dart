@@ -27,6 +27,10 @@ abstract class Assets {
   static const String checkedIcon = '${iconPath}checked_icon.png';
   /// Driver pickup complete / earnings success (leaf mark) — replaces check in flow.
   static const String driverPickupSuccessIcon = '${iconPath}driver_pickup_success_icon.svg';
+  /// Driver pickup reject dialog (white X-in-circle) icon.
+  ///
+  /// Note: This asset file is expected to be added under `assets/icons/`.
+  static const String driverPickupRejectIcon = '${iconPath}driver_pickup_reject_icon.png';
   /// Driver report issue flow — warning triangle (#E0A02F in asset).
   static const String reportIssueWarningIcon = '${iconPath}report_issue_warning_icon.svg';
   static const String checkBlackIcon = '${iconPath}check_black_icon.png';
@@ -79,6 +83,9 @@ abstract class Assets {
   static const String payPalIcon = '${iconPath}pay_pal_icon.svg';
   static const String timeIcon = '${iconPath}time_icon.png';
   static const String walletIcon = '${iconPath}wallet_icon.png';
+  /// Driver wallet summary icon (SVG suitcase/bag).
+  static const String driverWalletIcon =
+      '${iconPath}driver_wallet_icon.svg';
 
   // ——— Reward ———
   static const String rewardIcon = '${iconPath}reward_icon.svg';

@@ -41,7 +41,7 @@ class _DriverReportIssueViewState extends State<DriverReportIssueView> {
   @override
   Widget build(BuildContext context) {
     final horizontalPadding = context.screenWidth * 0.05;
-    final contentTop = context.screenHeight * 0.20;
+    final contentTop = context.screenHeight * 0.25;
     return Scaffold(
       backgroundColor: const Color(0xffF9FAFC),
       bottomNavigationBar: const DriverFlowBottomNavBar(currentIndex: 1),
@@ -58,7 +58,7 @@ class _DriverReportIssueViewState extends State<DriverReportIssueView> {
               onLogout: () {},
               showNotificationIcon: true,
               onNotificationTap: () => AppRouter.push(const NotificationView()),
-              height: 180,
+              height: 330,
               headerCaption: 'What is the reason for this issue?',
             ),
             Positioned(

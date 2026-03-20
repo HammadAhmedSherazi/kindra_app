@@ -205,15 +205,45 @@ class _RejectPickupDialog extends StatelessWidget {
                     final sw = context.screenWidth;
                     final sh = context.screenHeight;
                     final scale = (sw + sh) * 0.0004;
+                    final r = (70 * scale).clamp(50.0, 90.0);
                     final decoSize = (13 * scale).clamp(10.0, 18.0);
                     return Stack(
                       alignment: Alignment.center,
                       clipBehavior: Clip.none,
                       children: [
-                        Positioned(top: 8, left: 24, child: _decoCircle(decoSize, _rejectColor)),
-                        Positioned(top: 20, left: 48, child: _decoCircle(decoSize, _rejectColor)),
-                        Positioned(top: 8, right: 24, child: _decoCircle(decoSize, Colors.grey.shade400)),
-                        Positioned(top: 20, right: 48, child: _decoCircle(decoSize, Colors.grey.shade400)),
+                        Positioned(
+                          top: -8,
+                          right: -r,
+                          child: _decoCircle(
+                            (43 * scale).clamp(35.0, 50.0),
+                            Colors.grey.shade400,
+                          ),
+                        ),
+                        Positioned(
+                          top: 55,
+                          right: -(r * 0.65),
+                          child: _decoCircle(decoSize, Colors.grey.shade400),
+                        ),
+                        Positioned(
+                          top: 85,
+                          right: -(r * 0.9),
+                          child: _decoCircle(decoSize, Colors.grey.shade400),
+                        ),
+                        Positioned(
+                          top: 120,
+                          right: -(r * 0.6),
+                          child: _decoCircle(decoSize, Colors.grey.shade400),
+                        ),
+                        Positioned(
+                          top: 25,
+                          left: -(r * 0.7),
+                          child: _decoCircle(decoSize, Colors.grey.shade400),
+                        ),
+                        Positioned(
+                          top: 100,
+                          left: -(r * 0.5),
+                          child: _decoCircle(decoSize, Colors.grey.shade400),
+                        ),
                         Container(
                           width: 100,
                           height: 100,
@@ -222,29 +252,23 @@ class _RejectPickupDialog extends StatelessWidget {
                             shape: BoxShape.circle,
                           ),
                           alignment: Alignment.center,
-                          child: const Icon(Icons.close, color: Colors.white, size: 48),
+                          child: Image.asset(
+                            Assets.driverPickupRejectIcon,
+                            width: 48,
+                            height: 48,
+                            fit: BoxFit.contain,
+                            errorBuilder: (_, __, ___) => const Icon(
+                              Icons.close,
+                              color: Colors.white,
+                              size: 48,
+                            ),
+                          ),
                         ),
                       ],
                     );
                   },
                 ),
-                Positioned(
-                  top: -4,
-                  right: -4,
-                  child: GestureDetector(
-                    onTap: onCancel,
-                    child: Container(
-                      width: 32,
-                      height: 32,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.grey.shade300,
-                      ),
-                      alignment: Alignment.center,
-                      child: Icon(Icons.close, size: 18, color: Colors.grey.shade700),
-                    ),
-                  ),
-                ),
+                
               ],
             ),
             32.ph,

@@ -121,6 +121,8 @@ export 'views/driver_dashboard/driver_requests_tab.dart';
 export 'views/driver_dashboard/driver_pickup_detail_view.dart';
 export 'views/driver_dashboard/driver_pickup_flow_views.dart';
 export 'views/driver_dashboard/driver_earning_tab.dart';
+export 'views/driver_dashboard/driver_transaction_history_view.dart';
+export 'views/driver_dashboard/driver_earning_details_view.dart';
 export 'views/driver_dashboard/driver_impact_tab.dart';
 export 'views/driver_dashboard/driver_profile_tab.dart';
 
