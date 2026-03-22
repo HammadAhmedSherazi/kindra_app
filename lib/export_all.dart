@@ -125,6 +125,10 @@ export 'views/driver_dashboard/driver_transaction_history_view.dart';
 export 'views/driver_dashboard/driver_earning_details_view.dart';
 export 'views/driver_dashboard/driver_impact_tab.dart';
 export 'views/driver_dashboard/driver_profile_tab.dart';
+export 'views/driver_dashboard/driver_profile_shared.dart';
+export 'views/driver_dashboard/driver_edit_profile_view.dart';
+export 'views/driver_dashboard/driver_bank_account_view.dart';
+export 'views/driver_dashboard/driver_settings_view.dart';
 
 export 'views/onboarding/splash_view.dart';
 

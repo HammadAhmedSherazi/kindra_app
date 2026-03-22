@@ -3,7 +3,13 @@ import '../../export_all.dart';
 /// Withdraw funds screen: header, static balance card, amount input, method card, withdraw button, disclaimer.
 /// Stack layout: top card static, scrollable content in Expanded child.
 class WithdrawFundsView extends StatefulWidget {
-  const WithdrawFundsView({super.key});
+  const WithdrawFundsView({
+    super.key,
+    this.flowLabel = 'Coastal Group',
+  });
+
+  /// Header subtitle under the logo (matches other driver screens when `Driver`).
+  final String flowLabel;
 
   @override
   State<WithdrawFundsView> createState() => _WithdrawFundsViewState();
@@ -67,6 +73,7 @@ class _WithdrawFundsViewState extends State<WithdrawFundsView> {
           children: [
             CoastalGroupHeader(
               sectionTitle: 'Withdraw Funds',
+              flowLabel: widget.flowLabel,
               height: context.screenHeight * 0.30,
               onNotificationTap: () => AppRouter.push(const NotificationView()),
               // leading: GestureDetector(

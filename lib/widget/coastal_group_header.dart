@@ -1,10 +1,11 @@
 import '../export_all.dart';
 
-/// Green header for Coastal Group flow: Kindra logo, "Coastal Group", section title, notification.
+/// Green header: Kindra logo, flow label (e.g. Coastal Group, Driver), section title, notification.
 class CoastalGroupHeader extends StatelessWidget {
   const CoastalGroupHeader({
     super.key,
     required this.sectionTitle,
+    this.flowLabel = 'Coastal Group',
     this.height = 200,
     this.onNotificationTap,
     this.leading,
@@ -12,6 +13,8 @@ class CoastalGroupHeader extends StatelessWidget {
   });
 
   final String sectionTitle;
+  /// Shown under the logo (e.g. `Coastal Group`, `Driver`).
+  final String flowLabel;
   final double height;
   final VoidCallback? onNotificationTap;
   /// Optional leading widget (e.g. back button) for inner screens.
@@ -51,7 +54,7 @@ class CoastalGroupHeader extends StatelessWidget {
                     ),
                     4.ph,
                     Text(
-                      'Coastal Group',
+                      flowLabel,
                       style: context.robotoFlexMedium(fontSize: 16, color: Colors.white70),
                     ),
                     8.ph,

@@ -57,7 +57,11 @@ class DriverEarningTab extends StatelessWidget {
               children: [
                 CustomButtonWidget(
                   label: 'Withdraw',
-                  onPressed: () {},
+                  onPressed: () {
+                    AppRouter.push(
+                      const WithdrawFundsView(flowLabel: 'Driver'),
+                    );
+                  },
                   height: 58,
                   backgroundColor: AppColors.primaryColor,
                   textColor: Colors.white,

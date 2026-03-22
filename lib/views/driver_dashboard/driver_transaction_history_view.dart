@@ -1,7 +1,5 @@
 import '../../export_all.dart';
-
 import 'driver_pickup_flow/driver_pickup_flow_shared_widgets.dart';
-import 'driver_earning_details_view.dart';
 
 enum _WalletFilter { all, earnings, withdrawals }
 
@@ -41,7 +39,7 @@ class _DriverTransactionHistoryViewState
   @override
   Widget build(BuildContext context) {
     final horizontalPadding = context.screenWidth * 0.05;
-    final contentTop = context.screenHeight * 0.22;
+    final contentTop = context.screenHeight * 0.26;
 
     return Scaffold(
       backgroundColor: const Color(0xffF9FAFC),
@@ -59,7 +57,7 @@ class _DriverTransactionHistoryViewState
               onLogout: () {},
               showNotificationIcon: true,
               onNotificationTap: () => AppRouter.push(const NotificationView()),
-              height: 220,
+              height: 250,
             ),
             Positioned(
               top: contentTop,
@@ -129,8 +127,8 @@ class _DriverTransactionHistoryViewState
                     CustomButtonWidget(
                       label: 'Withdraw',
                       onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Withdraw coming soon')),
+                        AppRouter.push(
+                          const WithdrawFundsView(flowLabel: 'Driver'),
                         );
                       },
                       height: 58,
@@ -187,6 +185,7 @@ class _DriverTransactionHistoryViewState
             children: [
               Text(
                 label,
+                maxLines: 1,
                 style: context.robotoFlexRegular(
                   fontSize: 12,
                   color: Colors.black54,

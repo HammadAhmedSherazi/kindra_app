@@ -24,6 +24,7 @@ class CommunityDashboardHeader extends StatelessWidget {
     this.headerCaption,
     this.headerCaptionColor,
     this.sideActionLabelColor,
+    this.showSideActionLabel = true,
   });
 
   final String subtitle;
@@ -44,6 +45,8 @@ class CommunityDashboardHeader extends StatelessWidget {
   final String? headerCaption;
   final Color? headerCaptionColor;
   final Color? sideActionLabelColor;
+  /// When false, hides the "Notifications" / "Logout" caption under the side icon.
+  final bool showSideActionLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -71,16 +74,18 @@ class CommunityDashboardHeader extends StatelessWidget {
                       logoAsset ?? Assets.kindraTextWhiteLogo,
                       width: 160,
                     ),
-                    4.ph,
-                    Text(
-                      subtitle,
-                      style: context.robotoFlexMedium(
-                        fontSize: 20,
-                        color: subtitleColor ?? Colors.white,
+                    if (subtitle.isNotEmpty) ...[
+                      4.ph,
+                      Text(
+                        subtitle,
+                        style: context.robotoFlexMedium(
+                          fontSize: 20,
+                          color: subtitleColor ?? Colors.white,
+                        ),
                       ),
-                    ),
+                    ],
                     if (sectionTitle.isNotEmpty) ...[
-                      8.ph,
+                      if (subtitle.isNotEmpty) 8.ph else 12.ph,
                       Text(
                         sectionTitle,
                         style: context.robotoFlexSemiBold(
@@ -124,15 +129,17 @@ class CommunityDashboardHeader extends StatelessWidget {
                       ),
                     ),
                   ),
-                  4.ph,
-                  Text(
-                    showNotificationIcon ? 'Notifications' : 'Logout',
-                    style: context.robotoFlexSemiBold(
-                      fontSize: 12,
-                      color:
-                          sideActionLabelColor ?? logoutTextColor ?? Colors.white,
+                  if (showSideActionLabel) ...[
+                    4.ph,
+                    Text(
+                      showNotificationIcon ? 'Notifications' : 'Logout',
+                      style: context.robotoFlexSemiBold(
+                        fontSize: 12,
+                        color:
+                            sideActionLabelColor ?? logoutTextColor ?? Colors.white,
+                      ),
                     ),
-                  ),
+                  ],
                   if (showZoneLabel) ...[
                     20.ph,
                     Container(

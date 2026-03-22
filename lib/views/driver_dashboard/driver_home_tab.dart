@@ -179,7 +179,11 @@ class DriverHomeTab extends StatelessWidget {
               horizontal: 20,
             ),
             label: 'Withdraw',
-            onPressed: () {},
+            onPressed: () {
+              AppRouter.push(
+                const WithdrawFundsView(flowLabel: 'Driver'),
+              );
+            },
             variant: CustomButtonVariant.secondary,
             backgroundColor: const Color(0xff2F2F2F),
             height: 44,
