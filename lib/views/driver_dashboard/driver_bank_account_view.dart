@@ -5,13 +5,21 @@ import 'driver_pickup_flow/driver_pickup_flow_shared_widgets.dart';
 class DriverBankAccountView extends StatelessWidget {
   const DriverBankAccountView({super.key});
 
+  static const double _bankCardBlockHeight = 148;
+  static const double _belowBankCardGap = 14;
+
   @override
   Widget build(BuildContext context) {
     final horizontalPadding = context.screenWidth * 0.05;
-    final contentTop = kDriverProfileHeaderHeight + 24;
+    final bankCardTop = communityDashboardStackContentTop(
+      context,
+      hasSubtitle: false,
+    );
+    final scrollBodyTop =
+        bankCardTop + _bankCardBlockHeight + _belowBankCardGap;
 
     return Scaffold(
-      backgroundColor: const Color(0xffF9FAFC),
+      backgroundColor: Colors.white,
       bottomNavigationBar: const DriverFlowBottomNavBar(currentIndex: 4),
       body: Stack(
         clipBehavior: Clip.none,
@@ -35,78 +43,13 @@ class DriverBankAccountView extends StatelessWidget {
             child: SingleChildScrollView(
               padding: EdgeInsets.fromLTRB(
                 horizontalPadding,
-                contentTop,
+                scrollBodyTop,
                 horizontalPadding,
                 24,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Material(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    child: InkWell(
-                      onTap: () {},
-                      borderRadius: BorderRadius.circular(16),
-                      child: Container(
-                        padding: const EdgeInsets.all(18),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: Colors.grey.shade200),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.05),
-                              blurRadius: 10,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'ICII Bank',
-                              style: context.robotoFlexBold(
-                                fontSize: 17,
-                                color: Colors.black,
-                              ),
-                            ),
-                            Divider(height: 20, color: Colors.grey.shade200),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '***********12345',
-                                        style: context.robotoFlexSemiBold(
-                                          fontSize: 15,
-                                          color: Colors.black87,
-                                        ),
-                                      ),
-                                      6.ph,
-                                      Text(
-                                        'Thomas Charlie',
-                                        style: context.robotoFlexRegular(
-                                          fontSize: 14,
-                                          color: Colors.grey.shade600,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Icon(Icons.chevron_right,
-                                    color: Colors.grey.shade500),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  14.ph,
                   _linkRow(
                     context,
                     leading: Icon(Icons.add, color: AppColors.primaryColor),
@@ -129,7 +72,75 @@ class DriverBankAccountView extends StatelessWidget {
               ),
             ),
           ),
+          Positioned(
+            top: bankCardTop,
+            left: horizontalPadding,
+            right: horizontalPadding,
+            child: _iciciBankCard(context),
+          ),
         ],
+      ),
+    );
+  }
+
+  Widget _iciciBankCard(BuildContext context) {
+    return InkWell(
+      onTap: () {},
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.grey.shade200),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'ICII Bank',
+              style: context.robotoFlexBold(
+                fontSize: 17,
+                color: Colors.black,
+              ),
+            ),
+            Divider(height: 20, color: Colors.grey.shade200),
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '***********12345',
+                        style: context.robotoFlexSemiBold(
+                          fontSize: 15,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      6.ph,
+                      Text(
+                        'Thomas Charlie',
+                        style: context.robotoFlexRegular(
+                          fontSize: 14,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(Icons.chevron_right, color: Colors.grey.shade500),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -140,38 +151,35 @@ class DriverBankAccountView extends StatelessWidget {
     required String label,
     required VoidCallback onTap,
   }) {
-    return Material(
-      color: Colors.white,
+    return InkWell(
+      onTap: onTap,
       borderRadius: BorderRadius.circular(16),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.grey.shade200),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.grey.shade200),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            leading,
+            12.pw,
+            Text(
+              label,
+              style: context.robotoFlexSemiBold(
+                fontSize: 16,
+                color: Colors.black,
               ),
-            ],
-          ),
-          child: Row(
-            children: [
-              leading,
-              12.pw,
-              Text(
-                label,
-                style: context.robotoFlexSemiBold(
-                  fontSize: 16,
-                  color: Colors.black,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -182,39 +190,37 @@ class DriverBankAccountView extends StatelessWidget {
     required String label,
     required VoidCallback onTap,
   }) {
-    return Material(
-      color: Colors.white,
+    return InkWell(
+      onTap: onTap,
       borderRadius: BorderRadius.circular(16),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.grey.shade200),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  label,
-                  style: context.robotoFlexSemiBold(
-                    fontSize: 16,
-                    color: Colors.black,
-                  ),
+      child: Container(
+       
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+        decoration: BoxDecoration(
+           color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.grey.shade200),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                label,
+                style: context.robotoFlexSemiBold(
+                  fontSize: 16,
+                  color: Colors.black,
                 ),
               ),
-              Icon(Icons.chevron_right, color: Colors.grey.shade500),
-            ],
-          ),
+            ),
+            Icon(Icons.chevron_right, color: Colors.grey.shade500),
+          ],
         ),
       ),
     );

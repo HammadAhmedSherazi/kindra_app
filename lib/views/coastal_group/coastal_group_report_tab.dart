@@ -15,7 +15,12 @@ class _CoastalGroupReportTabState extends ConsumerState<CoastalGroupReportTab> {
   @override
   Widget build(BuildContext context) {
     final horizontalPadding = context.screenWidth * 0.05;
-    final contentTop = context.screenHeight * 0.24;
+    final headerHeight = context.screenHeight * 0.30;
+    final contentTop = communityDashboardStackContentTop(
+      context,
+      screenHeightFraction: 0.24,
+      coastalHeaderLayout: true,
+    );
 
     return SizedBox(
       width: double.infinity,
@@ -25,7 +30,7 @@ class _CoastalGroupReportTabState extends ConsumerState<CoastalGroupReportTab> {
         children: [
           CoastalGroupHeader(
             sectionTitle: 'Report Waste',
-            height: context.screenHeight * 0.30,
+            height: headerHeight,
             onNotificationTap: () => AppRouter.push(const NotificationView()),
           ),
           Positioned(

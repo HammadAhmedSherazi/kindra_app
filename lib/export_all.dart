@@ -144,6 +144,7 @@ export 'widget/country_phone_field_widget.dart';
 export 'widget/password_success_dialog.dart';
 export 'widget/exit_app_dialog.dart';
 export 'widget/driver_pickup_dialogs.dart';
+export 'widget/driver_pickup_request_card.dart';
 export 'widget/custom_inner_screen_template.dart';
 export 'widget/kindra_logo_with_rings_widget.dart';
 export 'widget/card_with_overlay_widget.dart';

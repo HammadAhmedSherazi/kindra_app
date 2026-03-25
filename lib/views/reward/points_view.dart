@@ -8,6 +8,17 @@ class PointsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final headerHeight = context.screenHeight * 0.27;
+    const summaryCardEstimatedHeight = 220.0;
+    final summaryCardTop = communityDashboardStackContentTop(
+      context,
+      screenHeightFraction: 0.14,
+      minContentTop: pointsScreenHeaderTextSafeBottom(context),
+    );
+    final historySectionTopPadding =
+        (summaryCardTop + summaryCardEstimatedHeight - headerHeight)
+            .clamp(24.0, 280.0);
+
     return Scaffold(
       backgroundColor: const Color(0xffF9FAFC),
       body: Stack(
@@ -17,7 +28,7 @@ class PointsView extends StatelessWidget {
             children: [
               // Green header (home_view style)
               Container(
-                height: context.screenHeight * 0.27,
+                height: headerHeight,
                 width: double.infinity,
                 padding: EdgeInsets.only(
                   top: MediaQuery.paddingOf(context).top + 16,
@@ -64,7 +75,7 @@ class PointsView extends StatelessWidget {
                   ],
                 ),
               ),
-              (context.screenHeight * 0.16).clamp(100.0, 150.0).ph,
+              historySectionTopPadding.ph,
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
@@ -98,7 +109,7 @@ class PointsView extends StatelessWidget {
           ),
           // Overlapping white card (home_view style positioned card)
           Positioned(
-            top: context.screenHeight * 0.14,
+            top: summaryCardTop,
             left: 20,
             right: 20,
             child: _PointsSummaryCard(

@@ -31,7 +31,7 @@ class DriverEarningDetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final horizontalPadding = context.screenWidth * 0.05;
-    final contentTop = context.screenHeight * 0.22;
+    final contentTop = communityDashboardStackContentTop(context);
 
     return Scaffold(
       backgroundColor: const Color(0xffF9FAFC),

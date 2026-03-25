@@ -33,7 +33,11 @@ class _DriverEnterCollectedQuantityViewState
   @override
   Widget build(BuildContext context) {
     final horizontalPadding = context.screenWidth * 0.05;
-    final contentTop = context.screenHeight * 0.20;
+    final contentTop = communityDashboardStackContentTop(
+      context,
+      screenHeightFraction: 0.20,
+      hasSectionTitle: false,
+    );
     final litersLabel =
         _liters == _liters.roundToDouble()
             ? _liters.round().toString()

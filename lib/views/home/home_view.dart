@@ -5,6 +5,17 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final headerHeight = context.screenHeight * 0.33;
+    final pointsCardHeight =
+        (context.screenHeight * 0.27).clamp(200.0, 280.0);
+    final pointsCardTop = communityDashboardStackContentTop(
+      context,
+      screenHeightFraction: 0.20,
+      minContentTop: householdHomeBannerTextSafeBottom(context),
+    );
+    final listTopInset =
+        (pointsCardTop + pointsCardHeight - headerHeight).clamp(24.0, 400.0);
+
     return Scaffold(
       body: Stack(
         clipBehavior: Clip.none,
@@ -15,7 +26,7 @@ class HomeView extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                  height: context.screenHeight * 0.33,
+                  height: headerHeight,
                   width: double.infinity,
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 80),
 
@@ -82,7 +93,7 @@ class HomeView extends StatelessWidget {
                     physics: AlwaysScrollableScrollPhysics(),
                     padding: EdgeInsets.symmetric(horizontal: 20),
                     children: [
-                      (context.screenHeight * 0.16).clamp(100.0, 150.0).ph,
+                      listTopInset.ph,
                       Text(
                         'Services Menu',
                         style: TextStyle(
@@ -190,12 +201,12 @@ class HomeView extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: context.screenHeight * 0.20,
+            top: pointsCardTop,
             left: 20,
             right: 20,
             child: Container(
               width: double.infinity,
-              height: (context.screenHeight * 0.27).clamp(200.0, 280.0),
+              height: pointsCardHeight,
               decoration: BoxDecoration(
                 color: Colors.black,
                 borderRadius: BorderRadius.circular(23),

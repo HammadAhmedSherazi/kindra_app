@@ -39,7 +39,10 @@ class _DriverTransactionHistoryViewState
   @override
   Widget build(BuildContext context) {
     final horizontalPadding = context.screenWidth * 0.05;
-    final contentTop = context.screenHeight * 0.26;
+    final contentTop = communityDashboardStackContentTop(
+      context,
+      screenHeightFraction: 0.26,
+    );
 
     return Scaffold(
       backgroundColor: const Color(0xffF9FAFC),
@@ -57,7 +60,6 @@ class _DriverTransactionHistoryViewState
               onLogout: () {},
               showNotificationIcon: true,
               onNotificationTap: () => AppRouter.push(const NotificationView()),
-              height: 250,
             ),
             Positioned(
               top: contentTop,

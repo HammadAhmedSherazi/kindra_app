@@ -6,7 +6,7 @@ class DriverImpactTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final contentTop = context.screenHeight * 0.22;
+    final contentTop = communityDashboardStackContentTop(context);
     final horizontalPadding = context.screenWidth * 0.05;
 
     return SizedBox(
@@ -53,7 +53,7 @@ class DriverImpactTab extends StatelessWidget {
                       Expanded(
                         child: _buildImpactStatCard(
                           context,
-                          icon: Assets.kindraLeaveIcon,
+                          icon: Assets.environmentImpactIcon,
                           value: '4,250',
                           subLabel: 'This Month',
                           label: 'Completed Pickups',
@@ -76,8 +76,10 @@ class DriverImpactTab extends StatelessWidget {
   }
 
   Widget _buildTotalOilCollectedCard(BuildContext context) {
+    // Same dual-series bar display as [BusinessImpactTab] Total Oil Collected.
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-    const values = [450.0, 480.0, 470.0, 490.0, 490.0, 500.0];
+    const values1 = [455.0, 485.0, 475.0, 495.0, 495.0, 505.0];
+    const values2 = [50.0, 50.0, 50.0, 40.0, 40.0, 30.0];
     const totalLiters = '2,730 Liters';
 
     return Container(
@@ -94,7 +96,7 @@ class DriverImpactTab extends StatelessWidget {
         ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -122,8 +124,12 @@ class DriverImpactTab extends StatelessWidget {
               labels: months,
               series: [
                 BarChartSeries(
-                  values: values,
+                  values: values1,
                   color: const Color(0xFFE5A842),
+                ),
+                BarChartSeries(
+                  values: values2,
+                  color: const Color(0xFF0A4D59),
                 ),
               ],
               maxY: 600,

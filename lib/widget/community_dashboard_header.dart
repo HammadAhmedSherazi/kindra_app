@@ -1,4 +1,91 @@
+import 'dart:math' as math;
+
 import '../export_all.dart';
+
+/// Default [CommunityDashboardHeader.height] when the constructor default is used.
+const double kDefaultCommunityDashboardHeaderHeight = 250;
+
+/// Approximate Y (from screen top) just below [CommunityDashboardHeader] title copy,
+/// so overlapping cards can sit in the green band without hiding text.
+double communityDashboardHeaderTextSafeBottom(
+  BuildContext context, {
+  bool hasSubtitle = true,
+  bool hasSectionTitle = true,
+  bool hasHeaderCaption = false,
+}) {
+  final pad = MediaQuery.paddingOf(context).top;
+  var y = pad + 8;
+  y += 38;
+  if (hasSubtitle) {
+    y += 4 + 26;
+  }
+  if (hasSectionTitle) {
+    y += hasSubtitle ? 8 : 12;
+    y += 34;
+  }
+  if (hasHeaderCaption) {
+    y += 6 + 20;
+  }
+  return y + 12;
+}
+
+/// Same idea for [CoastalGroupHeader] (logo + flow + section).
+double coastalGroupHeaderTextSafeBottom(
+  BuildContext context, {
+  bool hasSectionTitle = true,
+}) {
+  final pad = MediaQuery.paddingOf(context).top;
+  var y = pad + 8 + 34 + 4 + 22 + 8;
+  if (hasSectionTitle) {
+    y += 30;
+  }
+  return y + 12;
+}
+
+/// Household [HomeView] green strip (greeting block, not Kindra header widget).
+double householdHomeBannerTextSafeBottom(BuildContext context) {
+  final pad = MediaQuery.paddingOf(context).top;
+  const bodyStartPadding = 80.0;
+  const greetingBlock = 56.0;
+  return math.max(bodyStartPadding + greetingBlock + 8, pad + 80);
+}
+
+/// [PointsView] compact green header (back + title row).
+double pointsScreenHeaderTextSafeBottom(BuildContext context) {
+  final pad = MediaQuery.paddingOf(context).top;
+  return pad + 16 + 48 + 12;
+}
+
+/// Top offset for a [Stack] body that should **overlap** the green header stylishly,
+/// but never start high enough to cover header text.
+///
+/// Uses `max(screenHeight * [screenHeightFraction], text-safe floor)`.
+double communityDashboardStackContentTop(
+  BuildContext context, {
+  double screenHeightFraction = 0.22,
+  double? minContentTop,
+  bool hasSubtitle = true,
+  bool hasSectionTitle = true,
+  bool hasHeaderCaption = false,
+  bool coastalHeaderLayout = false,
+  bool coastalHasSectionTitle = true,
+}) {
+  final mediaHeight = MediaQuery.sizeOf(context).height;
+  final ratioTop = mediaHeight * screenHeightFraction;
+  final safe = minContentTop ??
+      (coastalHeaderLayout
+          ? coastalGroupHeaderTextSafeBottom(
+              context,
+              hasSectionTitle: coastalHasSectionTitle,
+            )
+          : communityDashboardHeaderTextSafeBottom(
+              context,
+              hasSubtitle: hasSubtitle,
+              hasSectionTitle: hasSectionTitle,
+              hasHeaderCaption: hasHeaderCaption,
+            ));
+  return math.max(ratioTop, safe);
+}
 
 /// Generic header for community dashboard screens.
 /// Use [subtitle] for the small label (e.g. "Community Dashboard"),
@@ -11,7 +98,7 @@ class CommunityDashboardHeader extends StatelessWidget {
     this.subtitle = 'Community Dashboard',
     this.sectionTitle = '',
     this.zoneLabel = 'Green Zone',
-    this.height = 250,
+    this.height = kDefaultCommunityDashboardHeaderHeight,
     this.showZoneLabel = true,
     this.logoutTextColor,
     required this.onLogout,

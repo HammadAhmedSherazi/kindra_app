@@ -11,7 +11,10 @@ class BusinessPaymentTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final horizontalPadding = context.screenWidth * 0.05;
-    final contentTop = context.screenHeight * _contentTopRatio;
+    final contentTop = communityDashboardStackContentTop(
+      context,
+      screenHeightFraction: _contentTopRatio,
+    );
 
     return SizedBox(
       width: double.infinity,

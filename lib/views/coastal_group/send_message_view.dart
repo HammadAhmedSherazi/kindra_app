@@ -22,7 +22,13 @@ class _SendMessageViewState extends ConsumerState<SendMessageView> {
   @override
   Widget build(BuildContext context) {
     final horizontalPadding = context.screenWidth * 0.05;
-    final contentTop = context.screenHeight * 0.24;
+    final headerHeight = context.screenHeight * 0.30;
+    final contentTop = communityDashboardStackContentTop(
+      context,
+      screenHeightFraction: 0.24,
+      coastalHeaderLayout: true,
+      coastalHasSectionTitle: false,
+    );
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
@@ -34,7 +40,7 @@ class _SendMessageViewState extends ConsumerState<SendMessageView> {
           children: [
             CoastalGroupHeader(
               sectionTitle: '',
-              height: context.screenHeight * 0.30,
+              height: headerHeight,
               onNotificationTap: () => AppRouter.push(const NotificationView()),
               // leading: GestureDetector(
               //   onTap: () => AppRouter.back(),

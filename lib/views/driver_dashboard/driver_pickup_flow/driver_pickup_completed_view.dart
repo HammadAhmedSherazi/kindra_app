@@ -18,7 +18,6 @@ class DriverPickupCompletedView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final horizontalPadding = context.screenWidth * 0.05;
-    final contentTop = context.screenHeight * 0.20;
     final litersLabel =
         collectedLiters == collectedLiters.roundToDouble()
             ? collectedLiters.round().toString()

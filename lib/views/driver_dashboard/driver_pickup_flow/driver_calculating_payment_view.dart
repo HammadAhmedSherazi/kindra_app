@@ -25,7 +25,11 @@ class _DriverCalculatingPaymentViewState
   @override
   Widget build(BuildContext context) {
     final horizontalPadding = context.screenWidth * 0.05;
-    final contentTop = context.screenHeight * 0.20;
+    final contentTop = communityDashboardStackContentTop(
+      context,
+      screenHeightFraction: 0.20,
+      hasSectionTitle: false,
+    );
 
     return Scaffold(
       backgroundColor: const Color(0xffF9FAFC),

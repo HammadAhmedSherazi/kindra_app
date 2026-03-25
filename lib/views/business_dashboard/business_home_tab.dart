@@ -29,7 +29,7 @@ class _BusinessHomeTabState extends State<BusinessHomeTab>
   @override
   Widget build(BuildContext context) {
     final horizontalPadding = context.screenWidth * 0.05;
-    final contentTop = context.screenHeight * 0.22;
+    final contentTop = communityDashboardStackContentTop(context);
 
     return SizedBox(
       width: double.infinity,

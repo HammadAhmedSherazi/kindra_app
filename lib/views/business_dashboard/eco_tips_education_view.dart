@@ -8,7 +8,10 @@ class EcoTipsEducationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final horizontalPadding = context.screenWidth * 0.05;
-    final contentTop = context.screenHeight * 0.23;
+    final contentTop = communityDashboardStackContentTop(
+      context,
+      screenHeightFraction: 0.23,
+    );
 
     return Scaffold(
       backgroundColor: const Color(0xffF9FAFC),

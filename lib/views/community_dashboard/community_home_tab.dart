@@ -6,8 +6,11 @@ class CommunityHomeTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final horizontalPadding = context.screenWidth * 0.05;
-    final oilCardTop = context.screenHeight * 0.22;
-    final gridTop = context.screenHeight * 0.39;
+    final oilCardTop = communityDashboardStackContentTop(
+      context,
+      hasSectionTitle: false,
+    );
+    final gridTop = oilCardTop + context.screenHeight * (0.39 - 0.22);
     final itemWidth = (context.screenWidth - horizontalPadding * 2 - 12) / 2;
     final itemHeight = context.screenHeight * 0.18;
     final gridAspectRatio = (itemWidth / itemHeight).clamp(0.7, 1.05);

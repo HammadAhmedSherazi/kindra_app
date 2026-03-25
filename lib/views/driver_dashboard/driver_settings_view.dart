@@ -13,13 +13,21 @@ class _DriverSettingsViewState extends State<DriverSettingsView> {
   bool _notificationsOn = true;
   bool _darkModeOn = false;
 
+  static const double _settingsCardBlockHeight = 258;
+  static const double _belowSettingsCardGap = 14;
+
   @override
   Widget build(BuildContext context) {
     final horizontalPadding = context.screenWidth * 0.05;
-    final contentTop = kDriverProfileHeaderHeight + 24;
+    final settingsCardTop = communityDashboardStackContentTop(
+      context,
+      hasSubtitle: false,
+    );
+    final scrollBodyTop =
+        settingsCardTop + _settingsCardBlockHeight + _belowSettingsCardGap;
 
     return Scaffold(
-      backgroundColor: const Color(0xffF9FAFC),
+      backgroundColor: Colors.white,
       bottomNavigationBar: const DriverFlowBottomNavBar(currentIndex: 4),
       body: Stack(
         clipBehavior: Clip.none,
@@ -43,82 +51,13 @@ class _DriverSettingsViewState extends State<DriverSettingsView> {
             child: SingleChildScrollView(
               padding: EdgeInsets.fromLTRB(
                 horizontalPadding,
-                contentTop,
+                scrollBodyTop,
                 horizontalPadding,
                 24,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.grey.shade200),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.06),
-                          blurRadius: 10,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        _toggleTile(
-                          context,
-                          label: 'Notification',
-                          value: _notificationsOn,
-                          onChanged: (v) => setState(() => _notificationsOn = v),
-                        ),
-                        Divider(height: 1, color: Colors.grey.shade200),
-                        _navigationTile(
-                          context,
-                          label: 'Language',
-                          trailing: 'English (US)',
-                          onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Language selection coming soon'),
-                              ),
-                            );
-                          },
-                        ),
-                        Divider(height: 1, color: Colors.grey.shade200),
-                        _toggleTile(
-                          context,
-                          label: 'Dark Mode',
-                          value: _darkModeOn,
-                          onChanged: (v) => setState(() => _darkModeOn = v),
-                        ),
-                        Divider(height: 1, color: Colors.grey.shade200),
-                        Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            onTap: () => showLogoutDialog(context),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 18,
-                                vertical: 16,
-                              ),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    'Logout',
-                                    style: context.robotoFlexSemiBold(
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  32.ph,
                   CustomButtonWidget(
                     label: 'Save Changes',
                     onPressed: () => AppRouter.back(),
@@ -127,6 +66,83 @@ class _DriverSettingsViewState extends State<DriverSettingsView> {
                     textColor: Colors.white,
                   ),
                 ],
+              ),
+            ),
+          ),
+          Positioned(
+            top: settingsCardTop,
+            left: horizontalPadding,
+            right: horizontalPadding,
+            child: _settingsOverlapCard(context),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _settingsOverlapCard(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade200),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          _toggleTile(
+            context,
+            label: 'Notification',
+            value: _notificationsOn,
+            onChanged: (v) => setState(() => _notificationsOn = v),
+          ),
+          Divider(height: 1, color: Colors.grey.shade200),
+          _navigationTile(
+            context,
+            label: 'Language',
+            trailing: 'English (US)',
+            onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Language selection coming soon'),
+                ),
+              );
+            },
+          ),
+          Divider(height: 1, color: Colors.grey.shade200),
+          _toggleTile(
+            context,
+            label: 'Dark Mode',
+            value: _darkModeOn,
+            onChanged: (v) => setState(() => _darkModeOn = v),
+          ),
+          Divider(height: 1, color: Colors.grey.shade200),
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () => showLogoutDialog(context),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 18,
+                  vertical: 16,
+                ),
+                child: Row(
+                  children: [
+                    Text(
+                      'Logout',
+                      style: context.robotoFlexSemiBold(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -142,7 +158,7 @@ class _DriverSettingsViewState extends State<DriverSettingsView> {
     required ValueChanged<bool> onChanged,
   }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
       child: Row(
         children: [
           Expanded(

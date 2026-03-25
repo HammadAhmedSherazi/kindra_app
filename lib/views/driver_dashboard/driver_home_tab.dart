@@ -5,10 +5,22 @@ import '../../export_all.dart';
 class DriverHomeTab extends StatelessWidget {
   const DriverHomeTab({super.key});
 
+  /// Same shape as [DriverRequestsTab] demo rows — opens pickup detail on tap.
+  static const DriverPickupRequestData _previewPickupData =
+      DriverPickupRequestData(
+    locationName: 'Mapco Gas station',
+    areaName: 'Arcata East',
+    fullAddress: 'Street 4, Road 8, USA',
+    timeSlot: '9:00 AM - 10:00 AM',
+    quantity: '800 Liters',
+    imageAsset: Assets.usedCookingOilCard,
+    distanceKm: '4',
+  );
+
   @override
   Widget build(BuildContext context) {
     final horizontalPadding = context.screenWidth * 0.05;
-    final contentTop = context.screenHeight * 0.22;
+    final contentTop = communityDashboardStackContentTop(context);
 
     return SizedBox(
       width: double.infinity,
@@ -218,140 +230,27 @@ class DriverHomeTab extends StatelessWidget {
           ],
         ),
         12.ph,
-        _buildPickupRequestCard(
-          context,
-          locationName: 'Mapco Gas station',
-          address: 'Arcata East',
-          timeSlot: '9:00 AM - 10:00 AM',
-          quantity: '800 Liters',
-          imageAsset: Assets.usedCookingOilCard,
+        DriverPickupRequestCard(
+          data: _previewPickupData,
+          onTap: () => AppRouter.push(
+            const DriverPickupDetailView(data: _previewPickupData),
+          ),
         ),
         12.ph,
-        _buildPickupRequestCard(
-          context,
-          locationName: 'Mapco Gas station',
-          address: 'Arcata East',
-          timeSlot: '9:00 AM - 10:00 AM',
-          quantity: '800 Liters',
-          imageAsset: Assets.usedCookingOilCard,
+        DriverPickupRequestCard(
+          data: _previewPickupData,
+          onTap: () => AppRouter.push(
+            const DriverPickupDetailView(data: _previewPickupData),
+          ),
         ),
         12.ph,
-        _buildPickupRequestCard(
-          context,
-          locationName: 'Mapco Gas station',
-          address: 'Arcata East',
-          timeSlot: '9:00 AM - 10:00 AM',
-          quantity: '800 Liters',
-          imageAsset: Assets.usedCookingOilCard,
+        DriverPickupRequestCard(
+          data: _previewPickupData,
+          onTap: () => AppRouter.push(
+            const DriverPickupDetailView(data: _previewPickupData),
+          ),
         ),
       ],
-    );
-  }
-
-  Widget _buildPickupRequestCard(
-    BuildContext context, {
-    required String locationName,
-    required String address,
-    required String timeSlot,
-    required String quantity,
-    required String imageAsset,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.asset(
-                  imageAsset,
-                  width: 72,
-                  height: 72,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              12.pw,
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      locationName,
-                      style: context.robotoFlexBold(fontSize: 16, color: Colors.black),
-                    ),
-                    6.ph,
-                    Row(
-                      children: [
-                        Icon(Icons.location_on_outlined, size: 14, color: Colors.grey.shade600),
-                        4.pw,
-                        Text(
-                          address,
-                          style: context.robotoFlexRegular(fontSize: 12, color: Colors.black87),
-                        ),
-                      ],
-                    ),
-                    4.ph,
-                    Row(
-                      children: [
-                        Icon(Icons.access_time, size: 14, color: Colors.grey.shade600),
-                        4.pw,
-                        Text(
-                          timeSlot,
-                          style: context.robotoFlexRegular(fontSize: 12, color: Colors.black87),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Text(
-                quantity,
-                style: context.robotoFlexSemiBold(fontSize: 13, color: Colors.black87),
-              ),
-            ],
-          ),
-          12.ph,
-          Row(
-            children: [
-              Expanded(
-                child: CustomButtonWidget(
-                  label: 'Accept',
-                  onPressed: () {},
-                  variant: CustomButtonVariant.secondary,
-                  backgroundColor: const Color(0xff2F2F2F),
-                  height: 40,
-                  expandWidth: false,
-                ),
-              ),
-              12.pw,
-              Expanded(
-                child: CustomButtonWidget(
-                  label: 'Reject',
-                  onPressed: () {},
-                  variant: CustomButtonVariant.secondary,
-                  backgroundColor: Colors.red.shade400,
-                  height: 40,
-                  expandWidth: false,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
     );
   }
 }

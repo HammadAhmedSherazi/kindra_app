@@ -13,7 +13,10 @@ class _CommunityMemberTabState extends ConsumerState<CommunityMemberTab> {
   @override
   Widget build(BuildContext context) {
     final horizontalPadding = context.screenWidth * 0.05;
-    final contentTop = context.screenHeight * 0.23;
+    final contentTop = communityDashboardStackContentTop(
+      context,
+      screenHeightFraction: 0.23,
+    );
 
     return SizedBox(
       width: double.infinity,

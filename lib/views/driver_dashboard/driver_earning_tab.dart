@@ -8,7 +8,7 @@ class DriverEarningTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final contentTop = context.screenHeight * 0.22;
+    final contentTop = communityDashboardStackContentTop(context);
     final horizontalPadding = context.screenWidth * 0.05;
     const bottomButtonsHeight = 124.0;
 
