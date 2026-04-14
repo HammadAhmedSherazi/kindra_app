@@ -1,7 +1,6 @@
 import '../../../export_all.dart';
 
 import 'driver_pickup_flow_shared_widgets.dart';
-import 'driver_upload_photos_view.dart';
 
 class DriverEnterCollectedQuantityView extends StatefulWidget {
   const DriverEnterCollectedQuantityView({

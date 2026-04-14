@@ -1,6 +1,5 @@
 import '../../../export_all.dart';
 
-import 'driver_earnings_updated_view.dart';
 import 'driver_pickup_flow_shared_widgets.dart';
 
 class DriverProcessingPaymentView extends StatefulWidget {
