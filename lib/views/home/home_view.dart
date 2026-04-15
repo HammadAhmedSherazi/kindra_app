@@ -41,7 +41,7 @@ class HomeView extends StatelessWidget {
                             Consumer(
                               builder: (context, ref, _) {
                                 final displayName = ref.watch(
-                                  currentUserProfileProvider.select((async) {
+                                  currentUserBaseProvider.select((async) {
                                     final fromFirestore = async.maybeWhen(
                                       data: (p) =>
                                           (p?.displayName.isNotEmpty == true)

@@ -17,7 +17,10 @@ class CommunityImpactTab extends StatelessWidget {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          CommunityDashboardHeader(sectionTitle: 'Impact', onLogout: () {}),
+          CommunityDashboardHeader(
+            sectionTitle: 'Impact',
+            onLogout: () => showLogoutDialog(context),
+          ),
           Positioned(
             top: contentTop,
             left: horizontalPadding,

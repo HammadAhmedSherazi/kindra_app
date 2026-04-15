@@ -18,7 +18,7 @@ class _RegistrationViewState extends ConsumerState<RegistrationView> {
 
   CountryCode _selectedCountry = defaultCountryCodes.first;
   LoginUserRole _selectedUserRole = LoginUserRole.householder;
-  bool _isSubmitting = false;
+  // Loading is driven by authProvider state (MVVM-ish).
   bool _obscurePassword = true;
   final ImagePicker _imagePicker = ImagePicker();
   XFile? _profileImage;
@@ -34,29 +34,28 @@ class _RegistrationViewState extends ConsumerState<RegistrationView> {
 
   Future<void> _onSubmit() async {
     if (!_formKey.currentState!.validate()) return;
-    setState(() => _isSubmitting = true);
-    try {
-      await FirebaseAuthService.instance.signUp(
-        email: _emailController.text.trim(),
-        password: _passwordController.text,
-        displayName: _firstNameController.text.trim(),
-        phone: _mobileController.text.trim(),
-        phoneDialCode: _selectedCountry.dialCode,
-        role: _selectedUserRole,
-        profileImagePath: _profileImage?.path,
-      );
-      if (!mounted) return;
-      AppRouter.pushAndRemoveUntil(const EmailVerificationView());
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(FirebaseAuthService.messageForAuthException(e)),
-          ),
+    final ok = await ref.read(authProvider.notifier).signUp(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+          displayName: _firstNameController.text.trim(),
+          phone: _mobileController.text.trim(),
+          phoneDialCode: _selectedCountry.dialCode,
+          role: _selectedUserRole,
+          profileImagePath: _profileImage?.path,
         );
-      }
-    } finally {
-      if (mounted) setState(() => _isSubmitting = false);
+    if (!mounted) return;
+    if (ok) {
+      // Navigate immediately (uses global navigatorKey via AppRouter).
+      await Future<void>.delayed(Duration.zero);
+      if (!mounted) return;
+      // Keep registration in stack so Back works.
+      AppRouter.push(const EmailVerificationView());
+      return;
+    }
+    final err = ref.read(authProvider).errorMessage;
+    if (err != null && err.isNotEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(err)));
+      ref.read(authProvider.notifier).clearError();
     }
   }
 
@@ -97,7 +96,8 @@ class _RegistrationViewState extends ConsumerState<RegistrationView> {
   void _removePhoto() => setState(() => _profileImage = null);
 
   Future<void> _showPhotoPickerSheet() async {
-    if (_isSubmitting) return;
+    final isSubmitting = ref.read(authProvider).isSigningUp;
+    if (isSubmitting) return;
     await showModalBottomSheet<void>(
       context: context,
       backgroundColor: Colors.white,
@@ -164,6 +164,8 @@ class _RegistrationViewState extends ConsumerState<RegistrationView> {
 
   @override
   Widget build(BuildContext context) {
+    final isSubmitting =
+        ref.watch(authProvider.select((s) => s.isSigningUp));
     return Scaffold(
       backgroundColor: Colors.white,
       extendBodyBehindAppBar: true,
@@ -346,7 +348,7 @@ class _RegistrationViewState extends ConsumerState<RegistrationView> {
                 CustomButtonWidget(
                   label: 'Registration',
                   onPressed: _onSubmit,
-                  loading: _isSubmitting,
+                  loading: isSubmitting,
                 ),
                 24.ph,
                 Row(

@@ -10,10 +10,12 @@ class EmailVerificationView extends ConsumerStatefulWidget {
 }
 
 class _EmailVerificationViewState extends ConsumerState<EmailVerificationView> {
-  bool _busy = false;
+  bool _isContinuing = false;
+  bool _isResending = false;
 
   Future<void> _tryContinue() async {
-    setState(() => _busy = true);
+    if (_isContinuing || _isResending) return;
+    setState(() => _isContinuing = true);
     try {
       await FirebaseAuthService.instance.reloadCurrentUser();
       if (!mounted) return;
@@ -48,12 +50,13 @@ class _EmailVerificationViewState extends ConsumerState<EmailVerificationView> {
         );
       }
     } finally {
-      if (mounted) setState(() => _busy = false);
+      if (mounted) setState(() => _isContinuing = false);
     }
   }
 
   Future<void> _resend() async {
-    setState(() => _busy = true);
+    if (_isResending || _isContinuing) return;
+    setState(() => _isResending = true);
     try {
       await FirebaseAuthService.instance.sendVerificationEmail();
       if (mounted) {
@@ -72,7 +75,7 @@ class _EmailVerificationViewState extends ConsumerState<EmailVerificationView> {
         );
       }
     } finally {
-      if (mounted) setState(() => _busy = false);
+      if (mounted) setState(() => _isResending = false);
     }
   }
 
@@ -124,20 +127,29 @@ class _EmailVerificationViewState extends ConsumerState<EmailVerificationView> {
               CustomButtonWidget(
                 label: 'I\'ve verified — continue',
                 onPressed: _tryContinue,
-                loading: _busy,
+                loading: _isContinuing,
               ),
               16.ph,
               TextButton(
-                onPressed: _busy ? null : _resend,
-                child: Text(
-                  'Resend verification email',
-                  style: TextStyle(
-                    color: AppColors.primaryColor,
-                    fontSize: 16,
-                    fontFamily: 'Roboto Flex',
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                onPressed: (_isContinuing || _isResending) ? null : _resend,
+                child: _isResending
+                    ? SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: AppColors.primaryColor,
+                        ),
+                      )
+                    : Text(
+                        'Resend verification email',
+                        style: TextStyle(
+                          color: AppColors.primaryColor,
+                          fontSize: 16,
+                          fontFamily: 'Roboto Flex',
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
               ),
             ],
           ),

@@ -53,7 +53,7 @@ class ProfileView extends StatelessWidget {
                     Consumer(
                       builder: (context, ref, _) {
                         final photoUrl = ref.watch(
-                          currentUserProfileProvider.select(
+                          currentUserBaseProvider.select(
                             (async) => async.maybeWhen(
                               data: (p) => p?.photoUrl ?? '',
                               orElse: () => '',
@@ -61,7 +61,7 @@ class ProfileView extends StatelessWidget {
                           ),
                         );
                         final displayName = ref.watch(
-                          currentUserProfileProvider.select((async) {
+                          currentUserBaseProvider.select((async) {
                             final fromFirestore = async.maybeWhen(
                               data: (p) =>
                                   (p?.displayName.isNotEmpty == true)
@@ -82,7 +82,7 @@ class ProfileView extends StatelessWidget {
                           }),
                         );
                         final email = ref.watch(
-                          currentUserProfileProvider.select((async) {
+                          currentUserBaseProvider.select((async) {
                             final fromFirestore = async.maybeWhen(
                               data: (p) =>
                                   (p?.email.isNotEmpty == true)

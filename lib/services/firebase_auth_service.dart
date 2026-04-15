@@ -6,7 +6,7 @@ import 'dart:convert';
 
 import '../utils/enums.dart';
 import 'secure_storage.dart';
-import '../models/user_profile.dart';
+import '../models/user/user_base.dart';
 
 /// Firebase Auth + Firestore profile for Kindra.
 ///
@@ -38,8 +38,10 @@ class FirebaseAuthService {
     required LoginUserRole role,
     String? profileImagePath,
   }) async {
+    final normalizedEmail = email.trim().toLowerCase();
+
     final cred = await _auth.createUserWithEmailAndPassword(
-      email: email.trim(),
+      email: normalizedEmail,
       password: password,
     );
     final user = cred.user;
@@ -51,6 +53,24 @@ class FirebaseAuthService {
     }
 
     try {
+      // Extra safety: ensure one account per email in Firestore.
+      // Firebase Auth should already enforce this, but this protects against
+      // misconfiguration or multiple auth providers writing to the same `users` collection.
+      await _firestore.runTransaction((tx) async {
+        final emailDoc = _firestore.collection('user_emails').doc(normalizedEmail);
+        final snap = await tx.get(emailDoc);
+        if (snap.exists) {
+          throw FirebaseAuthException(
+            code: 'email-already-in-use',
+            message: 'This email is already registered.',
+          );
+        }
+        tx.set(emailDoc, {
+          'uid': user.uid,
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+      });
+
       await user.updateDisplayName(displayName.trim());
       await user.reload();
 
@@ -63,7 +83,7 @@ class FirebaseAuthService {
       }
 
       await _firestore.collection(usersCollection).doc(user.uid).set({
-        'email': email.trim(),
+        'email': normalizedEmail,
         'displayName': displayName.trim(),
         'phone': phone.trim(),
         'phoneDialCode': phoneDialCode,
@@ -71,6 +91,13 @@ class FirebaseAuthService {
         'photoUrl': photoUrl,
         'createdAt': FieldValue.serverTimestamp(),
       });
+      // Ensure role-specific profile doc exists for future role-based flows.
+      await _firestore
+          .collection(usersCollection)
+          .doc(user.uid)
+          .collection('profiles')
+          .doc(role.name)
+          .set({'createdAt': FieldValue.serverTimestamp()}, SetOptions(merge: true));
       await user.sendEmailVerification();
     } catch (e) {
       await user.delete();
@@ -80,12 +107,64 @@ class FirebaseAuthService {
     return cred;
   }
 
+  /// Recovery path: if Auth account exists but Firestore user doc was deleted,
+  /// recreate/merge the app user profile in `users/{uid}` and role profile doc.
+  Future<void> recreateFirestoreProfileForCurrentUser({
+    required String displayName,
+    required String phone,
+    required String phoneDialCode,
+    required LoginUserRole role,
+    String? profileImagePath,
+  }) async {
+    final u = _auth.currentUser;
+    if (u == null) throw StateError('No user signed in');
+
+    final normalizedEmail = (u.email ?? '').trim().toLowerCase();
+    final safeName = displayName.trim();
+
+    if (safeName.isNotEmpty && safeName != u.displayName) {
+      await u.updateDisplayName(safeName);
+      await u.reload();
+    }
+
+    var photoUrl = '';
+    if (profileImagePath != null && profileImagePath.trim().isNotEmpty) {
+      final ref = _storage.ref().child('users/${u.uid}/profile.jpg');
+      final task = await ref.putFile(File(profileImagePath));
+      photoUrl = await task.ref.getDownloadURL();
+    }
+
+    await _firestore.collection(usersCollection).doc(u.uid).set(
+      {
+        'email': normalizedEmail,
+        'displayName': safeName,
+        'phone': phone.trim(),
+        'phoneDialCode': phoneDialCode,
+        'role': role.name,
+        if (photoUrl.isNotEmpty) 'photoUrl': photoUrl,
+        'updatedAt': FieldValue.serverTimestamp(),
+      },
+      SetOptions(merge: true),
+    );
+
+    await _firestore
+        .collection(usersCollection)
+        .doc(u.uid)
+        .collection('profiles')
+        .doc(role.name)
+        .set({'updatedAt': FieldValue.serverTimestamp()}, SetOptions(merge: true));
+
+    if (!isEmailVerified) {
+      await u.sendEmailVerification();
+    }
+  }
+
   Future<UserCredential> signIn({
     required String email,
     required String password,
   }) {
     return _auth.signInWithEmailAndPassword(
-      email: email.trim(),
+      email: email.trim().toLowerCase(),
       password: password,
     );
   }
@@ -114,14 +193,14 @@ class FirebaseAuthService {
     return loginUserRoleFromName(doc.data()?['role'] as String?);
   }
 
-  Future<UserProfile?> fetchCurrentUserProfile() async {
+  Future<UserBase?> fetchCurrentUserProfile() async {
     final u = _auth.currentUser;
     if (u == null) return null;
     final doc = await _firestore.collection(usersCollection).doc(u.uid).get();
     if (!doc.exists) return null;
     final data = doc.data();
     if (data == null) return null;
-    return UserProfile.fromFirestore(uid: u.uid, data: data);
+    return UserBase.fromFirestore(uid: u.uid, data: data);
   }
 
   Future<void> recordSuccessfulLogin(LoginUserRole selectedRole) async {
@@ -197,8 +276,19 @@ class FirebaseAuthService {
     }
   }
 
-  Future<void> sendPasswordResetEmail(String email) =>
-      _auth.sendPasswordResetEmail(email: email.trim());
+  Future<void> sendPasswordResetEmail(String email) => _auth
+      .sendPasswordResetEmail(email: email.trim().toLowerCase());
+
+  /// Completes password reset using the `oobCode` from the Firebase email link.
+  Future<void> confirmPasswordReset({
+    required String oobCode,
+    required String newPassword,
+  }) {
+    return _auth.confirmPasswordReset(
+      code: oobCode,
+      newPassword: newPassword,
+    );
+  }
 
   static String messageForAuthException(Object error) {
     if (error is FirebaseAuthException) {
@@ -219,6 +309,10 @@ class FirebaseAuthService {
           return 'Invalid credentials';
         case 'too-many-requests':
           return 'Too many attempts. Try again later.';
+        case 'expired-action-code':
+          return 'This reset link has expired. Request a new one.';
+        case 'invalid-action-code':
+          return 'This reset link is invalid or was already used.';
         default:
           return error.message?.isNotEmpty == true
               ? error.message!

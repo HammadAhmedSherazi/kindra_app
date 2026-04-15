@@ -68,7 +68,7 @@ class _PickupScheduleViewState extends ConsumerState<PickupScheduleView> {
               height: _headerHeight,
               showZoneLabel: false,
               logoutTextColor: AppColors.primaryColor,
-              onLogout: () {},
+              onLogout: () => showLogoutDialog(context),
             ),
             Positioned(
               top: _contentTop,

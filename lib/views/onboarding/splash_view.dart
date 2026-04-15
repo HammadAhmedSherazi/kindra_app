@@ -24,7 +24,12 @@ class _SplashViewState extends State<SplashView> {
       if (!mounted) return;
 
       if (!FirebaseAuthService.instance.isEmailVerified) {
-        AppRouter.pushReplacement(const EmailVerificationView());
+        // Avoid forcing verification screen on every cold start.
+        // User can verify and then login again.
+        await FirebaseAuthService.instance.signOut();
+        await FirebaseAuthService.instance.clearLocalAuthCache();
+        if (!mounted) return;
+        AppRouter.pushReplacement(const LoginView());
         return;
       }
 

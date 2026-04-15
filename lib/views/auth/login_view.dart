@@ -11,7 +11,6 @@ class _LoginViewState extends ConsumerState<LoginView> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _isSubmitting = false;
   bool _obscurePassword = true;
   LoginUserRole _selectedUserRole = LoginUserRole.householder;
 
@@ -24,57 +23,50 @@ class _LoginViewState extends ConsumerState<LoginView> {
 
   Future<void> _onSubmit() async {
     if (!_formKey.currentState!.validate()) return;
-    setState(() => _isSubmitting = true);
-    try {
-      await FirebaseAuthService.instance.signIn(
-        email: _emailController.text.trim(),
-        password: _passwordController.text,
-      );
-      await FirebaseAuthService.instance.reloadCurrentUser();
-      if (!mounted) return;
+    final role = await ref.read(authProvider.notifier).login(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+          selectedRole: _selectedUserRole,
+        );
+    if (!mounted) return;
 
-      if (!FirebaseAuthService.instance.isEmailVerified) {
-        AppRouter.pushAndRemoveUntil(const EmailVerificationView());
-        return;
-      }
-
-      final role = await FirebaseAuthService.instance.fetchRoleForCurrentUser();
-      if (!mounted) return;
-      if (role == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Your profile is incomplete. Please register again or contact support.',
-            ),
-          ),
-        );
-        await FirebaseAuthService.instance.signOut();
-        return;
-      }
-      if (role != _selectedUserRole) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Invalid credentials')),
-        );
-        await FirebaseAuthService.instance.signOut();
-        return;
-      }
-      await FirebaseAuthService.instance.recordSuccessfulLogin(_selectedUserRole);
-      navigateToDashboardForRole(role);
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(FirebaseAuthService.messageForAuthException(e)),
-          ),
-        );
-      }
-    } finally {
-      if (mounted) setState(() => _isSubmitting = false);
+    final authState = ref.read(authProvider);
+    if (authState.needsEmailVerification) {
+      // Keep previous screen in stack so Back works.
+      AppRouter.push(const EmailVerificationView());
+      return;
     }
+
+    if (role != null) {
+      navigateToDashboardForRole(role);
+      return;
+    }
+
+    // Errors are shown via ref.listen in build().
   }
 
   @override
   Widget build(BuildContext context) {
+    final isSubmitting =
+        ref.watch(authProvider.select((s) => s.isLoggingIn));
+
+    ref.listen<String?>(
+      authProvider.select((s) => s.errorMessage),
+      (previous, next) {
+        if (next == null || next.trim().isEmpty) return;
+        if (previous == next) return;
+        final ctx = AppRouter.navKey.currentContext;
+        if (ctx != null) {
+          Helper.showMessage(
+            ctx,
+            message: next,
+            backgroundColor: Colors.red,
+          );
+        }
+        ref.read(authProvider.notifier).clearError();
+      },
+    );
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -226,12 +218,12 @@ class _LoginViewState extends ConsumerState<LoginView> {
                   ),
                 ),
                 24.ph,
-                _buildRoleDropdown(context),
+                _buildRoleDropdown(context, isSubmitting: isSubmitting),
                 24.ph,
                 CustomButtonWidget(
                   label: context.tr('login'),
                   onPressed: _onSubmit,
-                  loading: _isSubmitting,
+                  loading: isSubmitting,
                 ),
                 50.ph,
                 Row(
@@ -285,7 +277,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
     );
   }
 
-  Widget _buildRoleDropdown(BuildContext context) {
+  Widget _buildRoleDropdown(BuildContext context, {required bool isSubmitting}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -327,7 +319,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                     ),
                   )
                   .toList(),
-              onChanged: _isSubmitting
+              onChanged: isSubmitting
                   ? null
                   : (LoginUserRole? value) {
                       if (value != null) {

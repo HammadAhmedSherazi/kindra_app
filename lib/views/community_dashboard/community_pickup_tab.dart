@@ -19,7 +19,7 @@ class CommunityPickupTab extends StatelessWidget {
         children: [
           CommunityDashboardHeader(
             sectionTitle: 'Pickups',
-            onLogout: () {},
+            onLogout: () => showLogoutDialog(context),
           ),
           Positioned(
             top: contentTop,

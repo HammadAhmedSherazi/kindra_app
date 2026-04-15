@@ -23,7 +23,7 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
   bool _hydrated = false;
   bool _hydratedFromAuthFallback = false;
   String? _hydratedUid;
-  ProviderSubscription<AsyncValue<UserProfile?>>? _profileSub;
+  ProviderSubscription<AsyncValue<UserBase?>>? _profileSub;
 
   @override
   void initState() {
@@ -37,8 +37,8 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
 
     // Listen to Firestore-backed profile changes and hydrate when data arrives.
     // Use listenManual here (ref.listen is only allowed in build()).
-    _profileSub = ref.listenManual<AsyncValue<UserProfile?>>(
-      currentUserProfileProvider,
+    _profileSub = ref.listenManual<AsyncValue<UserBase?>>(
+      currentUserBaseProvider,
       (previous, next) {
         next.whenOrNull(data: (p) => _maybeHydrate(p));
       },
@@ -52,7 +52,7 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
     });
   }
 
-  void _maybeHydrate(UserProfile? p) {
+  void _maybeHydrate(UserBase? p) {
     final uid = FirebaseAuthService.instance.currentUser?.uid;
     final authName = FirebaseAuthService.instance.currentUserDisplayName ?? '';
     final authEmail = FirebaseAuthService.instance.currentUserEmail ?? '';
@@ -209,7 +209,7 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
 
   @override
   Widget build(BuildContext context) {
-    ref.watch(currentUserProfileProvider);
+    ref.watch(currentUserBaseProvider);
 
     return CustomInnerScreenTemplate(
       title: 'Edit Profile',

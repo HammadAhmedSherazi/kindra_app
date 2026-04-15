@@ -10,7 +10,6 @@ class ResetPasswordView extends ConsumerStatefulWidget {
 class _ResetPasswordViewState extends ConsumerState<ResetPasswordView> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
-  bool _isSubmitting = false;
 
   @override
   void dispose() {
@@ -20,34 +19,30 @@ class _ResetPasswordViewState extends ConsumerState<ResetPasswordView> {
 
   Future<void> _onSubmit() async {
     if (!_formKey.currentState!.validate()) return;
-    setState(() => _isSubmitting = true);
-    try {
-      await FirebaseAuthService.instance
-          .sendPasswordResetEmail(_emailController.text.trim());
-      if (!mounted) return;
+    final ok = await ref
+        .read(authProvider.notifier)
+        .sendPasswordReset(_emailController.text.trim());
+    if (!mounted) return;
+    if (ok) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text(
-            'Check your email for a password reset link (Firebase sends a link, not an OTP).',
-          ),
+          content: Text('Check your email for a password reset link.'),
         ),
       );
       AppRouter.back();
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(FirebaseAuthService.messageForAuthException(e)),
-          ),
-        );
-      }
-    } finally {
-      if (mounted) setState(() => _isSubmitting = false);
+      return;
+    }
+    final err = ref.read(authProvider).errorMessage;
+    if (err != null && err.isNotEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(err)));
+      ref.read(authProvider.notifier).clearError();
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final isSubmitting =
+        ref.watch(authProvider.select((s) => s.isResettingPassword));
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
@@ -150,7 +145,7 @@ class _ResetPasswordViewState extends ConsumerState<ResetPasswordView> {
                 CustomButtonWidget(
                   label: 'Get Started',
                   onPressed: _onSubmit,
-                  loading: _isSubmitting,
+                  loading: isSubmitting,
                 ),
               
               ],

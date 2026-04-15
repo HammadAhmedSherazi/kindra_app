@@ -23,7 +23,9 @@ class CommunityHomeTab extends StatelessWidget {
             // crossAxisAlignment: CrossAxisAlignment.stretch,
             clipBehavior: Clip.none,
             children: [
-              CommunityDashboardHeader(onLogout: () {}),
+              CommunityDashboardHeader(
+                onLogout: () => showLogoutDialog(context),
+              ),
               Positioned(
                 top: oilCardTop,
                 left: horizontalPadding,

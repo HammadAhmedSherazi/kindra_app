@@ -22,12 +22,22 @@ export 'models/news_model.dart';
 export 'models/notification_data_model.dart';
 export 'models/user_data_model.dart';
 export 'models/user_profile.dart';
+export 'models/user/user_base.dart';
+export 'models/user/role_profiles.dart';
 
 // Providers
 export 'providers/auth_provider/auth_provider.dart';
 export 'providers/auth_provider/auth_state.dart';
 export 'providers/navigation_provider/navigation_provider.dart';
 export 'providers/user_profile_provider.dart';
+export 'providers/user_role_profile_provider.dart';
+
+// Repositories
+export 'repositories/user_repository.dart';
+
+// ViewModels
+export 'viewmodels/user_edit_state.dart';
+export 'viewmodels/user_edit_viewmodel.dart';
 
 // Services
 export 'services/base_api_services.dart';
@@ -58,6 +68,7 @@ export 'views/home/home_view.dart';
 export 'views/navigation/navigation_view.dart';
 export 'views/onboarding/onboarding_view.dart';
 export 'views/profile/edit_profile_view.dart';
+export 'views/profile/role_profile_edit_view.dart';
 export 'views/profile/profile_detail_view.dart';
 export 'views/profile/profile_view.dart';
 export 'views/reward/reward_view.dart';

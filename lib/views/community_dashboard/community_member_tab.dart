@@ -26,7 +26,7 @@ class _CommunityMemberTabState extends ConsumerState<CommunityMemberTab> {
         children: [
           CommunityDashboardHeader(
             sectionTitle: 'Members Overview',
-            onLogout: () {},
+            onLogout: () => showLogoutDialog(context),
           ),
           Positioned(
             top: contentTop,

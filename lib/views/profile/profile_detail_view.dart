@@ -18,7 +18,7 @@ class ProfileDetailView extends StatelessWidget {
               Consumer(
                 builder: (context, ref, _) {
                   final phoneDial = ref.watch(
-                    currentUserProfileProvider.select(
+                    currentUserBaseProvider.select(
                       (async) => async.maybeWhen(
                         data: (p) => p?.phoneDialCode ?? '',
                         orElse: () => '',
@@ -26,7 +26,7 @@ class ProfileDetailView extends StatelessWidget {
                     ),
                   );
                   final phone = ref.watch(
-                    currentUserProfileProvider.select(
+                    currentUserBaseProvider.select(
                       (async) => async.maybeWhen(
                         data: (p) => p?.phone ?? '',
                         orElse: () => '',
@@ -34,7 +34,7 @@ class ProfileDetailView extends StatelessWidget {
                     ),
                   );
                   final address = ref.watch(
-                    currentUserProfileProvider.select(
+                    currentUserBaseProvider.select(
                       (async) => async.maybeWhen(
                         data: (p) => p?.address ?? '',
                         orElse: () => '',
@@ -42,7 +42,7 @@ class ProfileDetailView extends StatelessWidget {
                     ),
                   );
                   final dob = ref.watch(
-                    currentUserProfileProvider.select(
+                    currentUserBaseProvider.select(
                       (async) => async.maybeWhen(
                         data: (p) => p?.dateOfBirth,
                         orElse: () => null,
@@ -65,7 +65,7 @@ class ProfileDetailView extends StatelessWidget {
                 child: Consumer(
                   builder: (context, ref, _) {
                     final displayName = ref.watch(
-                      currentUserProfileProvider.select((async) {
+                      currentUserBaseProvider.select((async) {
                         final fromFirestore = async.maybeWhen(
                           data: (p) => (p?.displayName.isNotEmpty == true)
                               ? p!.displayName
@@ -84,7 +84,7 @@ class ProfileDetailView extends StatelessWidget {
                       }),
                     );
                     final email = ref.watch(
-                      currentUserProfileProvider.select((async) {
+                      currentUserBaseProvider.select((async) {
                         final fromFirestore = async.maybeWhen(
                           data: (p) =>
                               (p?.email.isNotEmpty == true) ? p!.email : null,
@@ -102,7 +102,7 @@ class ProfileDetailView extends StatelessWidget {
                       }),
                     );
                     final photoUrl = ref.watch(
-                      currentUserProfileProvider.select(
+                      currentUserBaseProvider.select(
                         (async) => async.maybeWhen(
                           data: (p) => p?.photoUrl ?? '',
                           orElse: () => '',
@@ -156,11 +156,113 @@ class ProfileDetailView extends StatelessWidget {
             address: address,
             dateOfBirth: dateOfBirth,
           ),
+          20.ph,
+          _buildRoleProfileSection(context),
           28.ph,
           _buildEditProfileButton(context),
         ],
       ),
     );
+  }
+
+  Widget _buildRoleProfileSection(BuildContext context) {
+    return Consumer(
+      builder: (context, ref, _) {
+        final role = ref.watch(
+          currentUserBaseProvider.select(
+            (async) => async.maybeWhen(
+              data: (u) => u?.role,
+              orElse: () => null,
+            ),
+          ),
+        );
+        if (role == null) return const SizedBox.shrink();
+
+        final roleProfileAsync = ref.watch(currentUserRoleProfileProvider(role));
+
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.grey.shade200),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      '${role.displayName} details',
+                      style: context.robotoFlexSemiBold(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () =>
+                        AppRouter.push(RoleProfileEditView(role: role)),
+                    child: const Text('Edit'),
+                  ),
+                ],
+              ),
+              8.ph,
+              roleProfileAsync.when(
+                loading: () => const Text('Loading...'),
+                error: (error, stackTrace) =>
+                    const Text('Could not load role profile'),
+                data: (p) {
+                  if (p == null) {
+                    return const Text('No role profile yet.');
+                  }
+                  return Text(
+                    _roleProfileSummary(p),
+                    style: context.robotoFlexRegular(
+                      fontSize: 14,
+                      color: AppColors.primaryTextColor.withValues(alpha: 0.85),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  String _roleProfileSummary(RoleProfile p) {
+    switch (p.role) {
+      case LoginUserRole.householder:
+        final hp = p as HouseholderProfile;
+        return 'Household size: ${hp.householdSize ?? '-'}';
+      case LoginUserRole.communities:
+        final cp = p as CommunityProfile;
+        return 'Community name: ${cp.communityName?.trim().isNotEmpty == true ? cp.communityName : '-'}';
+      case LoginUserRole.businesses:
+        final bp = p as BusinessProfile;
+        final name =
+            bp.businessName?.trim().isNotEmpty == true ? bp.businessName : '-';
+        final cat = bp.businessCategory?.trim().isNotEmpty == true
+            ? bp.businessCategory
+            : '-';
+        return 'Business: $name\nCategory: $cat';
+      case LoginUserRole.coastalGroups:
+        final gp = p as CoastalGroupProfile;
+        return 'Group name: ${gp.groupName?.trim().isNotEmpty == true ? gp.groupName : '-'}';
+      case LoginUserRole.drivers:
+        final dp = p as DriverProfile;
+        final v = dp.vehicleNumber?.trim().isNotEmpty == true
+            ? dp.vehicleNumber
+            : '-';
+        final l = dp.licenseNumber?.trim().isNotEmpty == true
+            ? dp.licenseNumber
+            : '-';
+        return 'Vehicle: $v\nLicense: $l';
+    }
   }
 
   Widget _buildAvatarAndName(
