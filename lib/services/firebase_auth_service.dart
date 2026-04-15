@@ -6,6 +6,7 @@ import 'dart:convert';
 
 import '../utils/enums.dart';
 import 'secure_storage.dart';
+import '../models/user_profile.dart';
 
 /// Firebase Auth + Firestore profile for Kindra.
 ///
@@ -111,6 +112,16 @@ class FirebaseAuthService {
         await _firestore.collection(usersCollection).doc(u.uid).get();
     if (!doc.exists) return null;
     return loginUserRoleFromName(doc.data()?['role'] as String?);
+  }
+
+  Future<UserProfile?> fetchCurrentUserProfile() async {
+    final u = _auth.currentUser;
+    if (u == null) return null;
+    final doc = await _firestore.collection(usersCollection).doc(u.uid).get();
+    if (!doc.exists) return null;
+    final data = doc.data();
+    if (data == null) return null;
+    return UserProfile.fromFirestore(uid: u.uid, data: data);
   }
 
   Future<void> recordSuccessfulLogin(LoginUserRole selectedRole) async {

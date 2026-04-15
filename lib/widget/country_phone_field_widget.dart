@@ -73,7 +73,7 @@ class _CountryPhoneFieldWidgetState extends State<CountryPhoneFieldWidget> {
     super.didUpdateWidget(oldWidget);
     if (widget.initialCountry != null &&
         widget.initialCountry != oldWidget.initialCountry) {
-      _selectedCountry = widget.initialCountry!;
+      setState(() => _selectedCountry = widget.initialCountry!);
     }
   }
 

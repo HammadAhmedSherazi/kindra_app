@@ -2,12 +2,11 @@ import '../../export_all.dart';
 
 /// Display profile detail screen – separate from [ProfileView].
 /// Shows avatar, name, email, personal info (phone, DOB, address) and Edit Profile action.
-class ProfileDetailView extends ConsumerWidget {
+class ProfileDetailView extends StatelessWidget {
   const ProfileDetailView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final profileAsync = ref.watch(currentUserProfileProvider);
+  Widget build(BuildContext context) {
     return CustomInnerScreenTemplate(
       title: 'Profile Details',
       child: Column(
@@ -16,12 +15,108 @@ class ProfileDetailView extends ConsumerWidget {
           Stack(
             clipBehavior: Clip.none,
             children: [
-              _buildProfileCard(context, profileAsync),
+              Consumer(
+                builder: (context, ref, _) {
+                  final phoneDial = ref.watch(
+                    currentUserProfileProvider.select(
+                      (async) => async.maybeWhen(
+                        data: (p) => p?.phoneDialCode ?? '',
+                        orElse: () => '',
+                      ),
+                    ),
+                  );
+                  final phone = ref.watch(
+                    currentUserProfileProvider.select(
+                      (async) => async.maybeWhen(
+                        data: (p) => p?.phone ?? '',
+                        orElse: () => '',
+                      ),
+                    ),
+                  );
+                  final address = ref.watch(
+                    currentUserProfileProvider.select(
+                      (async) => async.maybeWhen(
+                        data: (p) => p?.address ?? '',
+                        orElse: () => '',
+                      ),
+                    ),
+                  );
+                  final dob = ref.watch(
+                    currentUserProfileProvider.select(
+                      (async) => async.maybeWhen(
+                        data: (p) => p?.dateOfBirth,
+                        orElse: () => null,
+                      ),
+                    ),
+                  );
+                  return _buildProfileCard(
+                    context,
+                    phoneDial: phoneDial,
+                    phone: phone,
+                    address: address,
+                    dateOfBirth: dob,
+                  );
+                },
+              ),
               Positioned(
                 top: -(context.screenHeight * 0.075).clamp(50.0, 80.0),
                 left: 0,
                 right: 0,
-                child: _buildAvatarAndName(context, profileAsync),
+                child: Consumer(
+                  builder: (context, ref, _) {
+                    final displayName = ref.watch(
+                      currentUserProfileProvider.select((async) {
+                        final fromFirestore = async.maybeWhen(
+                          data: (p) => (p?.displayName.isNotEmpty == true)
+                              ? p!.displayName
+                              : null,
+                          orElse: () => null,
+                        );
+                        if (fromFirestore != null &&
+                            fromFirestore.trim().isNotEmpty) {
+                          return fromFirestore;
+                        }
+                        final authName = FirebaseAuthService
+                            .instance.currentUserDisplayName;
+                        return (authName != null && authName.trim().isNotEmpty)
+                            ? authName
+                            : 'User';
+                      }),
+                    );
+                    final email = ref.watch(
+                      currentUserProfileProvider.select((async) {
+                        final fromFirestore = async.maybeWhen(
+                          data: (p) =>
+                              (p?.email.isNotEmpty == true) ? p!.email : null,
+                          orElse: () => null,
+                        );
+                        if (fromFirestore != null &&
+                            fromFirestore.trim().isNotEmpty) {
+                          return fromFirestore;
+                        }
+                        final authEmail =
+                            FirebaseAuthService.instance.currentUserEmail;
+                        return (authEmail != null && authEmail.trim().isNotEmpty)
+                            ? authEmail
+                            : '';
+                      }),
+                    );
+                    final photoUrl = ref.watch(
+                      currentUserProfileProvider.select(
+                        (async) => async.maybeWhen(
+                          data: (p) => p?.photoUrl ?? '',
+                          orElse: () => '',
+                        ),
+                      ),
+                    );
+                    return _buildAvatarAndName(
+                      context,
+                      displayName: displayName,
+                      email: email,
+                      photoUrl: photoUrl,
+                    );
+                  },
+                ),
               ),
             ],
           ),
@@ -32,7 +127,12 @@ class ProfileDetailView extends ConsumerWidget {
 
   Widget _buildProfileCard(
     BuildContext context,
-    AsyncValue<UserProfile?> profileAsync,
+    {
+    required String phoneDial,
+    required String phone,
+    required String address,
+    required DateTime? dateOfBirth,
+  }
   ) {
     final topPadding = (context.screenHeight * 0.06).clamp(44.0, 56.0);
     return Container(
@@ -49,7 +149,13 @@ class ProfileDetailView extends ConsumerWidget {
       child: Column(
         children: [
           (context.screenHeight * 0.14).clamp(100.0, 140.0).ph,
-          _buildPersonalInfoSection(context, profileAsync),
+          _buildPersonalInfoSection(
+            context,
+            phoneDial: phoneDial,
+            phone: phone,
+            address: address,
+            dateOfBirth: dateOfBirth,
+          ),
           28.ph,
           _buildEditProfileButton(context),
         ],
@@ -59,21 +165,12 @@ class ProfileDetailView extends ConsumerWidget {
 
   Widget _buildAvatarAndName(
     BuildContext context,
-    AsyncValue<UserProfile?> profileAsync,
+    {
+    required String displayName,
+    required String email,
+    required String photoUrl,
+  }
   ) {
-    final displayName = profileAsync.maybeWhen(
-      data: (p) => (p?.displayName.isNotEmpty == true) ? p!.displayName : 'User',
-      orElse: () => 'User',
-    );
-    final email = profileAsync.maybeWhen(
-      data: (p) => (p?.email.isNotEmpty == true) ? p!.email : '',
-      orElse: () => '',
-    );
-    final photoUrl = profileAsync.maybeWhen(
-      data: (p) => p?.photoUrl ?? '',
-      orElse: () => '',
-    );
-
     return Column(
       
       children: [
@@ -110,16 +207,13 @@ class ProfileDetailView extends ConsumerWidget {
 
   Widget _buildPersonalInfoSection(
     BuildContext context,
-    AsyncValue<UserProfile?> profileAsync,
+    {
+    required String phoneDial,
+    required String phone,
+    required String address,
+    required DateTime? dateOfBirth,
+  }
   ) {
-    final phoneDial = profileAsync.maybeWhen(
-      data: (p) => p?.phoneDialCode ?? '',
-      orElse: () => '',
-    );
-    final phone = profileAsync.maybeWhen(
-      data: (p) => p?.phone ?? '',
-      orElse: () => '',
-    );
     final phoneDisplay =
         [phoneDial, phone].where((e) => e.trim().isNotEmpty).join(' ').trim();
 
@@ -142,14 +236,16 @@ class ProfileDetailView extends ConsumerWidget {
           context,
           icon: Assets.calenderIcon,
           label: 'Date of Birth',
-          value: '-',
+          value: dateOfBirth == null
+              ? '-'
+              : '${dateOfBirth.day.toString().padLeft(2, '0')}/${dateOfBirth.month.toString().padLeft(2, '0')}/${dateOfBirth.year}',
         ),
         14.ph,
         _buildInfoRow(
           context,
           icon: Assets.locationIcon,
           label: 'Address',
-          value: '-',
+          value: address.trim().isNotEmpty ? address : '-',
           valueMaxLines: 2,
         ),
       ],

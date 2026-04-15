@@ -18,10 +18,11 @@ void showExitAppDialog(BuildContext context) {
 
 /// Shows "Log Out?" confirmation dialog. On confirm, pops dialog and navigates to login.
 void showLogoutDialog(BuildContext context) {
-  showDialog<void>(
+  showModalBottomSheet<void>(
     context: context,
-    barrierDismissible: true,
-    builder: (ctx) => const _LogoutDialog(),
+    isScrollControlled: false,
+    backgroundColor: Colors.transparent,
+    builder: (ctx) => const _LogoutSheet(),
   );
 }
 
@@ -103,30 +104,59 @@ class _ExitAppDialog extends StatelessWidget {
   }
 }
 
-class _LogoutDialog extends StatelessWidget {
-  const _LogoutDialog();
+class _LogoutSheet extends StatefulWidget {
+  const _LogoutSheet();
+
+  @override
+  State<_LogoutSheet> createState() => _LogoutSheetState();
+}
+
+class _LogoutSheetState extends State<_LogoutSheet> {
+  bool _isLoading = false;
+
+  Future<void> _onLogout() async {
+    if (_isLoading) return;
+    setState(() => _isLoading = true);
+    try {
+      await FirebaseAuthService.instance.signOut();
+      await FirebaseAuthService.instance.clearLocalAuthCache();
+      if (!mounted) return;
+      Navigator.of(context).pop(); // close sheet
+      AppRouter.pushAndRemoveUntil(const LoginView());
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      backgroundColor: Colors.transparent,
-      alignment: Alignment.bottomCenter,
+    return SafeArea(
       child: Container(
-        padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
+        padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
-              blurRadius: 20,
-              offset: const Offset(0, -4),
+              color: Colors.black.withValues(alpha: 0.12),
+              blurRadius: 22,
+              offset: const Offset(0, -6),
             ),
           ],
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            Container(
+              width: 44,
+              height: 4,
+              margin: const EdgeInsets.only(bottom: 18),
+              decoration: BoxDecoration(
+                color: Colors.black.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(999),
+              ),
+            ),
             Text(
               'Log Out?',
               style: context.robotoFlexSemiBold(
@@ -150,7 +180,9 @@ class _LogoutDialog extends StatelessWidget {
                 Expanded(
                   child: CustomButtonWidget(
                     label: 'Cancel',
-                    onPressed: () => Navigator.of(context).pop(),
+                    onPressed: _isLoading
+                        ? null
+                        : () => Navigator.of(context).pop(), // close sheet
                     variant: CustomButtonVariant.outlined,
                     backgroundColor: Colors.white,
                     textColor: const Color(0xFF3A3A3A),
@@ -162,12 +194,8 @@ class _LogoutDialog extends StatelessWidget {
                 Expanded(
                   child: CustomButtonWidget(
                     label: 'Log Out',
-                    onPressed: () async {
-                      Navigator.of(context).pop();
-                      await FirebaseAuthService.instance.signOut();
-                      await FirebaseAuthService.instance.clearLocalAuthCache();
-                      AppRouter.pushAndRemoveUntil(const LoginView());
-                    },
+                    onPressed: _onLogout,
+                    loading: _isLoading,
                     backgroundColor: AppColors.primaryColor,
                     textColor: Colors.white,
                     textSize: 16,

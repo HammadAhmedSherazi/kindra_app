@@ -23,17 +23,32 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
   bool _hydrated = false;
   bool _hydratedFromAuthFallback = false;
   String? _hydratedUid;
+  ProviderSubscription<AsyncValue<UserProfile?>>? _profileSub;
 
   @override
   void initState() {
     super.initState();
     // Hydrate immediately from FirebaseAuth so fields show even before Firestore loads.
-    // Firestore values will later override via [_maybeHydrate] once available.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       _maybeHydrate(null);
-      // No need to call setState: controllers update the fields.
       setState(() {});
+    });
+
+    // Listen to Firestore-backed profile changes and hydrate when data arrives.
+    // Use listenManual here (ref.listen is only allowed in build()).
+    _profileSub = ref.listenManual<AsyncValue<UserProfile?>>(
+      currentUserProfileProvider,
+      (previous, next) {
+        next.whenOrNull(data: (p) => _maybeHydrate(p));
+      },
+    );
+
+    // Also fetch once directly (helps when stream hasn't emitted yet).
+    Future.microtask(() async {
+      final p = await FirebaseAuthService.instance.fetchCurrentUserProfile();
+      if (!mounted) return;
+      _maybeHydrate(p);
     });
   }
 
@@ -58,15 +73,23 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
 
     final hasFirestore = firestoreName.trim().isNotEmpty ||
         firestoreEmail.trim().isNotEmpty ||
-        firestorePhone.trim().isNotEmpty;
+        firestorePhone.trim().isNotEmpty ||
+        firestoreDial.trim().isNotEmpty ||
+        (firestoreAddress != null && firestoreAddress.trim().isNotEmpty) ||
+        firestoreDob != null;
 
     final candidateName = firestoreName.trim().isNotEmpty ? firestoreName : authName;
     final candidateEmail = firestoreEmail.trim().isNotEmpty ? firestoreEmail : authEmail;
-    final candidatePhone = firestorePhone;
+    final candidatePhone = firestorePhone.trim().isNotEmpty
+        ? firestorePhone
+        : _mobileController.text;
 
     final hasAnyCandidate = candidateName.trim().isNotEmpty ||
         candidateEmail.trim().isNotEmpty ||
-        candidatePhone.trim().isNotEmpty;
+        candidatePhone.trim().isNotEmpty ||
+        firestoreDial.trim().isNotEmpty ||
+        (firestoreAddress != null && firestoreAddress.trim().isNotEmpty) ||
+        firestoreDob != null;
 
     if (!hasAnyCandidate) return;
 
@@ -77,7 +100,9 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
 
     _nameController.text = candidateName;
     _emailController.text = candidateEmail;
-    _mobileController.text = candidatePhone;
+    if (candidatePhone.trim().isNotEmpty) {
+      _mobileController.text = candidatePhone;
+    }
 
     bool needsRebuild = false;
     if (firestoreAddress != null && firestoreAddress.trim().isNotEmpty) {
@@ -104,7 +129,9 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
     _hydrated = true;
     _hydratedFromAuthFallback = !hasFirestore;
 
-    if (needsRebuild && mounted) {
+    // When Firestore profile arrives, force one rebuild to refresh derived UI
+    // (DOB text + country code widget state).
+    if ((needsRebuild || hasFirestore) && mounted) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) setState(() {});
       });
@@ -113,6 +140,7 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
 
   @override
   void dispose() {
+    _profileSub?.close();
     _nameController.dispose();
     _emailController.dispose();
     _mobileController.dispose();
@@ -181,8 +209,7 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
 
   @override
   Widget build(BuildContext context) {
-    final profileAsync = ref.watch(currentUserProfileProvider);
-    profileAsync.whenData(_maybeHydrate);
+    ref.watch(currentUserProfileProvider);
 
     return CustomInnerScreenTemplate(
       title: 'Edit Profile',

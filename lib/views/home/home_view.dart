@@ -1,10 +1,10 @@
 import '../../export_all.dart';
 
-class HomeView extends ConsumerWidget {
+class HomeView extends StatelessWidget {
   const HomeView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final headerHeight = context.screenHeight * 0.33;
     final pointsCardHeight =
         (context.screenHeight * 0.27).clamp(200.0, 280.0);
@@ -15,15 +15,6 @@ class HomeView extends ConsumerWidget {
     );
     final listTopInset =
         (pointsCardTop + pointsCardHeight - headerHeight).clamp(24.0, 400.0);
-
-    final profileAsync = ref.watch(currentUserProfileProvider);
-    final authName = FirebaseAuthService.instance.currentUserDisplayName;
-    final displayName = profileAsync.maybeWhen(
-          data: (p) =>
-              (p?.displayName.isNotEmpty == true) ? p!.displayName : null,
-          orElse: () => null,
-        ) ??
-        (authName != null && authName.trim().isNotEmpty ? authName : null);
 
     return Scaffold(
       body: Stack(
@@ -47,35 +38,65 @@ class HomeView extends ConsumerWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text.rich(
-                              TextSpan(
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 19,
-                                  fontFamily: 'Roboto Flex',
-                                  fontWeight: FontWeight.w500,
-                                  height: 1.65,
-                                ),
-                                children: [
-                                  TextSpan(text: 'Hello '),
-                                  WidgetSpan(
-                                    alignment: PlaceholderAlignment.middle,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(left: 4),
-                                      child: Transform.flip(
-                                        flipX: true,
-                                        child: Image.asset(
-                                          Assets.helloHandIcon,
-                                          width: 24,
-                                          height: 24,
-                                          fit: BoxFit.contain,
+                            Consumer(
+                              builder: (context, ref, _) {
+                                final displayName = ref.watch(
+                                  currentUserProfileProvider.select((async) {
+                                    final fromFirestore = async.maybeWhen(
+                                      data: (p) =>
+                                          (p?.displayName.isNotEmpty == true)
+                                              ? p!.displayName
+                                              : null,
+                                      orElse: () => null,
+                                    );
+                                    if (fromFirestore != null &&
+                                        fromFirestore.trim().isNotEmpty) {
+                                      return fromFirestore;
+                                    }
+                                    final authName = FirebaseAuthService
+                                        .instance.currentUserDisplayName;
+                                    return (authName != null &&
+                                            authName.trim().isNotEmpty)
+                                        ? authName
+                                        : null;
+                                  }),
+                                );
+
+                                return Text.rich(
+                                  TextSpan(
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 19,
+                                      fontFamily: 'Roboto Flex',
+                                      fontWeight: FontWeight.w500,
+                                      height: 1.65,
+                                    ),
+                                    children: [
+                                      const TextSpan(text: 'Hello '),
+                                      WidgetSpan(
+                                        alignment:
+                                            PlaceholderAlignment.middle,
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 4),
+                                          child: Transform.flip(
+                                            flipX: true,
+                                            child: Image.asset(
+                                              Assets.helloHandIcon,
+                                              width: 24,
+                                              height: 24,
+                                              fit: BoxFit.contain,
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
+                                      TextSpan(
+                                        text: '\n${displayName ?? 'User'}',
+                                      ),
+                                    ],
                                   ),
-                                  TextSpan(text: '\n${displayName ?? 'User'}'),
-                                ],
-                              ),
+                                );
+                              },
                             ),
                           ],
                         ),

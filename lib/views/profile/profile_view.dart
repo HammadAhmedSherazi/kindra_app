@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import '../../export_all.dart';
 
-class ProfileView extends ConsumerWidget {
+class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
 
   static const int _demoRank = 5;
@@ -10,8 +10,7 @@ class ProfileView extends ConsumerWidget {
   static const int _demoBadges = 3;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final profileAsync = ref.watch(currentUserProfileProvider);
+  Widget build(BuildContext context) {
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -51,7 +50,67 @@ class ProfileView extends ConsumerWidget {
                     //   ],
                     // ),
                     // 24.ph,
-                    _buildUserSection(context, profileAsync),
+                    Consumer(
+                      builder: (context, ref, _) {
+                        final photoUrl = ref.watch(
+                          currentUserProfileProvider.select(
+                            (async) => async.maybeWhen(
+                              data: (p) => p?.photoUrl ?? '',
+                              orElse: () => '',
+                            ),
+                          ),
+                        );
+                        final displayName = ref.watch(
+                          currentUserProfileProvider.select((async) {
+                            final fromFirestore = async.maybeWhen(
+                              data: (p) =>
+                                  (p?.displayName.isNotEmpty == true)
+                                      ? p!.displayName
+                                      : null,
+                              orElse: () => null,
+                            );
+                            if (fromFirestore != null &&
+                                fromFirestore.trim().isNotEmpty) {
+                              return fromFirestore;
+                            }
+                            final authName = FirebaseAuthService
+                                .instance.currentUserDisplayName;
+                            return (authName != null &&
+                                    authName.trim().isNotEmpty)
+                                ? authName
+                                : 'User';
+                          }),
+                        );
+                        final email = ref.watch(
+                          currentUserProfileProvider.select((async) {
+                            final fromFirestore = async.maybeWhen(
+                              data: (p) =>
+                                  (p?.email.isNotEmpty == true)
+                                      ? p!.email
+                                      : null,
+                              orElse: () => null,
+                            );
+                            if (fromFirestore != null &&
+                                fromFirestore.trim().isNotEmpty) {
+                              return fromFirestore;
+                            }
+                            final authEmail =
+                                FirebaseAuthService.instance.currentUserEmail;
+                            return (authEmail != null &&
+                                    authEmail.trim().isNotEmpty)
+                                ? authEmail
+                                : '';
+                          }),
+                        );
+
+                        return _buildUserSection(
+                          context,
+                          photoUrl: photoUrl,
+                          displayName: displayName,
+                          email: email,
+                        );
+                      },
+                    ),
                     28.ph,
                     Text(
                       'Account',
@@ -104,44 +163,26 @@ class ProfileView extends ConsumerWidget {
 
   Widget _buildUserSection(
     BuildContext context,
-    AsyncValue<UserProfile?> profileAsync,
+    {
+    required String photoUrl,
+    required String displayName,
+    required String email,
+  }
   ) {
     return GestureDetector(
       onTap: () => AppRouter.push(const ProfileDetailView()),
       child: Row(
         children: [
-          profileAsync.when(
-            data: (p) {
-              final photoUrl = p?.photoUrl ?? '';
-              if (photoUrl.isNotEmpty) {
-                return CircleAvatar(
-                  radius: 40,
-                  backgroundColor: Colors.white,
-                  backgroundImage: NetworkImage(photoUrl),
-                );
-              }
-              return CircleAvatar(
-                radius: 40,
-                backgroundColor: Colors.white,
-                child: Image.asset(
-                  Assets.userAvatar,
-                  color: AppColors.primaryColor,
-                ),
-              );
-            },
-            loading: () => const CircleAvatar(
-              radius: 40,
-              backgroundColor: Colors.white,
-              child: CircularProgressIndicator(strokeWidth: 2),
-            ),
-            error: (error, stackTrace) => CircleAvatar(
-              radius: 40,
-              backgroundColor: Colors.white,
-              child: Image.asset(
-                Assets.userAvatar,
-                color: AppColors.primaryColor,
-              ),
-            ),
+          CircleAvatar(
+            radius: 40,
+            backgroundColor: Colors.white,
+            backgroundImage: photoUrl.isNotEmpty ? NetworkImage(photoUrl) : null,
+            child: photoUrl.isEmpty
+                ? Image.asset(
+                    Assets.userAvatar,
+                    color: AppColors.primaryColor,
+                  )
+                : null,
           ),
           16.pw,
           Expanded(
@@ -149,21 +190,7 @@ class ProfileView extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  profileAsync.maybeWhen(
-                        data: (p) =>
-                            (p?.displayName.isNotEmpty == true)
-                                ? p!.displayName
-                                : null,
-                        orElse: () => null,
-                      ) ??
-                      (FirebaseAuthService
-                                  .instance.currentUserDisplayName
-                                  ?.trim()
-                                  .isNotEmpty ==
-                              true
-                          ? FirebaseAuthService
-                              .instance.currentUserDisplayName!
-                          : 'User'),
+                  displayName,
                   style: context.robotoFlexSemiBold(
                     fontSize: 18,
                     color: Colors.black,
@@ -171,17 +198,7 @@ class ProfileView extends ConsumerWidget {
                 ),
                 4.ph,
                 Text(
-                  profileAsync.maybeWhen(
-                        data: (p) =>
-                            (p?.email.isNotEmpty == true) ? p!.email : null,
-                        orElse: () => null,
-                      ) ??
-                      (FirebaseAuthService.instance.currentUserEmail
-                                  ?.trim()
-                                  .isNotEmpty ==
-                              true
-                          ? FirebaseAuthService.instance.currentUserEmail!
-                          : ''),
+                  email,
                   style: context.robotoFlexRegular(
                     fontSize: 14,
                     color: AppColors.primaryTextColor.withValues(alpha: 0.8),
