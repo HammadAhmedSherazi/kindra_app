@@ -1,20 +1,115 @@
 import '../../export_all.dart';
 
-class EditProfileView extends StatefulWidget {
+class EditProfileView extends ConsumerStatefulWidget {
   const EditProfileView({super.key});
 
   @override
-  State<EditProfileView> createState() => _EditProfileViewState();
+  ConsumerState<EditProfileView> createState() => _EditProfileViewState();
 }
 
-class _EditProfileViewState extends State<EditProfileView> {
-  final _nameController = TextEditingController(text: 'John Doe');
-  final _emailController = TextEditingController(text: 'user@gmail.com');
-  final _mobileController = TextEditingController(text: '898*******');
+class _EditProfileViewState extends ConsumerState<EditProfileView> {
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _mobileController = TextEditingController();
   final _addressController = TextEditingController();
 
   DateTime? _dateOfBirth;
   static const int _addressMaxLength = 200;
+
+  CountryCode _selectedCountry = defaultCountryCodes.first;
+  bool _isSubmitting = false;
+  bool _showDobError = false;
+  bool _hydrated = false;
+  bool _hydratedFromAuthFallback = false;
+  String? _hydratedUid;
+
+  @override
+  void initState() {
+    super.initState();
+    // Hydrate immediately from FirebaseAuth so fields show even before Firestore loads.
+    // Firestore values will later override via [_maybeHydrate] once available.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _maybeHydrate(null);
+      // No need to call setState: controllers update the fields.
+      setState(() {});
+    });
+  }
+
+  void _maybeHydrate(UserProfile? p) {
+    final uid = FirebaseAuthService.instance.currentUser?.uid;
+    final authName = FirebaseAuthService.instance.currentUserDisplayName ?? '';
+    final authEmail = FirebaseAuthService.instance.currentUserEmail ?? '';
+
+    // If user changed (logout/login), allow hydration again.
+    if (_hydratedUid != uid) {
+      _hydratedUid = uid;
+      _hydrated = false;
+      _hydratedFromAuthFallback = false;
+    }
+
+    final firestoreName = p?.displayName ?? '';
+    final firestoreEmail = p?.email ?? '';
+    final firestorePhone = p?.phone ?? '';
+    final firestoreDial = p?.phoneDialCode ?? '';
+    final firestoreAddress = p?.address;
+    final firestoreDob = p?.dateOfBirth;
+
+    final hasFirestore = firestoreName.trim().isNotEmpty ||
+        firestoreEmail.trim().isNotEmpty ||
+        firestorePhone.trim().isNotEmpty;
+
+    final candidateName = firestoreName.trim().isNotEmpty ? firestoreName : authName;
+    final candidateEmail = firestoreEmail.trim().isNotEmpty ? firestoreEmail : authEmail;
+    final candidatePhone = firestorePhone;
+
+    final hasAnyCandidate = candidateName.trim().isNotEmpty ||
+        candidateEmail.trim().isNotEmpty ||
+        candidatePhone.trim().isNotEmpty;
+
+    if (!hasAnyCandidate) return;
+
+    // If we hydrated from auth fallback earlier and Firestore arrives later, update once.
+    final shouldUpgradeFromFirestore = hasFirestore && _hydratedFromAuthFallback;
+
+    if (_hydrated && !shouldUpgradeFromFirestore) return;
+
+    _nameController.text = candidateName;
+    _emailController.text = candidateEmail;
+    _mobileController.text = candidatePhone;
+
+    bool needsRebuild = false;
+    if (firestoreAddress != null && firestoreAddress.trim().isNotEmpty) {
+      _addressController.text = firestoreAddress;
+    }
+    if (firestoreDob != null) {
+      if (_dateOfBirth != firestoreDob) {
+        _dateOfBirth = firestoreDob;
+        needsRebuild = true; // DOB text is derived from state, needs rebuild.
+      }
+    }
+
+    final dialToUse =
+        firestoreDial.trim().isNotEmpty ? firestoreDial : _selectedCountry.dialCode;
+    final nextCountry = defaultCountryCodes.firstWhere(
+      (c) => c.dialCode == dialToUse,
+      orElse: () => defaultCountryCodes.first,
+    );
+    if (nextCountry.dialCode != _selectedCountry.dialCode) {
+      _selectedCountry = nextCountry;
+      needsRebuild = true; // CountryPhoneFieldWidget updates via widget rebuild.
+    }
+
+    _hydrated = true;
+    _hydratedFromAuthFallback = !hasFirestore;
+
+    if (needsRebuild && mounted) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) setState(() {});
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -26,27 +121,76 @@ class _EditProfileViewState extends State<EditProfileView> {
   }
 
   Future<void> _pickDate() async {
+    final now = DateTime.now();
+    final firstDate = DateTime(1900, 1, 1);
+    final lastDate = DateTime(now.year, now.month, now.day);
+    final initial = _dateOfBirth ?? DateTime(2000, 1, 15);
+    final initialDate = initial.isAfter(lastDate)
+        ? lastDate
+        : (initial.isBefore(firstDate) ? firstDate : initial);
+
     final picked = await showDatePicker(
       context: context,
-      initialDate: _dateOfBirth ?? DateTime(2000, 1, 15),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
+      initialDate: initialDate,
+      firstDate: firstDate,
+      lastDate: lastDate,
+      selectableDayPredicate: (d) => !d.isAfter(lastDate),
     );
-    if (picked != null) setState(() => _dateOfBirth = picked);
+    if (picked != null) {
+      setState(() {
+        _dateOfBirth = picked;
+        _showDobError = false;
+      });
+    }
   }
 
-  void _onUpdate() {
-    // TODO: call API to update profile
-    AppRouter.back();
+  Future<void> _onUpdate() async {
+    if (_isSubmitting) return;
+    if (!_formKey.currentState!.validate()) return;
+    if (_dateOfBirth == null) {
+      setState(() => _showDobError = true);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select date of birth')),
+      );
+      return;
+    }
+
+    setState(() => _isSubmitting = true);
+    try {
+      await FirebaseAuthService.instance.updateCurrentUserProfile(
+        displayName: _nameController.text,
+        phone: _mobileController.text,
+        phoneDialCode: _selectedCountry.dialCode,
+        address: _addressController.text,
+        dateOfBirth: _dateOfBirth,
+      );
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Profile updated')),
+      );
+      AppRouter.back();
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(FirebaseAuthService.messageForAuthException(e))),
+      );
+    } finally {
+      if (mounted) setState(() => _isSubmitting = false);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final profileAsync = ref.watch(currentUserProfileProvider);
+    profileAsync.whenData(_maybeHydrate);
+
     return CustomInnerScreenTemplate(
       title: 'Edit Profile',
-      child: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        children: [
+      child: Form(
+        key: _formKey,
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          children: [
           CustomTextFieldWidget(
             controller: _nameController,
             label: 'Name',
@@ -56,6 +200,10 @@ class _EditProfileViewState extends State<EditProfileView> {
               child: Image.asset(Assets.userIcon, width: 22, height: 22),
             ),
             prefixIconConstraints: const BoxConstraints(minWidth: 54, minHeight: 26),
+            validator: (v) {
+              if (v == null || v.trim().isEmpty) return 'Name is required';
+              return null;
+            },
           ),
           20.ph,
           CustomTextFieldWidget(
@@ -63,6 +211,8 @@ class _EditProfileViewState extends State<EditProfileView> {
             label: 'Email',
             hint: 'user@gmail.com',
             keyboardType: TextInputType.emailAddress,
+            readOnly: true,
+            enabled: false,
             prefixIcon: Padding(
               padding: const EdgeInsets.only(left: 20, right: 12),
               child: Image.asset(Assets.emailIcon, width: 22, height: 22),
@@ -74,10 +224,16 @@ class _EditProfileViewState extends State<EditProfileView> {
           20.ph,
           CountryPhoneFieldWidget(
             controller: _mobileController,
-            initialCountry: defaultCountryCodes
-                .firstWhere((c) => c.dialCode == '+62', orElse: () => defaultCountryCodes.first),
+            initialCountry: _selectedCountry,
+            onCountryChanged: (c) => setState(() => _selectedCountry = c),
             label: 'Mobile Number',
             hint: '898*******',
+            validator: (v) {
+              if (v == null || v.trim().isEmpty) {
+                return 'Mobile number is required';
+              }
+              return null;
+            },
           ),
           20.ph,
           CustomTextFieldWidget(
@@ -96,9 +252,11 @@ class _EditProfileViewState extends State<EditProfileView> {
             label: 'Update',
             onPressed: _onUpdate,
             height: 52,
+            loading: _isSubmitting,
           ),
           40.ph,
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -116,7 +274,9 @@ class _EditProfileViewState extends State<EditProfileView> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xFF393939)),
+              border: Border.all(
+                color: _showDobError ? Theme.of(context).colorScheme.error : const Color(0xFF393939),
+              ),
               borderRadius: BorderRadius.circular(29),
             ),
             child: Row(
@@ -125,7 +285,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                 12.pw,
                 Text(
                   _dateOfBirth != null
-                      ? '${_dateOfBirth!.day}/${_dateOfBirth!.month}/${_dateOfBirth!.year}'
+                      ? '${_dateOfBirth!.day.toString().padLeft(2, '0')}/${_dateOfBirth!.month.toString().padLeft(2, '0')}/${_dateOfBirth!.year}'
                       : 'Select date',
                   style: context.robotoFlexRegular(
                     fontSize: 14.87,
@@ -144,10 +304,22 @@ class _EditProfileViewState extends State<EditProfileView> {
             ),
           ),
         ),
+        if (_showDobError) ...[
+          6.ph,
+          Text(
+            'Date of birth is required',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.error,
+              fontSize: 11,
+              fontFamily: 'Roboto Flex',
+            ),
+          ),
+        ],
       ],
     );
   }
 
+  // ignore: unused_element
   Widget _buildAddressCounter() {
     return ListenableBuilder(
       listenable: _addressController,

@@ -11,10 +11,35 @@ class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 3), () {
-      if (mounted) {
+    Future.delayed(const Duration(seconds: 2), () async {
+      if (!mounted) return;
+
+      final user = FirebaseAuthService.instance.currentUser;
+      if (user == null) {
         AppRouter.pushReplacement(const OnboardingView());
+        return;
       }
+
+      await FirebaseAuthService.instance.reloadCurrentUser();
+      if (!mounted) return;
+
+      if (!FirebaseAuthService.instance.isEmailVerified) {
+        AppRouter.pushReplacement(const EmailVerificationView());
+        return;
+      }
+
+      // Prefer Firestore role; fallback to cached role if needed.
+      final role =
+          await FirebaseAuthService.instance.fetchRoleForCurrentUser() ??
+              await FirebaseAuthService.instance.readCachedLoginRole();
+
+      if (!mounted) return;
+
+      if (role == null) {
+        AppRouter.pushReplacement(const LoginView());
+        return;
+      }
+      navigateToDashboardForRole(role);
     });
   }
 

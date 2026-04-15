@@ -10,6 +10,7 @@ class ResetPasswordView extends ConsumerStatefulWidget {
 class _ResetPasswordViewState extends ConsumerState<ResetPasswordView> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
+  bool _isSubmitting = false;
 
   @override
   void dispose() {
@@ -19,14 +20,30 @@ class _ResetPasswordViewState extends ConsumerState<ResetPasswordView> {
 
   Future<void> _onSubmit() async {
     if (!_formKey.currentState!.validate()) return;
-    // TODO: call API to send OTP to email
-    if (!mounted) return;
-    final email = _emailController.text.trim();
-    AppRouter.push(OtpVerificationView(email: email));
-  }
-
-  void _onSkip() {
-    AppRouter.back();
+    setState(() => _isSubmitting = true);
+    try {
+      await FirebaseAuthService.instance
+          .sendPasswordResetEmail(_emailController.text.trim());
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Check your email for a password reset link (Firebase sends a link, not an OTP).',
+          ),
+        ),
+      );
+      AppRouter.back();
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(FirebaseAuthService.messageForAuthException(e)),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isSubmitting = false);
+    }
   }
 
   @override
@@ -88,7 +105,7 @@ class _ResetPasswordViewState extends ConsumerState<ResetPasswordView> {
                     children: [
                       Expanded(
                         child: Text(
-                          'Please enter your email to get an OTP code to reset your password',
+                          'Please enter your email. We will send a link to reset your password.',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.black,
@@ -130,7 +147,11 @@ class _ResetPasswordViewState extends ConsumerState<ResetPasswordView> {
                   },
                 ),
                 32.ph,
-                CustomButtonWidget(label: 'Get Started', onPressed: _onSubmit),
+                CustomButtonWidget(
+                  label: 'Get Started',
+                  onPressed: _onSubmit,
+                  loading: _isSubmitting,
+                ),
               
               ],
             ),

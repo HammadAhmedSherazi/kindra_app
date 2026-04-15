@@ -2,17 +2,12 @@ import '../../export_all.dart';
 
 /// Display profile detail screen – separate from [ProfileView].
 /// Shows avatar, name, email, personal info (phone, DOB, address) and Edit Profile action.
-class ProfileDetailView extends StatelessWidget {
+class ProfileDetailView extends ConsumerWidget {
   const ProfileDetailView({super.key});
 
-  static const String _demoName = 'Fajar Firmansyah';
-  static const String _demoEmail = 'Fajar0123@gmail.com';
-  static const String _demoPhone = '0123 456789';
-  static const String _demoDob = '1, Dec, 2025';
-  static const String _demoAddress = 'Abc Road, 123 Street, 12 City';
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final profileAsync = ref.watch(currentUserProfileProvider);
     return CustomInnerScreenTemplate(
       title: 'Profile Details',
       child: Column(
@@ -21,12 +16,12 @@ class ProfileDetailView extends StatelessWidget {
           Stack(
             clipBehavior: Clip.none,
             children: [
-              _buildProfileCard(context),
+              _buildProfileCard(context, profileAsync),
               Positioned(
                 top: -(context.screenHeight * 0.075).clamp(50.0, 80.0),
                 left: 0,
                 right: 0,
-                child: _buildAvatarAndName(context),
+                child: _buildAvatarAndName(context, profileAsync),
               ),
             ],
           ),
@@ -35,7 +30,10 @@ class ProfileDetailView extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileCard(BuildContext context) {
+  Widget _buildProfileCard(
+    BuildContext context,
+    AsyncValue<UserProfile?> profileAsync,
+  ) {
     final topPadding = (context.screenHeight * 0.06).clamp(44.0, 56.0);
     return Container(
       width: double.infinity,
@@ -51,7 +49,7 @@ class ProfileDetailView extends StatelessWidget {
       child: Column(
         children: [
           (context.screenHeight * 0.14).clamp(100.0, 140.0).ph,
-          _buildPersonalInfoSection(context),
+          _buildPersonalInfoSection(context, profileAsync),
           28.ph,
           _buildEditProfileButton(context),
         ],
@@ -59,7 +57,23 @@ class ProfileDetailView extends StatelessWidget {
     );
   }
 
-  Widget _buildAvatarAndName(BuildContext context) {
+  Widget _buildAvatarAndName(
+    BuildContext context,
+    AsyncValue<UserProfile?> profileAsync,
+  ) {
+    final displayName = profileAsync.maybeWhen(
+      data: (p) => (p?.displayName.isNotEmpty == true) ? p!.displayName : 'User',
+      orElse: () => 'User',
+    );
+    final email = profileAsync.maybeWhen(
+      data: (p) => (p?.email.isNotEmpty == true) ? p!.email : '',
+      orElse: () => '',
+    );
+    final photoUrl = profileAsync.maybeWhen(
+      data: (p) => p?.photoUrl ?? '',
+      orElse: () => '',
+    );
+
     return Column(
       
       children: [
@@ -69,16 +83,21 @@ class ProfileDetailView extends StatelessWidget {
             color: Colors.white,
             shape: BoxShape.circle,
           ),
-          child: Image.asset(Assets.userAvatar, )),
+          child: ClipOval(
+            child: photoUrl.isNotEmpty
+                ? Image.network(photoUrl, fit: BoxFit.cover)
+                : Image.asset(Assets.userAvatar, fit: BoxFit.cover),
+          ),
+        ),
         5.ph,
         Text(
-          _demoName,
+          displayName,
           style: context.robotoFlexSemiBold(fontSize: 20, color: Colors.black),
           textAlign: TextAlign.center,
         ),
         6.ph,
         Text(
-          _demoEmail,
+          email,
           style: context.robotoFlexRegular(
             fontSize: 14,
             color: AppColors.primaryTextColor.withValues(alpha: 0.85),
@@ -89,7 +108,21 @@ class ProfileDetailView extends StatelessWidget {
     );
   }
 
-  Widget _buildPersonalInfoSection(BuildContext context) {
+  Widget _buildPersonalInfoSection(
+    BuildContext context,
+    AsyncValue<UserProfile?> profileAsync,
+  ) {
+    final phoneDial = profileAsync.maybeWhen(
+      data: (p) => p?.phoneDialCode ?? '',
+      orElse: () => '',
+    );
+    final phone = profileAsync.maybeWhen(
+      data: (p) => p?.phone ?? '',
+      orElse: () => '',
+    );
+    final phoneDisplay =
+        [phoneDial, phone].where((e) => e.trim().isNotEmpty).join(' ').trim();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -102,21 +135,21 @@ class ProfileDetailView extends StatelessWidget {
           context,
           icon: Assets.telephoneIcon,
           label: 'Phone No.',
-          value: _demoPhone,
+          value: phoneDisplay.isNotEmpty ? phoneDisplay : '-',
         ),
         14.ph,
         _buildInfoRow(
           context,
           icon: Assets.calenderIcon,
           label: 'Date of Birth',
-          value: _demoDob,
+          value: '-',
         ),
         14.ph,
         _buildInfoRow(
           context,
           icon: Assets.locationIcon,
           label: 'Address',
-          value: _demoAddress,
+          value: '-',
           valueMaxLines: 2,
         ),
       ],

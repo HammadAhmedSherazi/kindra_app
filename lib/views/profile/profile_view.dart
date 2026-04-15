@@ -2,17 +2,17 @@ import 'dart:math' as math;
 
 import '../../export_all.dart';
 
-class ProfileView extends StatelessWidget {
+class ProfileView extends ConsumerWidget {
   const ProfileView({super.key});
 
-  static const String _demoName = 'Fajar Firmansyah';
-  static const String _demoEmail = 'Fajar0123@gmail.com';
   static const int _demoRank = 5;
   static const int _demoPoints = 142;
   static const int _demoBadges = 3;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final profileAsync = ref.watch(currentUserProfileProvider);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -51,7 +51,7 @@ class ProfileView extends StatelessWidget {
                     //   ],
                     // ),
                     // 24.ph,
-                    _buildUserSection(context),
+                    _buildUserSection(context, profileAsync),
                     28.ph,
                     Text(
                       'Account',
@@ -89,7 +89,7 @@ class ProfileView extends StatelessWidget {
                       icon: Assets.logoutIcon,
                       label: 'Logout',
                       isLogout: true,
-                      onTap: () => showExitAppDialog(context),
+                      onTap: () => showLogoutDialog(context),
                     ),
                     40.ph,
                   ],
@@ -102,17 +102,46 @@ class ProfileView extends StatelessWidget {
     );
   }
 
-  Widget _buildUserSection(BuildContext context) {
+  Widget _buildUserSection(
+    BuildContext context,
+    AsyncValue<UserProfile?> profileAsync,
+  ) {
     return GestureDetector(
       onTap: () => AppRouter.push(const ProfileDetailView()),
       child: Row(
         children: [
-          CircleAvatar(
-            radius: 40,
-            backgroundColor: Colors.white,
-            // backgroundImage: AssetImage(Assets.userAvatar,),
-            child: Image.asset(Assets.userAvatar, color: AppColors.primaryColor,),
-            // onBackgroundImageError: (_, __) {},
+          profileAsync.when(
+            data: (p) {
+              final photoUrl = p?.photoUrl ?? '';
+              if (photoUrl.isNotEmpty) {
+                return CircleAvatar(
+                  radius: 40,
+                  backgroundColor: Colors.white,
+                  backgroundImage: NetworkImage(photoUrl),
+                );
+              }
+              return CircleAvatar(
+                radius: 40,
+                backgroundColor: Colors.white,
+                child: Image.asset(
+                  Assets.userAvatar,
+                  color: AppColors.primaryColor,
+                ),
+              );
+            },
+            loading: () => const CircleAvatar(
+              radius: 40,
+              backgroundColor: Colors.white,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            ),
+            error: (error, stackTrace) => CircleAvatar(
+              radius: 40,
+              backgroundColor: Colors.white,
+              child: Image.asset(
+                Assets.userAvatar,
+                color: AppColors.primaryColor,
+              ),
+            ),
           ),
           16.pw,
           Expanded(
@@ -120,7 +149,21 @@ class ProfileView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  _demoName,
+                  profileAsync.maybeWhen(
+                        data: (p) =>
+                            (p?.displayName.isNotEmpty == true)
+                                ? p!.displayName
+                                : null,
+                        orElse: () => null,
+                      ) ??
+                      (FirebaseAuthService
+                                  .instance.currentUserDisplayName
+                                  ?.trim()
+                                  .isNotEmpty ==
+                              true
+                          ? FirebaseAuthService
+                              .instance.currentUserDisplayName!
+                          : 'User'),
                   style: context.robotoFlexSemiBold(
                     fontSize: 18,
                     color: Colors.black,
@@ -128,7 +171,17 @@ class ProfileView extends StatelessWidget {
                 ),
                 4.ph,
                 Text(
-                  _demoEmail,
+                  profileAsync.maybeWhen(
+                        data: (p) =>
+                            (p?.email.isNotEmpty == true) ? p!.email : null,
+                        orElse: () => null,
+                      ) ??
+                      (FirebaseAuthService.instance.currentUserEmail
+                                  ?.trim()
+                                  .isNotEmpty ==
+                              true
+                          ? FirebaseAuthService.instance.currentUserEmail!
+                          : ''),
                   style: context.robotoFlexRegular(
                     fontSize: 14,
                     color: AppColors.primaryTextColor.withValues(alpha: 0.8),

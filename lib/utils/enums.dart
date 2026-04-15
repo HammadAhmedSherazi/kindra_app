@@ -32,3 +32,12 @@ extension LoginUserRoleExtension on LoginUserRole {
     }
   }
 }
+
+/// Parses [LoginUserRole.name] from Firestore `users/{uid}.role`.
+LoginUserRole? loginUserRoleFromName(String? name) {
+  if (name == null || name.isEmpty) return null;
+  for (final e in LoginUserRole.values) {
+    if (e.name == name) return e;
+  }
+  return null;
+}

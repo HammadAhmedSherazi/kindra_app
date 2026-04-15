@@ -4,6 +4,7 @@ import '../utils/colors.dart';
 import '../utils/extension.dart';
 import '../utils/router.dart';
 import '../views/auth/login_view.dart';
+import '../services/firebase_auth_service.dart';
 import 'custom_button_widget.dart';
 
 /// Shows "Exit App?" confirmation dialog. On Exit, pops dialog and navigates to login.
@@ -161,8 +162,10 @@ class _LogoutDialog extends StatelessWidget {
                 Expanded(
                   child: CustomButtonWidget(
                     label: 'Log Out',
-                    onPressed: () {
+                    onPressed: () async {
                       Navigator.of(context).pop();
+                      await FirebaseAuthService.instance.signOut();
+                      await FirebaseAuthService.instance.clearLocalAuthCache();
                       AppRouter.pushAndRemoveUntil(const LoginView());
                     },
                     backgroundColor: AppColors.primaryColor,

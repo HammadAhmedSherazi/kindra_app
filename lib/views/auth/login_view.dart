@@ -11,6 +11,8 @@ class _LoginViewState extends ConsumerState<LoginView> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _isSubmitting = false;
+  bool _obscurePassword = true;
   LoginUserRole _selectedUserRole = LoginUserRole.householder;
 
   @override
@@ -22,67 +24,57 @@ class _LoginViewState extends ConsumerState<LoginView> {
 
   Future<void> _onSubmit() async {
     if (!_formKey.currentState!.validate()) return;
-    if (mounted) {
-        if (_selectedUserRole == LoginUserRole.communities) {
-          AppRouter.pushAndRemoveUntil(const CommunityDashboardView());
-        } else if (_selectedUserRole == LoginUserRole.businesses) {
-          AppRouter.pushAndRemoveUntil(const BusinessDashboardView());
-        } else if (_selectedUserRole == LoginUserRole.coastalGroups) {
-          AppRouter.pushAndRemoveUntil(const CoastalGroupNavigationView());
-        } else if (_selectedUserRole == LoginUserRole.drivers) {
-          AppRouter.pushAndRemoveUntil(const DriverDashboardView());
-        } else {
-          AppRouter.pushAndRemoveUntil(const NavigationView());
-        }
-      }
-    // await ref.read(authProvider.notifier).login(
-    //       email: _emailController.text.trim(),
-    //       password: _passwordController.text,
-    //       userRole: _selectedUserRole.name,
-    //     );
-    // final authState = ref.read(authProvider);
-    // if (authState.loginApiResponse.status == Status.completed) {
-    //   AppConstant.userType = _loginRoleToUserType(_selectedUserRole);
-    //   if (mounted) {
-    //     if (_selectedUserRole == LoginUserRole.communities) {
-    //       AppRouter.pushAndRemoveUntil(const CommunityDashboardView());
-    //     } else {
-    //       AppRouter.pushAndRemoveUntil(const NavigationView());
-    //     }
-    //   }
-    // } else if (authState.loginApiResponse.status == Status.error &&
-    //     mounted) {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     SnackBar(
-    //       content: Text(
-    //         authState.loginApiResponse.message.isNotEmpty
-    //             ? authState.loginApiResponse.message
-    //             : 'Login failed. Please try again.',
-    //       ),
-    //     ),
-    //   );
-    // }
-  }
+    setState(() => _isSubmitting = true);
+    try {
+      await FirebaseAuthService.instance.signIn(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      );
+      await FirebaseAuthService.instance.reloadCurrentUser();
+      if (!mounted) return;
 
-  static UserType _loginRoleToUserType(LoginUserRole role) {
-    switch (role) {
-      // case LoginUserRole.globalAdmin:
-      //   return UserType.manager;
-      case LoginUserRole.drivers:
-        return UserType.staff;
-      case LoginUserRole.householder:
-      case LoginUserRole.communities:
-      case LoginUserRole.businesses:
-      case LoginUserRole.coastalGroups:
-        return UserType.customer;
+      if (!FirebaseAuthService.instance.isEmailVerified) {
+        AppRouter.pushAndRemoveUntil(const EmailVerificationView());
+        return;
+      }
+
+      final role = await FirebaseAuthService.instance.fetchRoleForCurrentUser();
+      if (!mounted) return;
+      if (role == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Your profile is incomplete. Please register again or contact support.',
+            ),
+          ),
+        );
+        await FirebaseAuthService.instance.signOut();
+        return;
+      }
+      if (role != _selectedUserRole) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Invalid credentials')),
+        );
+        await FirebaseAuthService.instance.signOut();
+        return;
+      }
+      await FirebaseAuthService.instance.recordSuccessfulLogin(_selectedUserRole);
+      navigateToDashboardForRole(role);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(FirebaseAuthService.messageForAuthException(e)),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isSubmitting = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authProvider);
-    final isLoading = authState.loginApiResponse.status == Status.loading;
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -189,19 +181,24 @@ class _LoginViewState extends ConsumerState<LoginView> {
                       color: Colors.black.withValues(alpha: 0.3),
                     ),
                   ),
-                  obscureText: true,
+                  obscureText: _obscurePassword,
                   textInputAction: TextInputAction.done,
                   validator: (v) {
                     if (v == null || v.isEmpty) return 'Password is required';
                     return null;
                   },
-                  suffixIcon: Padding(
-                    padding: const EdgeInsets.only(right: 20, left: 10),
-                    child: Image.asset(
-                      Assets.eyeIcon,
-                      width: 26,
-                      height: 26,
-                      color: Colors.black.withValues(alpha: 0.3),
+                  suffixIcon: InkWell(
+                    onTap: () =>
+                        setState(() => _obscurePassword = !_obscurePassword),
+                    borderRadius: BorderRadius.circular(999),
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 20, left: 10),
+                      child: Image.asset(
+                        Assets.eyeIcon,
+                        width: 26,
+                        height: 26,
+                        color: Colors.black.withValues(alpha: 0.3),
+                      ),
                     ),
                   ),
                 ),
@@ -229,12 +226,12 @@ class _LoginViewState extends ConsumerState<LoginView> {
                   ),
                 ),
                 24.ph,
-                _buildSelectUserDropdown(context),
+                _buildRoleDropdown(context),
                 24.ph,
                 CustomButtonWidget(
                   label: context.tr('login'),
                   onPressed: _onSubmit,
-                  loading: isLoading,
+                  loading: _isSubmitting,
                 ),
                 50.ph,
                 Row(
@@ -288,7 +285,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
     );
   }
 
-  Widget _buildSelectUserDropdown(BuildContext context) {
+  Widget _buildRoleDropdown(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -330,11 +327,13 @@ class _LoginViewState extends ConsumerState<LoginView> {
                     ),
                   )
                   .toList(),
-              onChanged: (LoginUserRole? value) {
-                if (value != null) {
-                  setState(() => _selectedUserRole = value);
-                }
-              },
+              onChanged: _isSubmitting
+                  ? null
+                  : (LoginUserRole? value) {
+                      if (value != null) {
+                        setState(() => _selectedUserRole = value);
+                      }
+                    },
             ),
           ),
         ),

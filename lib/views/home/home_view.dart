@@ -1,10 +1,10 @@
 import '../../export_all.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends ConsumerWidget {
   const HomeView({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final headerHeight = context.screenHeight * 0.33;
     final pointsCardHeight =
         (context.screenHeight * 0.27).clamp(200.0, 280.0);
@@ -15,6 +15,15 @@ class HomeView extends StatelessWidget {
     );
     final listTopInset =
         (pointsCardTop + pointsCardHeight - headerHeight).clamp(24.0, 400.0);
+
+    final profileAsync = ref.watch(currentUserProfileProvider);
+    final authName = FirebaseAuthService.instance.currentUserDisplayName;
+    final displayName = profileAsync.maybeWhen(
+          data: (p) =>
+              (p?.displayName.isNotEmpty == true) ? p!.displayName : null,
+          orElse: () => null,
+        ) ??
+        (authName != null && authName.trim().isNotEmpty ? authName : null);
 
     return Scaffold(
       body: Stack(
@@ -64,7 +73,7 @@ class HomeView extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  TextSpan(text: '\nFajar Firmansyah'),
+                                  TextSpan(text: '\n${displayName ?? 'User'}'),
                                 ],
                               ),
                             ),

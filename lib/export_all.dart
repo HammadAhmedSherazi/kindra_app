@@ -21,19 +21,23 @@ export 'data/network/http_client.dart';
 export 'models/news_model.dart';
 export 'models/notification_data_model.dart';
 export 'models/user_data_model.dart';
+export 'models/user_profile.dart';
 
 // Providers
 export 'providers/auth_provider/auth_provider.dart';
 export 'providers/auth_provider/auth_state.dart';
 export 'providers/navigation_provider/navigation_provider.dart';
+export 'providers/user_profile_provider.dart';
 
 // Services
 export 'services/base_api_services.dart';
+export 'services/firebase_auth_service.dart';
 export 'services/secure_storage.dart';
 export 'services/shared_preferences.dart';
 
 // Utils
 export 'utils/assets.dart';
+export 'utils/auth_navigation_helper.dart';
 export 'utils/colors.dart';
 export 'utils/constant.dart';
 export 'utils/enums.dart';
@@ -45,6 +49,7 @@ export 'utils/theme.dart';
 
 // Views
 export 'views/auth/create_new_password_view.dart';
+export 'views/auth/email_verification_view.dart';
 export 'views/auth/login_view.dart';
 export 'views/auth/otp_verification_view.dart';
 export 'views/auth/registration_view.dart';
