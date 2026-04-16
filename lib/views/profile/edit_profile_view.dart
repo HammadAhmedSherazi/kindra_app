@@ -1,4 +1,5 @@
 import '../../export_all.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditProfileView extends ConsumerStatefulWidget {
   const EditProfileView({super.key});
@@ -13,6 +14,7 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
   final _emailController = TextEditingController();
   final _mobileController = TextEditingController();
   final _addressController = TextEditingController();
+  XFile? _profileImage;
 
   DateTime? _dateOfBirth;
   static const int _addressMaxLength = 200;
@@ -191,6 +193,7 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
         phoneDialCode: _selectedCountry.dialCode,
         address: _addressController.text,
         dateOfBirth: _dateOfBirth,
+        profileImagePath: _profileImage?.path,
       );
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -209,7 +212,12 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
 
   @override
   Widget build(BuildContext context) {
-    ref.watch(currentUserBaseProvider);
+    final base = ref.watch(currentUserBaseProvider);
+    final photoUrl = base.when(
+      data: (p) => p?.photoUrl ?? '',
+      loading: () => '',
+      error: (error, stackTrace) => '',
+    );
 
     return CustomInnerScreenTemplate(
       title: 'Edit Profile',
@@ -218,6 +226,13 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           children: [
+          ProfilePhotoPicker(
+            localImage: _profileImage,
+            networkImageUrl: photoUrl,
+            enabled: !_isSubmitting,
+            onChanged: (f) => setState(() => _profileImage = f),
+          ),
+          20.ph,
           CustomTextFieldWidget(
             controller: _nameController,
             label: 'Name',

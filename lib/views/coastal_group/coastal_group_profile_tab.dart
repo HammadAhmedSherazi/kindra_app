@@ -86,10 +86,16 @@ class _ProfileAppBar extends StatelessWidget {
       decoration: BoxDecoration(color: Colors.white),
       child: Row(
         children: [
-          IconButton(
-            onPressed: () => AppRouter.back(),
-            icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          // IconButton(
+          //   onPressed: () => AppRouter.back(),
+          //   icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          // ),
+          SizedBox(
+            width: 26,
+            height: 26
+            ,
           ),
+
           Expanded(
             child: Text(
               'Members',

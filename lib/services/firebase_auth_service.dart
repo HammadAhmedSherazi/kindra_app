@@ -5,8 +5,39 @@ import 'dart:io';
 import 'dart:convert';
 
 import '../utils/enums.dart';
+import 'fcm_service.dart';
 import 'secure_storage.dart';
 import '../models/user/user_base.dart';
+
+Map<String, dynamic> _roleProfileFieldsForSignUp({
+  required LoginUserRole role,
+  required String displayName,
+  String? businessCategory,
+  String? groupName,
+  String? vehicleRegistration,
+}) {
+  switch (role) {
+    case LoginUserRole.businesses:
+      return {
+        'businessName': displayName,
+        if (businessCategory != null && businessCategory.trim().isNotEmpty)
+          'businessCategory': businessCategory.trim(),
+      };
+    case LoginUserRole.coastalGroups:
+      return {
+        if (groupName != null && groupName.trim().isNotEmpty)
+          'groupName': groupName.trim(),
+      };
+    case LoginUserRole.drivers:
+      return {
+        if (vehicleRegistration != null && vehicleRegistration.trim().isNotEmpty)
+          'vehicleNumber': vehicleRegistration.trim(),
+      };
+    case LoginUserRole.householder:
+    case LoginUserRole.communities:
+      return {};
+  }
+}
 
 /// Firebase Auth + Firestore profile for Kindra.
 ///
@@ -22,6 +53,7 @@ class FirebaseAuthService {
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
   static const String usersCollection = 'users';
+  static const String fcmTokenField = 'fcmToken';
 
   User? get currentUser => _auth.currentUser;
 
@@ -37,6 +69,12 @@ class FirebaseAuthService {
     required String phoneDialCode,
     required LoginUserRole role,
     String? profileImagePath,
+    /// Businesses: from category dropdown.
+    String? businessCategory,
+    /// Coastal groups: group display name.
+    String? groupName,
+    /// Drivers: vehicle registration number (stored as `vehicleNumber` in profile).
+    String? vehicleRegistration,
   }) async {
     final normalizedEmail = email.trim().toLowerCase();
 
@@ -91,13 +129,23 @@ class FirebaseAuthService {
         'photoUrl': photoUrl,
         'createdAt': FieldValue.serverTimestamp(),
       });
-      // Ensure role-specific profile doc exists for future role-based flows.
+      await _syncFcmTokenForUid(user.uid);
+      final profilePayload = <String, dynamic>{
+        'createdAt': FieldValue.serverTimestamp(),
+        ..._roleProfileFieldsForSignUp(
+          role: role,
+          displayName: displayName.trim(),
+          businessCategory: businessCategory,
+          groupName: groupName,
+          vehicleRegistration: vehicleRegistration,
+        ),
+      };
       await _firestore
           .collection(usersCollection)
           .doc(user.uid)
           .collection('profiles')
           .doc(role.name)
-          .set({'createdAt': FieldValue.serverTimestamp()}, SetOptions(merge: true));
+          .set(profilePayload, SetOptions(merge: true));
       await user.sendEmailVerification();
     } catch (e) {
       await user.delete();
@@ -115,6 +163,9 @@ class FirebaseAuthService {
     required String phoneDialCode,
     required LoginUserRole role,
     String? profileImagePath,
+    String? businessCategory,
+    String? groupName,
+    String? vehicleRegistration,
   }) async {
     final u = _auth.currentUser;
     if (u == null) throw StateError('No user signed in');
@@ -152,7 +203,19 @@ class FirebaseAuthService {
         .doc(u.uid)
         .collection('profiles')
         .doc(role.name)
-        .set({'updatedAt': FieldValue.serverTimestamp()}, SetOptions(merge: true));
+        .set(
+          {
+            'updatedAt': FieldValue.serverTimestamp(),
+            ..._roleProfileFieldsForSignUp(
+              role: role,
+              displayName: safeName,
+              businessCategory: businessCategory,
+              groupName: groupName,
+              vehicleRegistration: vehicleRegistration,
+            ),
+          },
+          SetOptions(merge: true),
+        );
 
     if (!isEmailVerified) {
       await u.sendEmailVerification();
@@ -206,6 +269,8 @@ class FirebaseAuthService {
   Future<void> recordSuccessfulLogin(LoginUserRole selectedRole) async {
     final u = _auth.currentUser;
     if (u == null) return;
+    await _syncFcmTokenForUid(u.uid);
+    _startFcmRefreshListener(u.uid);
     await _firestore.collection(usersCollection).doc(u.uid).set(
       {
         'lastLoginAt': FieldValue.serverTimestamp(),
@@ -229,6 +294,7 @@ class FirebaseAuthService {
     required String phoneDialCode,
     String? address,
     DateTime? dateOfBirth,
+    String? profileImagePath,
   }) async {
     final u = _auth.currentUser;
     if (u == null) {
@@ -253,13 +319,57 @@ class FirebaseAuthService {
       data['dateOfBirth'] = Timestamp.fromDate(dateOfBirth);
     }
 
+    if (profileImagePath != null && profileImagePath.trim().isNotEmpty) {
+      final ref = _storage.ref().child('users/${u.uid}/profile.jpg');
+      final task = await ref.putFile(File(profileImagePath));
+      final photoUrl = await task.ref.getDownloadURL();
+      data['photoUrl'] = photoUrl;
+      await u.updatePhotoURL(photoUrl);
+      await u.reload();
+    }
+
     await _firestore.collection(usersCollection).doc(u.uid).set(
           data,
           SetOptions(merge: true),
         );
   }
 
-  Future<void> signOut() => _auth.signOut();
+  Future<void> signOut() async {
+    await FcmService.instance.stopTokenListener();
+    await _auth.signOut();
+  }
+
+  Future<void> _syncFcmTokenForUid(String uid) async {
+    try {
+      await FcmService.instance.ensurePermission();
+      final token = await FcmService.instance.getToken();
+      if (token == null || token.trim().isEmpty) return;
+      await _firestore.collection(usersCollection).doc(uid).set(
+        {
+          fcmTokenField: token,
+          'fcmUpdatedAt': FieldValue.serverTimestamp(),
+        },
+        SetOptions(merge: true),
+      );
+    } catch (_) {
+      // Don't block auth flows on FCM token issues.
+    }
+  }
+
+  void _startFcmRefreshListener(String uid) {
+    FcmService.instance.startTokenListener((token) async {
+      if (token.trim().isEmpty) return;
+      try {
+        await _firestore.collection(usersCollection).doc(uid).set(
+          {
+            fcmTokenField: token,
+            'fcmUpdatedAt': FieldValue.serverTimestamp(),
+          },
+          SetOptions(merge: true),
+        );
+      } catch (_) {}
+    });
+  }
 
   Future<void> clearLocalAuthCache() async {
     await SecureStorageManager.sharedInstance.clearAll();

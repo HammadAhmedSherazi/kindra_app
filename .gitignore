@@ -120,6 +120,9 @@ unlinked_spec.ds
 coverage/
 /coverage/
 
+# Env files (API keys, secrets)
+.env
+
 # Symbols
 app.*.symbols
 

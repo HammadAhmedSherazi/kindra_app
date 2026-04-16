@@ -179,49 +179,115 @@ class HomeView extends StatelessWidget {
                         ),
                       ),
                       40.ph,
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'News',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                              fontFamily: 'Roboto Flex',
-                              fontWeight: FontWeight.w600,
+                      Consumer(
+                        builder: (context, ref, _) {
+                          final newsState = ref.watch(householdNewsProvider);
+                          final items = newsState.items;
+
+                          final showCount = 3; // Home pe sirf itne items
+                          final shouldShowSeeAll =
+                              items.length > showCount || newsState.hasMore;
+
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'News',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                  fontFamily: 'Roboto Flex',
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  if (shouldShowSeeAll)
+                                    TextButton(
+                                      onPressed: () {
+                                        AppRouter.push(const AllNewsView());
+                                      },
+                                      child: Text(
+                                        'See All',
+                                        style: TextStyle(
+                                          color: Colors.black
+                                              .withValues(alpha: 0.40),
+                                          fontSize: 15,
+                                          fontFamily: 'Roboto Flex',
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                      Consumer(
+                        builder: (context, ref, _) {
+                          final newsState = ref.watch(householdNewsProvider);
+                          final items = newsState.items;
+                          final showCount = 3;
+                          final showItems = items.length > showCount
+                              ? items.sublist(0, showCount)
+                              : items;
+
+                          return ApiListHandler<NewsModel>(
+                            items: showItems,
+                            isLoadingInitial: newsState.isLoadingInitial,
+                            isLoadingMore: false,
+                            hasMore: false,
+                            error: newsState.error,
+                            onRetry: () => ref
+                                .read(householdNewsProvider.notifier)
+                                .fetchFirstPage(),
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            separator: const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              child: Divider(),
                             ),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              AppRouter.push(AllNewsView());
-                            },
-                            child: Text(
-                              'See All',
-                              style: TextStyle(
-                                color: Colors.black.withValues(alpha: 0.40),
-                                fontSize: 15,
-                                fontFamily: 'Roboto Flex',
-                                fontWeight: FontWeight.w400,
+                            empty: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 18),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'No news yet',
+                                    style: TextStyle(
+                                      color:
+                                          Colors.black.withValues(alpha: 0.55),
+                                      fontSize: 14,
+                                      fontFamily: 'Roboto Flex',
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      ListView.separated(
-                        shrinkWrap: true,
-                        padding: EdgeInsets.zero,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: demoNewsList.length,
-                        itemBuilder: (context, index) => NewsItemWidget(
-                          news: demoNewsList[index],
-                          onTap: () => AppRouter.push(
-                            NewsDetailView(news: demoNewsList[index]),
-                          ),
-                        ),
-                        separatorBuilder: (context, index) => Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Divider(),
-                        ),
+                            skeletonCount: 3,
+                            skeletonItem: NewsItemWidget(
+                              news: NewsModel(
+                                image:
+                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8kvhwsPdeSIGSEvbktsxc_4pQpEqu4ykg4A&s',
+                                title: 'Loading title',
+                                description:
+                                    'Loading description for the news item...',
+                                date: DateTime.now(),
+                              ),
+                              onTap: () {},
+                            ),
+                            itemBuilder: (context, index, item) => NewsItemWidget(
+                              news: item,
+                              onTap: () => AppRouter.push(
+                                NewsDetailView(news: item),
+                              ),
+                            ),
+                          );
+                        },
                       ),
                       (context.screenHeight * 0.22).clamp(120.0, 220.0).ph,
                     ],

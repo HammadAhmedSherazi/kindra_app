@@ -4,6 +4,7 @@ export 'package:flutter_riverpod/flutter_riverpod.dart';
 export 'package:flutter_localizations/flutter_localizations.dart';
 export 'package:shared_preferences/shared_preferences.dart';
 export 'package:flutter_svg/flutter_svg.dart';
+export 'package:skeletonizer/skeletonizer.dart';
 
 // Data
 export 'data/demo_news_list.dart';
@@ -29,6 +30,7 @@ export 'models/user/role_profiles.dart';
 export 'providers/auth_provider/auth_provider.dart';
 export 'providers/auth_provider/auth_state.dart';
 export 'providers/navigation_provider/navigation_provider.dart';
+export 'providers/news_provider/news_provider.dart';
 export 'providers/user_profile_provider.dart';
 export 'providers/user_role_profile_provider.dart';
 
@@ -42,6 +44,9 @@ export 'viewmodels/user_edit_viewmodel.dart';
 // Services
 export 'services/base_api_services.dart';
 export 'services/firebase_auth_service.dart';
+export 'services/fcm_service.dart';
+export 'services/news_service.dart';
+export 'services/gemini_oil_detection_service.dart';
 export 'services/secure_storage.dart';
 export 'services/shared_preferences.dart';
 
@@ -152,6 +157,7 @@ export 'views/onboarding/splash_view.dart';
 export 'widget/back_button_widget.dart';
 export 'widget/custom_back_arrow_widget.dart';
 export 'widget/news_item_widget.dart';
+export 'widget/api_list_handler.dart';
 export 'widget/custom_button_widget.dart';
 export 'widget/custom_loading_widget.dart';
 export 'widget/custom_text_field_widget.dart';
@@ -159,6 +165,7 @@ export 'widget/cleanup_event_card.dart';
 export 'widget/country_phone_field_widget.dart';
 export 'widget/password_success_dialog.dart';
 export 'widget/exit_app_dialog.dart';
+export 'widget/profile_photo_picker.dart';
 export 'widget/driver_pickup_dialogs.dart';
 export 'widget/driver_pickup_request_card.dart';
 export 'widget/custom_inner_screen_template.dart';

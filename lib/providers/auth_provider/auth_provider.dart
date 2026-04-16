@@ -78,6 +78,9 @@ class AuthProvider extends AutoDisposeNotifier<AuthState> {
     required String phoneDialCode,
     required LoginUserRole role,
     String? profileImagePath,
+    String? businessCategory,
+    String? groupName,
+    String? vehicleRegistration,
   }) async {
     state = state.copyWith(isSigningUp: true, errorMessage: null);
     try {
@@ -89,6 +92,9 @@ class AuthProvider extends AutoDisposeNotifier<AuthState> {
         phoneDialCode: phoneDialCode,
         role: role,
         profileImagePath: profileImagePath,
+        businessCategory: businessCategory,
+        groupName: groupName,
+        vehicleRegistration: vehicleRegistration,
       );
       return true;
     } catch (e) {
@@ -112,6 +118,9 @@ class AuthProvider extends AutoDisposeNotifier<AuthState> {
               phoneDialCode: phoneDialCode,
               role: role,
               profileImagePath: profileImagePath,
+              businessCategory: businessCategory,
+              groupName: groupName,
+              vehicleRegistration: vehicleRegistration,
             );
             return true;
           }
