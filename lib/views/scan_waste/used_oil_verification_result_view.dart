@@ -5,9 +5,14 @@ import '../../export_all.dart';
 /// Shown after user confirms the used oil image. Displays verification result
 /// (Oil Detected), details with gram-unit prices, and "Hand over the used oil" CTA.
 class UsedOilVerificationResultView extends StatelessWidget {
-  const UsedOilVerificationResultView({super.key, required this.imagePath});
+  const UsedOilVerificationResultView({
+    super.key,
+    required this.imagePath,
+    this.geminiResult,
+  });
 
   final String imagePath;
+  final GeminiOilDetectionResult? geminiResult;
 
   /// Demo details; replace with API response when backend is ready.
   static const List<({String name, String price})> _demoDetails = [
@@ -17,6 +22,20 @@ class UsedOilVerificationResultView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final oilDetected = geminiResult?.oilDetected;
+    final confidence = geminiResult?.confidence;
+    final reason = geminiResult?.reason;
+
+    final statusTitle = oilDetected == null
+        ? 'Verification Pending'
+        : (oilDetected ? 'Oil Detected.' : 'No Oil Detected.');
+    final statusColor = oilDetected == null
+        ? const Color(0xFFF0FBFF)
+        : (oilDetected ? const Color(0xFFF0FBFF) : const Color(0xFFFFF7F0));
+    final statusBorder = oilDetected == null
+        ? const Color(0xFF4EC5EB)
+        : (oilDetected ? const Color(0xFF4EC5EB) : const Color(0xFFEBA44E));
+
     return CustomInnerScreenTemplate(
       title: 'Oil Type Verification Result',
       child: SafeArea(
@@ -54,14 +73,14 @@ class UsedOilVerificationResultView extends StatelessWidget {
                   horizontal: 16,
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF0FBFF),
+                  color: statusColor,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: const Color(0xFF4EC5EB)),
+                  border: Border.all(color: statusBorder),
                 ),
                 child: Column(
                   children: [
                     Text(
-                      'Oil Detected.',
+                      statusTitle,
                       style: context.robotoFlexSemiBold(
                         fontSize: 18,
                         color: Colors.black,
@@ -69,13 +88,36 @@ class UsedOilVerificationResultView extends StatelessWidget {
                     ),
                     8.ph,
                     Text(
-                      'The Price listed is the price in gram units.',
+                      oilDetected == null
+                          ? 'We are verifying your image...'
+                          : 'The Price listed is the price in gram units.',
                       textAlign: TextAlign.center,
                       style: context.robotoFlexRegular(
                         fontSize: 14,
                         color: Colors.black87,
                       ),
                     ),
+                    if (confidence != null) ...[
+                      10.ph,
+                      Text(
+                        'Confidence: $confidence%',
+                        style: context.robotoFlexRegular(
+                          fontSize: 13,
+                          color: Colors.black.withValues(alpha: 0.70),
+                        ),
+                      ),
+                    ],
+                    if (reason != null && reason.trim().isNotEmpty) ...[
+                      6.ph,
+                      Text(
+                        reason,
+                        textAlign: TextAlign.center,
+                        style: context.robotoFlexRegular(
+                          fontSize: 13,
+                          color: Colors.black.withValues(alpha: 0.60),
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),

@@ -36,13 +36,16 @@ class GeminiOilDetectionResult {
 }
 
 class GeminiOilDetectionService {
+  /// For Google AI Studio keys, use a model that [lists as available](https://ai.google.dev/api/models)
+  /// for `generateContent`. `gemini-1.5-flash` often returns 404 on v1beta now — prefer 2.x.
   GeminiOilDetectionService({
     required this.apiKey,
-    this.model = 'gemini-1.5-flash',
+    this.model = 'gemini-2.0-flash',
   });
 
   final String apiKey;
   final String model;
+  static const String _host = 'generativelanguage.googleapis.com';
 
   static const _prompt = '''
 You are a highly strict image analysis AI.
@@ -80,10 +83,11 @@ Return ONLY JSON:
   }) async {
     final base64Image = base64Encode(bytes);
 
-    final url = Uri.parse(
-      'https://generativelanguage.googleapis.com/v1/models/'
-      '$model:generateContent?key=$apiKey',
-    );
+    Uri buildUrl(String apiVersion) => Uri.https(
+          _host,
+          '/$apiVersion/models/$model:generateContent',
+          {'key': apiKey},
+        );
 
     final body = <String, dynamic>{
       'contents': [
@@ -101,11 +105,14 @@ Return ONLY JSON:
       ],
     };
 
-    final response = await http.post(
-      url,
-      headers: const {'Content-Type': 'application/json'},
-      body: jsonEncode(body),
-    );
+    // Gemini Generative Language API models are commonly available on v1beta.
+    // Try v1beta first, then fallback to v1 for compatibility.
+    http.Response response;
+    try {
+      response = await _postJson(buildUrl('v1beta'), body);
+    } catch (_) {
+      response = await _postJson(buildUrl('v1'), body);
+    }
 
     if (response.statusCode != 200) {
       throw Exception(
@@ -133,6 +140,17 @@ Return ONLY JSON:
     final cleaned = _cleanGeminiJsonText(text);
     final jsonMap = jsonDecode(cleaned) as Map<String, dynamic>;
     return GeminiOilDetectionResult.fromJson(jsonMap);
+  }
+
+  Future<http.Response> _postJson(
+    Uri url,
+    Map<String, dynamic> body,
+  ) {
+    return http.post(
+      url,
+      headers: const {'Content-Type': 'application/json'},
+      body: jsonEncode(body),
+    );
   }
 
   String _guessMimeTypeFromPath(String path) {
