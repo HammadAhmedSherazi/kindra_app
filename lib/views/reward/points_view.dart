@@ -76,6 +76,7 @@ class PointsView extends StatelessWidget {
                 ),
               ),
               historySectionTopPadding.ph,
+              15.ph,
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(

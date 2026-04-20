@@ -1,5 +1,15 @@
 import '../../export_all.dart';
 
+/// Points card: show a short prefix only; rest masked with asterisks.
+String _maskedPointsCardName(String? displayName) {
+  final s = displayName?.trim();
+  if (s == null || s.isEmpty) return '****';
+  if (s.length <= 3) {
+    return '${s.substring(0, 1)}****';
+  }
+  return '${s.substring(0, 3)}*******';
+}
+
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
 
@@ -117,6 +127,7 @@ class HomeView extends StatelessWidget {
                     ],
                   ),
                 ),
+                10.ph,
                 Expanded(
                   child: ListView(
                     // shrinkWrap: true,
@@ -133,7 +144,7 @@ class HomeView extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      17.ph,
+                      10.ph,
                       Container(
                         width: 371,
                         // height: 77,
@@ -382,17 +393,42 @@ class HomeView extends StatelessWidget {
                         Row(
                           children: [
                             Expanded(
-                              child: Text(
-                                'Faj*******',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 17.83,
-                                  fontFamily: 'Roboto Flex',
-                                  fontWeight: FontWeight.w600,
-                                  height: 0.73,
-                                ),
+                              child: Consumer(
+                                builder: (context, ref, _) {
+                                  final displayName = ref.watch(
+                                    currentUserBaseProvider.select((async) {
+                                      final fromFirestore = async.maybeWhen(
+                                        data: (p) =>
+                                            (p?.displayName.isNotEmpty == true)
+                                                ? p!.displayName
+                                                : null,
+                                        orElse: () => null,
+                                      );
+                                      if (fromFirestore != null &&
+                                          fromFirestore.trim().isNotEmpty) {
+                                        return fromFirestore;
+                                      }
+                                      final authName = FirebaseAuthService
+                                          .instance.currentUserDisplayName;
+                                      return (authName != null &&
+                                              authName.trim().isNotEmpty)
+                                          ? authName
+                                          : null;
+                                    }),
+                                  );
+                                  return Text(
+                                    _maskedPointsCardName(displayName),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 17.83,
+                                      fontFamily: 'Roboto Flex',
+                                      fontWeight: FontWeight.w600,
+                                      height: 0.73,
+                                    ),
+                                  );
+                                },
                               ),
                             ),
                           ],
