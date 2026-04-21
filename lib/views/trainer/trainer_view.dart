@@ -2,15 +2,8 @@ import '../../../export_all.dart';
 
 enum CourseStatus { completed, inProgress, available, locked }
 
+/// List row model + demo progress for [TrainingModuleFlowArgs] resume.
 class _CourseItem {
-  final String title;
-  final String description;
-  final String duration;
-  final String points;
-  final String participants;
-  final CourseStatus status;
-  final double progress; // 0 to 1
-
   const _CourseItem({
     required this.title,
     required this.description,
@@ -19,51 +12,121 @@ class _CourseItem {
     required this.participants,
     required this.status,
     this.progress = 0,
+    this.lessonProgress01 = 0,
+    this.quizScore01 = 0,
+    this.challengeProgress01 = 0,
+    this.challengeCaption,
   });
+
+  final String title;
+  final String description;
+  final String duration;
+  final String points;
+  final String participants;
+  final CourseStatus status;
+  final double progress;
+
+  final double lessonProgress01;
+  final double quizScore01;
+  final double challengeProgress01;
+  final String? challengeCaption;
+
+  /// Client flow always includes quiz + practical challenge unless backend says otherwise.
+  bool get hasPracticalChallenge => true;
 }
 
 class TrainerView extends StatelessWidget {
   const TrainerView({super.key});
 
-  static const _courses = [
+  static const _fallbackCourses = [
     _CourseItem(
       title: 'Waste Sorting Basics',
-      description: 'Learn the fundamentals of proper waste categorization',
+      description:
+          'Learn the fundamentals of proper waste categorization',
       duration: '15 min',
       points: '100 pts',
       participants: '1250',
       status: CourseStatus.completed,
       progress: 1,
+      lessonProgress01: 1,
+      quizScore01: 0.85,
+      challengeProgress01: 1,
+      challengeCaption: 'Photo proof • AI validated',
     ),
     _CourseItem(
       title: 'Recycling Best Practices',
-      description: 'Advanced techniques for maximizing recycling efficiency',
+      description:
+          'Advanced techniques for maximizing recycling efficiency',
       duration: '25 min',
       points: '150 pts',
       participants: '890',
       status: CourseStatus.inProgress,
       progress: 0.6,
+      lessonProgress01: 1,
+      quizScore01: 0.55,
+      challengeProgress01: 0,
+      challengeCaption: 'Upload proof • validation',
     ),
     _CourseItem(
       title: 'Composting Guide',
-      description: 'Transform organic waste into valuable compost',
+      description:
+          'Transform organic waste into valuable compost',
       duration: '20 min',
       points: '125 pts',
       participants: '675',
       status: CourseStatus.available,
+      progress: 0,
+      lessonProgress01: 0,
+      quizScore01: 0,
+      challengeProgress01: 0,
     ),
     _CourseItem(
       title: 'Hazardous Waste Safety',
-      description: 'Safe handling and disposal of dangerous materials',
+      description:
+          'Safe handling and disposal of dangerous materials',
       duration: '30 min',
       points: '200 pts',
       participants: '432',
       status: CourseStatus.locked,
+      progress: 0,
+      lessonProgress01: 0,
+      quizScore01: 0,
+      challengeProgress01: 0,
+    ),
+    _CourseItem(
+      title: 'Used cooking oil at home',
+      description:
+          'Store, label, and prepare used oil for safe handover — text-first, low data use',
+      duration: '12 min',
+      points: '110 pts',
+      participants: '2100',
+      status: CourseStatus.available,
+      progress: 0,
+      lessonProgress01: 0,
+      quizScore01: 0,
+      challengeProgress01: 0,
+      challengeCaption: 'Photo of sealed container • AI check',
+    ),
+    _CourseItem(
+      title: 'Eco-points & community impact',
+      description:
+          'How Kindra points, levels, and community ranking connect to real recycling actions',
+      duration: '18 min',
+      points: '95 pts',
+      participants: '1540',
+      status: CourseStatus.available,
+      progress: 0,
+      lessonProgress01: 0,
+      quizScore01: 0,
+      challengeProgress01: 0,
+      challengeCaption: 'Short reflection + optional photo',
     ),
   ];
 
   @override
   Widget build(BuildContext context) {
+    const courses = TrainerView._fallbackCourses;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF9FAFC),
       appBar: AppBar(
@@ -79,19 +142,6 @@ class TrainerView extends StatelessWidget {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            // SliverToBoxAdapter(
-            //   child: Padding(
-            //     padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
-            //     child: Text(
-            //       'Training',
-            //       textAlign: TextAlign.center,
-            //       style: context.robotoFlexBold(
-            //         fontSize: 22,
-            //         color: Colors.black,
-            //       ),
-            //     ),
-            //   ),
-            // ),
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -126,9 +176,9 @@ class TrainerView extends StatelessWidget {
                     horizontal: 20,
                     vertical: 6,
                   ),
-                  child: _CourseCard(course: _courses[index]),
+                  child: _CourseCard(course: courses[index]),
                 ),
-                childCount: _courses.length,
+                childCount: courses.length,
               ),
             ),
             SliverToBoxAdapter(child: 24.ph),
@@ -235,18 +285,14 @@ class TrainerView extends StatelessWidget {
                                 Container(
                                   width: 27.95,
                                   height: 27.95,
-                                  // padding: EdgeInsets.all(5),
                                   alignment: Alignment.center,
-
                                   decoration: BoxDecoration(
                                     color: const Color(0xFFF3F4F6),
                                     shape: BoxShape.circle,
                                   ),
-
                                   child: Icon(
                                     Icons.star_outline_rounded,
                                     color: Color(0xff99A1AF),
-                                    
                                   ),
                                 ),
                                 Text(
@@ -308,7 +354,6 @@ class _CertificationCard extends StatelessWidget {
                 Assets.rewardIcon,
                 colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
               ),
-
               Expanded(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -320,9 +365,8 @@ class _CertificationCard extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-
                     Text(
-                      '2/4 Completed',
+                      '2/6 Completed',
                       style: context.robotoFlexMedium(
                         fontSize: 14,
                         color: Colors.white,
@@ -337,7 +381,7 @@ class _CertificationCard extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(6),
             child: LinearProgressIndicator(
-              value: 0.5,
+              value: 2 / 6,
               minHeight: 8,
               backgroundColor: Colors.white.withValues(alpha: 0.35),
               valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
@@ -345,7 +389,7 @@ class _CertificationCard extends StatelessWidget {
           ),
           12.ph,
           Text(
-            'Complete 2 more courses to earn your Waste Management Certificate',
+            'Complete 4 more courses to earn your Waste Management Certificate',
             style: context.robotoFlexRegular(fontSize: 13, color: Colors.white),
           ),
         ],
@@ -366,7 +410,6 @@ class _StatsRow extends StatelessWidget {
             iconWidget: Container(
               width: 31.45,
               height: 31.45,
-
               decoration: ShapeDecoration(
                 color: const Color(0xFFFEF9C2),
                 shape: RoundedRectangleBorder(
@@ -499,11 +542,9 @@ class _CourseCard extends StatelessWidget {
     final color = _statusColor();
     switch (course.status) {
       case CourseStatus.completed:
-        return Image.asset(
-          Assets.checkedIcon,
-          color: AppColors.primaryColor,
-          width: 15,
-          height: 15,
+        return ColorFiltered(
+          colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+          child: Image.asset(Assets.checkedIcon, width: 15, height: 15),
         );
       case CourseStatus.inProgress:
         return SvgPicture.asset(Assets.playIcon, width: 15, height: 15);
@@ -527,10 +568,19 @@ class _CourseCard extends StatelessWidget {
     }
   }
 
+  Future<void> _openStartFlow(BuildContext context) async {
+    await _presentTrainingCourseFlow(
+      context,
+      course,
+      isReplay: course.status == CourseStatus.completed,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final statusColor = _statusColor();
     final isLocked = course.status == CourseStatus.locked;
+    final progressPct = (course.progress.clamp(0.0, 1.0) * 100).round();
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -550,7 +600,6 @@ class _CourseCard extends StatelessWidget {
         spacing: 20,
         children: [
           Column(children: [10.ph, _leadingIcon()]),
-
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -558,11 +607,13 @@ class _CourseCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      course.title,
-                      style: context.robotoFlexRegular(
-                        fontSize: 15,
-                        color: Colors.black,
+                    Expanded(
+                      child: Text(
+                        course.title,
+                        style: context.robotoFlexRegular(
+                          fontSize: 15,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                     Container(
@@ -638,7 +689,6 @@ class _CourseCard extends StatelessWidget {
                     ),
                   ],
                 ),
-
                 if (course.status == CourseStatus.completed ||
                     course.status == CourseStatus.inProgress) ...[
                   10.ph,
@@ -656,7 +706,7 @@ class _CourseCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '100%',
+                        '$progressPct%',
                         style: TextStyle(
                           color: const Color(0xFF1A332E),
                           fontSize: 10.50,
@@ -671,93 +721,45 @@ class _CourseCard extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(4),
                     child: LinearProgressIndicator(
-                      value: course.progress,
+                      value: course.progress.clamp(0.0, 1.0),
                       minHeight: 6,
                       backgroundColor: Colors.grey.shade200,
-                      valueColor: AlwaysStoppedAnimation<Color>(
+                      valueColor: const AlwaysStoppedAnimation<Color>(
                         Color(0xff10B981),
                       ),
                     ),
                   ),
-                  if (course.status == CourseStatus.completed) 4.ph,
-                  if (course.status == CourseStatus.completed)
+                  if (course.status == CourseStatus.completed) ...[
+                    4.ph,
                     Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        '${(course.progress * 100).toInt()}%',
+                        '$progressPct%',
                         style: context.robotoFlexMedium(
                           fontSize: 11,
                           color: AppColors.primaryColor,
                         ),
                       ),
                     ),
+                  ],
                 ],
                 14.ph,
                 SizedBox(
                   width: double.infinity,
+                  height: 30,
                   child: isLocked
-                      ? SizedBox(
-                          height: 30,
-                          child: Opacity(
-                            opacity: 0.50,
-                            child: OutlinedButton(
-                              onPressed: null,
-                              style: OutlinedButton.styleFrom(
-                                padding: EdgeInsets.zero,
-                                foregroundColor: Colors.grey,
-                                side: BorderSide(color: Colors.grey.shade300),
-                                backgroundColor: const Color(0xFF10B981),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8.50),
-                                ),
-                              ),
-                              child: Text(
-                                _buttonLabel(),
-                                style: context.robotoFlexMedium(
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      : course.status == CourseStatus.completed
-                      ? SizedBox(
-                          height: 30,
+                      ? Opacity(
+                          opacity: 0.50,
                           child: OutlinedButton(
-                            onPressed: () {},
+                            onPressed: null,
                             style: OutlinedButton.styleFrom(
-                              foregroundColor: const Color(0xFFF8FFFE),
-
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.50),
-                              ),
-                              side: BorderSide(
-                                width: 1.05,
-                                color: const Color(0x2610B981),
-                              ),
-                              backgroundColor: const Color(0xFFF8FFFE),
-                            ),
-                            child: Text(
-                              _buttonLabel(),
-                              style: context.robotoFlexMedium(
-                                fontSize: 14,
-                                // color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        )
-                      : SizedBox(
-                          height: 30,
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            style: ElevatedButton.styleFrom(
                               padding: EdgeInsets.zero,
+                              foregroundColor: Colors.grey,
+                              side: BorderSide(color: Colors.grey.shade300),
+                              backgroundColor: const Color(0xFF10B981),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8.50),
                               ),
-                              backgroundColor: Color(0xff10B981),
-                              foregroundColor: Colors.white,
                             ),
                             child: Text(
                               _buttonLabel(),
@@ -767,7 +769,44 @@ class _CourseCard extends StatelessWidget {
                               ),
                             ),
                           ),
-                        ),
+                        )
+                      : course.status == CourseStatus.completed
+                          ? OutlinedButton(
+                              onPressed: () => _openStartFlow(context),
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: const Color(0xFFF8FFFE),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.50),
+                                ),
+                                side: BorderSide(
+                                  width: 1.05,
+                                  color: const Color(0x2610B981),
+                                ),
+                                backgroundColor: const Color(0xFFF8FFFE),
+                              ),
+                              child: Text(
+                                _buttonLabel(),
+                                style: context.robotoFlexMedium(fontSize: 14),
+                              ),
+                            )
+                          : ElevatedButton(
+                              onPressed: () => _openStartFlow(context),
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.zero,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.50),
+                                ),
+                                backgroundColor: Color(0xff10B981),
+                                foregroundColor: Colors.white,
+                              ),
+                              child: Text(
+                                _buttonLabel(),
+                                style: context.robotoFlexMedium(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
                 ),
               ],
             ),
@@ -778,55 +817,111 @@ class _CourseCard extends StatelessWidget {
   }
 }
 
-class _AchievementCard extends StatelessWidget {
-  const _AchievementCard({
-    required this.title,
-    required this.subtitle,
-    required this.icon,
-    required this.color,
-    required this.iconColor,
-  });
-
-  final String title;
-  final String subtitle;
-  final IconData icon;
-  final Color color;
-  final Color iconColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(14),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+/// Intro dialog → [TrainingModuleFlowView] (video → quiz → challenge).
+Future<void> _presentTrainingCourseFlow(
+  BuildContext context,
+  _CourseItem course, {
+  required bool isReplay,
+}) async {
+  final passPct = (kTrainingQuizPassThreshold * 100).round();
+  final proceed = await showDialog<bool>(
+    context: context,
+    barrierDismissible: true,
+    builder: (ctx) => AlertDialog(
+      title: Text(
+        course.title,
+        style: context.robotoFlexBold(fontSize: 18, color: Colors.black),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, size: 32, color: iconColor),
-          10.ph,
-          Text(
-            title,
-            style: context.robotoFlexBold(fontSize: 14, color: Colors.black),
-          ),
-          4.ph,
-          Text(
-            subtitle,
-            style: context.robotoFlexRegular(
-              fontSize: 11,
-              color: Colors.grey.shade600,
+      content: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              course.description,
+              style: context.robotoFlexRegular(
+                fontSize: 13,
+                color: Colors.grey.shade800,
+              ),
+            ),
+            14.ph,
+            Text(
+              'After you start',
+              style: context.robotoFlexBold(fontSize: 14, color: Colors.black),
+            ),
+            8.ph,
+            Text(
+              '• Video lesson (${course.duration})\n'
+              '• Quiz — $passPct%+ to continue\n'
+              '${course.hasPracticalChallenge ? '• Practical challenge\n' : ''}'
+              '• Points: ${course.points}',
+              style: context.robotoFlexRegular(
+                fontSize: 12,
+                color: Colors.grey.shade700,
+              ),
+            ),
+            if (course.challengeCaption != null) ...[
+              10.ph,
+              Text(
+                course.challengeCaption!,
+                style: context.robotoFlexMedium(
+                  fontSize: 11,
+                  color: const Color(0xFF1A332E),
+                ),
+              ),
+            ],
+            if (isReplay) ...[
+              12.ph,
+              Text(
+                'Completed course — replay from the video if you want to review.',
+                style: context.robotoFlexRegular(
+                  fontSize: 12,
+                  color: Colors.grey.shade600,
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(ctx, false),
+          child: Text(
+            'Cancel',
+            style: context.robotoFlexMedium(
+              fontSize: 15,
+              color: Colors.grey.shade700,
             ),
           ),
-        ],
-      ),
-    );
-  }
+        ),
+        ElevatedButton(
+          onPressed: () => Navigator.pop(ctx, true),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xff10B981),
+            foregroundColor: Colors.white,
+          ),
+          child: Text(
+            isReplay ? 'Replay' : 'Start',
+            style: context.robotoFlexMedium(fontSize: 15, color: Colors.white),
+          ),
+        ),
+      ],
+    ),
+  );
+
+  if (proceed != true || !context.mounted) return;
+
+  final args = TrainingModuleFlowArgs.fromModule(
+    title: course.title,
+    description: course.description,
+    ecoPointsLabel: course.points,
+    lessonMinutesRange: course.duration,
+    hasPracticalChallenge: course.hasPracticalChallenge,
+    lessonProgress01: course.lessonProgress01,
+    quizScore01: course.quizScore01,
+    challengeProgress01: course.challengeProgress01,
+    challengeCaption: course.challengeCaption,
+  );
+
+  await AppRouter.push(TrainingModuleFlowView(args: args));
 }

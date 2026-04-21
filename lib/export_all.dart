@@ -88,6 +88,7 @@ export 'views/redeem/credit_check_modal.dart';
 export 'views/redeem/credit_exchange_view.dart';
 export 'views/redeem/redeem_success_view.dart';
 export 'views/trainer/trainer_view.dart';
+export 'views/trainer/training_module_flow_view.dart';
 export 'views/home/all_news_view.dart';
 export 'views/home/news_detail_view.dart';
 export 'views/notification/notification_view.dart';

@@ -1,9 +1,12 @@
 import 'dart:io';
 
+import 'package:image_picker/image_picker.dart';
+
 import '../../export_all.dart';
 
-/// Shown after user confirms the used oil image. Displays verification result
-/// (Oil Detected), details with gram-unit prices, and "Hand over the used oil" CTA.
+/// Shown after user confirms the used oil image. Displays verification result,
+/// details with gram-unit prices, and either "Hand over the used oil" or "Retake"
+/// when no oil was detected.
 class UsedOilVerificationResultView extends StatelessWidget {
   const UsedOilVerificationResultView({
     super.key,
@@ -169,11 +172,23 @@ class UsedOilVerificationResultView extends StatelessWidget {
                 ),
               ),
               30.ph,
-              CustomButtonWidget(
-                label: 'Hand over the used oil',
-                onPressed: _onHandOver,
-                textSize: 18,
-              ),
+              if (oilDetected == false)
+                CustomButtonWidget(
+                  label: 'Retake',
+                  variant: CustomButtonVariant.outlined,
+                  onPressed: () => _onRetake(),
+                  borderColor:
+                      const Color(0xFF020202).withValues(alpha: 0.70),
+                  textColor:
+                      const Color(0xFF020202).withValues(alpha: 0.70),
+                  textSize: 18,
+                )
+              else
+                CustomButtonWidget(
+                  label: 'Hand over the used oil',
+                  onPressed: _onHandOver,
+                  textSize: 18,
+                ),
               24.ph,
             ],
           ),
@@ -184,5 +199,19 @@ class UsedOilVerificationResultView extends StatelessWidget {
 
   void _onHandOver() {
     AppRouter.push(UsedOilHandoverFormView(trashImagePath: imagePath));
+  }
+
+  Future<void> _onRetake() async {
+    final picker = ImagePicker();
+    final XFile? photo = await picker.pickImage(
+      source: ImageSource.camera,
+      imageQuality: 85,
+    );
+    if (photo == null || !AppRouter.navKey.currentContext!.mounted) return;
+    AppRouter.back();
+    AppRouter.back();
+    await AppRouter.push(
+      UsedOilImageConfirmationView(imagePath: photo.path),
+    );
   }
 }

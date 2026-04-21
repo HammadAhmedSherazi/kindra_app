@@ -37,10 +37,10 @@ class GeminiOilDetectionResult {
 
 class GeminiOilDetectionService {
   /// For Google AI Studio keys, use a model that [lists as available](https://ai.google.dev/api/models)
-  /// for `generateContent`. `gemini-1.5-flash` often returns 404 on v1beta now — prefer 2.x.
+  /// for `generateContent`. Avoid deprecated IDs (e.g. `gemini-2.0-flash` may 404 for new users).
   GeminiOilDetectionService({
     required this.apiKey,
-    this.model = 'gemini-2.0-flash',
+    this.model = 'gemini-2.5-flash',
   });
 
   final String apiKey;
