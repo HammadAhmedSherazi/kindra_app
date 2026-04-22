@@ -14,145 +14,146 @@ class ProfileView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        title: Text(
-          'Profile',
-          style: context.robotoFlexBold(
-            fontSize: 22,
-            color: Colors.black,
-          ),
-        ),
-      ),
       body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Fixed title (Reward/Award tab style)
+            Center(
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 24,
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: const Text(
+                  'Profile',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontFamily: 'Roboto Flex',
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.center,
-                    //   children: [
-                    //     Text(
-                    //       'Profile',
-                    //       textAlign: TextAlign.center,
-                    //       style: context.robotoFlexSemiBold(
-                    //         fontSize: 20,
-                    //         color: Colors.black,
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
-                    // 24.ph,
-                    Consumer(
-                      builder: (context, ref, _) {
-                        final photoUrl = ref.watch(
-                          currentUserBaseProvider.select(
-                            (async) => async.maybeWhen(
-                              data: (p) => p?.photoUrl ?? '',
-                              orElse: () => '',
+              ),
+            ),
+            // Scroll only the body content
+            Expanded(
+              child: CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 24,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Consumer(
+                            builder: (context, ref, _) {
+                              final photoUrl = ref.watch(
+                                currentUserBaseProvider.select(
+                                  (async) => async.maybeWhen(
+                                    data: (p) => p?.photoUrl ?? '',
+                                    orElse: () => '',
+                                  ),
+                                ),
+                              );
+                              final displayName = ref.watch(
+                                currentUserBaseProvider.select((async) {
+                                  final fromFirestore = async.maybeWhen(
+                                    data: (p) =>
+                                        (p?.displayName.isNotEmpty == true)
+                                            ? p!.displayName
+                                            : null,
+                                    orElse: () => null,
+                                  );
+                                  if (fromFirestore != null &&
+                                      fromFirestore.trim().isNotEmpty) {
+                                    return fromFirestore;
+                                  }
+                                  final authName = FirebaseAuthService
+                                      .instance.currentUserDisplayName;
+                                  return (authName != null &&
+                                          authName.trim().isNotEmpty)
+                                      ? authName
+                                      : 'User';
+                                }),
+                              );
+                              final email = ref.watch(
+                                currentUserBaseProvider.select((async) {
+                                  final fromFirestore = async.maybeWhen(
+                                    data: (p) =>
+                                        (p?.email.isNotEmpty == true)
+                                            ? p!.email
+                                            : null,
+                                    orElse: () => null,
+                                  );
+                                  if (fromFirestore != null &&
+                                      fromFirestore.trim().isNotEmpty) {
+                                    return fromFirestore;
+                                  }
+                                  final authEmail = FirebaseAuthService
+                                      .instance.currentUserEmail;
+                                  return (authEmail != null &&
+                                          authEmail.trim().isNotEmpty)
+                                      ? authEmail
+                                      : '';
+                                }),
+                              );
+
+                              return _buildUserSection(
+                                context,
+                                photoUrl: photoUrl,
+                                displayName: displayName,
+                                email: email,
+                              );
+                            },
+                          ),
+                          28.ph,
+                          Text(
+                            'Account',
+                            style: context.robotoFlexSemiBold(
+                              fontSize: 18,
+                              color: Colors.black,
                             ),
                           ),
-                        );
-                        final displayName = ref.watch(
-                          currentUserBaseProvider.select((async) {
-                            final fromFirestore = async.maybeWhen(
-                              data: (p) =>
-                                  (p?.displayName.isNotEmpty == true)
-                                      ? p!.displayName
-                                      : null,
-                              orElse: () => null,
-                            );
-                            if (fromFirestore != null &&
-                                fromFirestore.trim().isNotEmpty) {
-                              return fromFirestore;
-                            }
-                            final authName = FirebaseAuthService
-                                .instance.currentUserDisplayName;
-                            return (authName != null &&
-                                    authName.trim().isNotEmpty)
-                                ? authName
-                                : 'User';
-                          }),
-                        );
-                        final email = ref.watch(
-                          currentUserBaseProvider.select((async) {
-                            final fromFirestore = async.maybeWhen(
-                              data: (p) =>
-                                  (p?.email.isNotEmpty == true)
-                                      ? p!.email
-                                      : null,
-                              orElse: () => null,
-                            );
-                            if (fromFirestore != null &&
-                                fromFirestore.trim().isNotEmpty) {
-                              return fromFirestore;
-                            }
-                            final authEmail =
-                                FirebaseAuthService.instance.currentUserEmail;
-                            return (authEmail != null &&
-                                    authEmail.trim().isNotEmpty)
-                                ? authEmail
-                                : '';
-                          }),
-                        );
-
-                        return _buildUserSection(
-                          context,
-                          photoUrl: photoUrl,
-                          displayName: displayName,
-                          email: email,
-                        );
-                      },
-                    ),
-                    28.ph,
-                    Text(
-                      'Account',
-                      style: context.robotoFlexSemiBold(
-                        fontSize: 18,
-                        color: Colors.black,
+                          14.ph,
+                          _buildYourRankCard(context),
+                          20.ph,
+                          _buildMenuItem(
+                            context,
+                            icon: Assets.editProfileIcon,
+                            label: 'Edit Profile',
+                            onTap: () =>
+                                AppRouter.push(const EditProfileView()),
+                          ),
+                          12.ph,
+                          _buildMenuItem(
+                            context,
+                            icon: Assets.notificationIcon,
+                            label: 'Notification',
+                            onTap: () =>
+                                AppRouter.push(const NotificationView()),
+                          ),
+                          12.ph,
+                          _buildMenuItem(
+                            context,
+                            icon: Assets.medalIcon,
+                            label: 'Reward',
+                            onTap: () => AppRouter.push(const PointsView()),
+                          ),
+                          12.ph,
+                          _buildMenuItem(
+                            context,
+                            icon: Assets.logoutIcon,
+                            label: 'Logout',
+                            isLogout: true,
+                            onTap: () => showLogoutDialog(context),
+                          ),
+                          40.ph,
+                        ],
                       ),
                     ),
-                    14.ph,
-                    _buildYourRankCard(context),
-                    20.ph,
-                    _buildMenuItem(
-                      context,
-                      icon: Assets.editProfileIcon,
-                      label: 'Edit Profile',
-                      onTap: () => AppRouter.push(const EditProfileView()),
-                    ),
-                    12.ph,
-                    _buildMenuItem(
-                      context,
-                      icon: Assets.notificationIcon,
-                      label: 'Notification',
-                      onTap: () => AppRouter.push(const NotificationView()),
-                    ),
-                    12.ph,
-                    _buildMenuItem(
-                      context,
-                      icon: Assets.medalIcon,
-                      label: 'Reward',
-                      onTap: () => AppRouter.push(const PointsView()),
-                    ),
-                    12.ph,
-                    _buildMenuItem(
-                      context,
-                      icon: Assets.logoutIcon,
-                      label: 'Logout',
-                      isLogout: true,
-                      onTap: () => showLogoutDialog(context),
-                    ),
-                    40.ph,
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],

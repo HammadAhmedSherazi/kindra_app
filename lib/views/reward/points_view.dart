@@ -82,7 +82,7 @@ class PointsView extends StatelessWidget {
                 child: Row(
                   children: [
                     Text(
-                      'Ponts Redemption History',
+                      'Points Redemption History',
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 22,
@@ -270,36 +270,6 @@ class _PointsSummaryCard extends StatelessWidget {
       ),
     );
   }
-}
-
-class _SwirlPatternPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.grey
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5;
-    for (var i = 0; i < 8; i++) {
-      final path = Path();
-      path.moveTo(size.width * (0.2 + i * 0.08), size.height * 0.5);
-      path.quadraticBezierTo(
-        size.width * (0.5 + i * 0.05),
-        size.height * (0.3 - i * 0.02),
-        size.width * 0.8,
-        size.height * (0.4 + i * 0.05),
-      );
-      path.quadraticBezierTo(
-        size.width * (0.6 - i * 0.03),
-        size.height * 0.7,
-        size.width * 0.2,
-        size.height * 0.6,
-      );
-      canvas.drawPath(path, paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
 class _RedemptionHistoryTile extends StatelessWidget {

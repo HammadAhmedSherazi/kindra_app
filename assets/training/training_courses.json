@@ -1,0 +1,133 @@
+{
+  "_meta": {
+    "collection": "course",
+    "index_field": "order",
+    "note": "Upload uses Firestore auto document IDs. JSON has no per-course keys: use the top-level 'courses' array. Each app run that uploads creates new documents unless you de-duplicate in console.",
+    "field_rules": {
+      "order": "number (int, 0+). Unlocks next course: householder gating uses trainingUnlockedUpToOrder on users/{uid}.",
+      "title": "string",
+      "description": "string",
+      "estimatedMinutes": "number (int)",
+      "ecoPoints": "number (int)",
+      "participants": "number (int), optional, default 0",
+      "isActive": "boolean, only isActive==true is listed in app",
+      "videoUrl": "string, HTTPS MP4 URL (use a bucket that allows anonymous read, or a public CDN; Google gtv-videos-bucket sample URLs are often AccessDenied for anonymous now)",
+      "quiz": "array of { id, prompt, options: string[], correctIndex: int (0-based) }. App currently uses the first item only in UI.",
+      "challenge": "{ type: 'photo' | 'text', prompt: string, caption?: string }"
+    }
+  },
+  "courses": [
+    {
+      "order": 0,
+      "title": "Waste Sorting Basics",
+      "description": "Learn how to separate wet, dry, and hazardous waste and label bins for safer collection.",
+      "estimatedMinutes": 12,
+      "ecoPoints": 100,
+      "participants": 1250,
+      "isActive": true,
+      "videoUrl": "https://www.w3schools.com/html/mov_bbb.mp4",
+      "quiz": [
+        {
+          "id": "q1",
+          "prompt": "Which bin should food scraps go into?",
+          "options": [
+            "Wet/Organic",
+            "Dry/Recyclable",
+            "E-waste",
+            "Hazardous"
+          ],
+          "correctIndex": 0
+        }
+      ],
+      "challenge": {
+        "type": "photo",
+        "prompt": "Upload a photo of your labeled waste bins at home.",
+        "caption": "Photo proof • AI / ops review"
+      }
+    },
+    {
+      "order": 1,
+      "title": "Recycling Best Practices",
+      "description": "Rinse, dry, and sort common recyclables so more material actually gets recycled (not landfilled).",
+      "estimatedMinutes": 18,
+      "ecoPoints": 140,
+      "participants": 890,
+      "isActive": true,
+      "videoUrl": "https://filesamples.com/samples/video/mp4/sample_640x360.mp4",
+      "quiz": [
+        {
+          "id": "q1",
+          "prompt": "Before recycling a bottle, you should…",
+          "options": [
+            "Rinse it",
+            "Fill it with water",
+            "Crush it with food inside",
+            "Paint it"
+          ],
+          "correctIndex": 0
+        }
+      ],
+      "challenge": {
+        "type": "photo",
+        "prompt": "Upload a photo of clean, sorted recyclables ready for pickup.",
+        "caption": "Upload proof • validation"
+      }
+    },
+    {
+      "order": 2,
+      "title": "Used cooking oil at home",
+      "description": "Cool, store, and label used cooking oil in a sealed container before Kindra handover.",
+      "estimatedMinutes": 10,
+      "ecoPoints": 110,
+      "participants": 2100,
+      "isActive": true,
+      "videoUrl": "https://storage.googleapis.com/muxdemofiles/mux.mp4",
+      "quiz": [
+        {
+          "id": "q1",
+          "prompt": "Best container for used oil is…",
+          "options": [
+            "Sealed plastic bottle",
+            "Open bowl",
+            "Paper cup",
+            "Cloth bag"
+          ],
+          "correctIndex": 0
+        }
+      ],
+      "challenge": {
+        "type": "photo",
+        "prompt": "Take a photo of a sealed, labeled used-oil container.",
+        "caption": "Sealed container • check"
+      }
+    },
+    {
+      "order": 3,
+      "title": "Hazardous Waste Safety",
+      "description": "Handle batteries, chemicals, and sharps safely; never mix with general household waste.",
+      "estimatedMinutes": 15,
+      "ecoPoints": 160,
+      "participants": 432,
+      "isActive": true,
+      "videoUrl": "https://www.w3schools.com/html/mov_bbb.mp4",
+      "quiz": [
+        {
+          "id": "q1",
+          "prompt": "Used batteries should be disposed…",
+          "options": [
+            "At e-waste dropoff",
+            "In wet bin",
+            "In dry bin",
+            "In sink"
+          ],
+          "correctIndex": 0
+        }
+      ],
+      "challenge": {
+        "type": "photo",
+        "prompt": "Upload a photo of your e-waste or sharp-safe box.",
+        "caption": "E-waste / safety • review"
+      }
+    }
+  ]
+}

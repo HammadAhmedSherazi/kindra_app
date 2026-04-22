@@ -122,6 +122,11 @@ class _UsedOilImageConfirmationViewState
           await service.detectOilFromFile(File(widget.imagePath));
 
       if (!mounted) return;
+      if (result.oilDetected != true) {
+        _showOilNotDetectedDialog();
+        return;
+      }
+
       await AppRouter.push(
         UsedOilVerificationResultView(
           imagePath: widget.imagePath,
@@ -130,14 +135,20 @@ class _UsedOilImageConfirmationViewState
       );
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Verification failed: $e')),
-      );
-      await AppRouter.push(
-        UsedOilVerificationResultView(imagePath: widget.imagePath),
-      );
+      _showOilNotDetectedDialog();
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
+  }
+
+  void _showOilNotDetectedDialog() {
+    if (!mounted) return;
+    showRejectStyleDialog(
+      context,
+      title: 'Oil not detected',
+      subtitle: 'Please retake a clearer picture.',
+      confirmLabel: 'Retake',
+      onConfirm: _retake,
+    );
   }
 }

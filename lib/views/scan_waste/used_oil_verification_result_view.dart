@@ -100,7 +100,7 @@ class UsedOilVerificationResultView extends StatelessWidget {
                         color: Colors.black87,
                       ),
                     ),
-                    if (confidence != null) ...[
+                    if (confidence != null && oilDetected != true) ...[
                       10.ph,
                       Text(
                         'Confidence: $confidence%',

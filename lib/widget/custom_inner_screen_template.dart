@@ -1,4 +1,7 @@
-import '../../export_all.dart';
+import 'package:flutter/material.dart';
+
+import '../utils/extension.dart';
+import '../utils/router.dart';
 
 class CustomInnerScreenTemplate extends StatelessWidget {
   final String title;

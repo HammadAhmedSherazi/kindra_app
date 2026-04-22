@@ -25,6 +25,8 @@ export 'models/user_data_model.dart';
 export 'models/user_profile.dart';
 export 'models/user/user_base.dart';
 export 'models/user/role_profiles.dart';
+export 'models/training/training_course.dart';
+export 'models/training/training_course_progress.dart';
 
 // Providers
 export 'providers/auth_provider/auth_provider.dart';
@@ -47,6 +49,7 @@ export 'services/firebase_auth_service.dart';
 export 'services/fcm_service.dart';
 export 'services/news_service.dart';
 export 'services/gemini_oil_detection_service.dart';
+export 'services/training_course_service.dart';
 export 'services/secure_storage.dart';
 export 'services/shared_preferences.dart';
 
@@ -87,6 +90,7 @@ export 'views/redeem/wallet_exchange_view.dart';
 export 'views/redeem/credit_check_modal.dart';
 export 'views/redeem/credit_exchange_view.dart';
 export 'views/redeem/redeem_success_view.dart';
+export 'views/trainer/training_course_list_item.dart';
 export 'views/trainer/trainer_view.dart';
 export 'views/trainer/training_module_flow_view.dart';
 export 'views/home/all_news_view.dart';
@@ -178,3 +182,4 @@ export 'widget/bar_chart_widget.dart';
 export 'widget/kindra_friendly_card.dart';
 export 'widget/line_chart_widget.dart';
 export 'widget/coastal_group_header.dart';
+export 'widget/training_course_card.dart';
