@@ -134,7 +134,13 @@ class TrainingCourseService {
     });
   }
 
-  /// `users/{uid}/appTraining/summary` (see [firestore.rules] `appTraining`).
+  /// Aggregated training stats.
+  ///
+  /// **Source of truth**: `users/{uid}` fields so they show on the main user doc:
+  /// - `trainingPointsEarned`
+  /// - `trainingMinutesSpent`
+  ///
+  /// We still write the same fields to `users/{uid}/appTraining/summary` as well.
   Stream<({int pointsEarned, int minutesSpent})> watchTrainingStats() {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -144,11 +150,11 @@ class TrainingCourseService {
       ));
     }
     final uid = user.uid;
-    return _trainingStatsDoc(uid).snapshots().map((subSnap) {
-      final s = subSnap.data() ?? const <String, dynamic>{};
+    return _userDoc(uid).snapshots().map((doc) {
+      final d = doc.data() ?? const <String, dynamic>{};
       return (
-        pointsEarned: (s['trainingPointsEarned'] as num?)?.toInt() ?? 0,
-        minutesSpent: (s['trainingMinutesSpent'] as num?)?.toInt() ?? 0,
+        pointsEarned: (d['trainingPointsEarned'] as num?)?.toInt() ?? 0,
+        minutesSpent: (d['trainingMinutesSpent'] as num?)?.toInt() ?? 0,
       );
     });
   }
@@ -280,6 +286,14 @@ class TrainingCourseService {
         'activeTrainingCourseId': FieldValue.delete(),
         'trainingUnlockedUpToOrder': nextUnlocked,
       };
+      if (shouldCreditStats) {
+        if (points > 0) {
+          userUpdate['trainingPointsEarned'] = FieldValue.increment(points);
+        }
+        if (minutes > 0) {
+          userUpdate['trainingMinutesSpent'] = FieldValue.increment(minutes);
+        }
+      }
       tx.set(userRef, userUpdate, SetOptions(merge: true));
 
       if (shouldCreditStats) {
